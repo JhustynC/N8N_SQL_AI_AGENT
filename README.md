@@ -39,7 +39,6 @@ CREATE TABLE citas (
     FOREIGN KEY (barbero_id) REFERENCES barberos(id) ON DELETE SET NULL
 );
 ```
-
 # Obtén la dirección IP de tu host. En Linux, puedes usar:
 
 ```bash
@@ -71,8 +70,13 @@ git commit -m "Eliminar carpeta no deseada del repositorio"
 ```bash
 git filter-branch --force --index-filter "git rm -r --cached --ignore-unmatch nombre_de_la_carpeta" --prune-empty --tag-name-filter cat -- --all
 
-
 git filter-repo --path nombre_de_la_carpeta --invert-paths
 ```
 
 ⚠️ Este tipo de limpieza reescribe la historia de Git, por lo tanto es destructiva y debes comunicar a otros colaboradores que vuelvan a clonar el repositorio.
+
+# Entrar a un contenedor
+
+````bash
+ docker exec -it ollama_container /bin/bash
+```
