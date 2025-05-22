@@ -1,0 +1,784 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4cd49c9a-a3d4-40de-aca6-14081db34457",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -1920,
+        2060
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Aqui esta el esquema de la base de datos: {{ $json.schema }}\nAqui esta la peticion del usuario: {{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "Asistant eres un modelo de lenguaje extenso entrenado por Google.\n\nAsistant está diseñado para asistir en una amplia gama de tareas, desde responder preguntas sencillas hasta proporcionar explicaciones y debates exhaustivos sobre una amplia gama de temas. Como modelo de lenguaje, Assistant puede generar texto con un lenguaje similar al humano a partir de la información que recibe, lo que le permite entablar conversaciones con un sonido natural y proporcionar respuestas coherentes y relevantes para el tema en cuestión.\n\nAsistant está en constante aprendizaje y mejora, y sus capacidades evolucionan constantemente. Es capaz de procesar y comprender grandes cantidades de texto y puede utilizar este conocimiento para proporcionar respuestas precisas e informativas a una amplia gama de preguntas. Además, Assistant puede generar su propio texto a partir de la información que recibe, lo que le permite participar en debates y proporcionar explicaciones y descripciones sobre una amplia gama de temas.\n\nEn resumen, Assistant es un sistema potente que puede asistir en una amplia gama de tareas y proporcionar información valiosa sobre una amplia gama de temas. Ya sea que necesite ayuda con una pregunta específica o simplemente quiera conversar sobre un tema específico, el Asistente está aquí para ayudarle.\n\nAyuda al usuario a trabajar con la base de datos MySQL.\n\nSolo responde con la consulta sql no seas redundante ni extenso.\n\nPor favor, escribe los comandos SQL entre comillas triples. No dispone de una herramienta para ejecutar SQL, así que el usuario lo hará por usted."
+        }
+      },
+      "id": "c4a20e6a-499e-4bb6-a147-8a1ec3094250",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -1040,
+        2420
+      ],
+      "notesInFlow": false,
+      "typeVersion": 1.9,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
+        "options": {}
+      },
+      "id": "a860d667-5275-4966-91b6-64c5bc1bf401",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -1920,
+        2420
+      ],
+      "webhookId": "efac56c4-fe10-4448-862c-396e3145fb10",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SHOW TABLES;",
+        "options": {}
+      },
+      "id": "8137f0a5-dd6a-4aa9-93c5-20e1fabac3a9",
+      "name": "MySQL1",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        -1480,
+        2060
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "3TmtCkl0FQB6oZ3U",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fecc2be-7277-4f8d-aaa0-572808748c94",
+              "name": "table",
+              "type": "string",
+              "value": "={{ $('All tables').item.json.Tables_in_n8n_db }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "3b2c2c32-693d-4000-87af-545efc7080e1",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1260,
+        2060
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SHOW TABLES;",
+        "options": {}
+      },
+      "id": "10c22c89-5c6b-4a22-88e8-a0a6f40406fa",
+      "name": "All tables",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        -1700,
+        2060
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "3TmtCkl0FQB6oZ3U",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {
+          "fileName": "model_mysql.json"
+        }
+      },
+      "id": "64ab44d5-9423-4bde-a908-aa67b7a49407",
+      "name": "Convert to File",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        -1040,
+        2060
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "./model_mysql.json",
+        "options": {
+          "append": false
+        }
+      },
+      "id": "4117fd8f-b9ad-45dc-b6ef-0b4a7fc78c58",
+      "name": "Read/Write Files from Disk",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        -820,
+        2060
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "fileSelector": "./model_mysql.json",
+        "options": {}
+      },
+      "id": "4517367d-e7a1-4366-aa8e-0eca22a6ec72",
+      "name": "Read/Write Files from Disk1",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        -1700,
+        2420
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "id": "bdca074a-47f5-4e7d-9a86-5d9326c8c5db",
+      "name": "Extract from File",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        -1480,
+        2420
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60cd4390-227f-43d9-b001-e588fe8e1595",
+              "name": "schema",
+              "type": "string",
+              "value": "={{ $json.data }}"
+            },
+            {
+              "id": "c43be3c8-2314-4ea0-9467-96a48e81a90a",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.raw.message.extendedTextMessage.text }}"
+            },
+            {
+              "id": "62e1b7aa-2637-4693-a6a5-659f08ee8c51",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.from }}"
+            },
+            {
+              "id": "f132adc0-5023-40d3-986b-58a2f52247d5",
+              "name": "userPushName",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.raw.pushName }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a2885177-8156-42a9-8f90-1c78fa2acf5a",
+      "name": "Edit Fields2",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1260,
+        2420
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a6970e90-b0bd-4e4b-81b3-3cb807af3bb5",
+              "name": "query",
+              "type": "string",
+              "value": "={{ ($json.output.match(/SELECT[\\s\\S]*?;/i) || [])[0] || \"\" }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2afb9e61-12ce-4bf9-9e86-96ec5a705479",
+      "name": "Extract SQL Query",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -664,
+        2420
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.query }}",
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "ec01d6dc-a424-424e-a804-cae94fc97a37",
+      "name": "MySQL",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        -224,
+        2495
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "3TmtCkl0FQB6oZ3U",
+          "name": "MySQL account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {
+          "includeUnpaired": true
+        }
+      },
+      "id": "5388683a-d292-4fef-aa70-b7c567b45606",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        -1920,
+        1280
+      ],
+      "typeVersion": 3.1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $('Get SQL Output').item.json.sqlOutput }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c8f1dd00-2a5f-46fa-b3ba-bc348ec33a52",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        436,
+        2545
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cf344f4c-b879-4c9d-9b00-1757b34a9ba5",
+              "name": "output",
+              "type": "string",
+              "value": "={ $json.output }}  SQL result: ```markdown {{ $json.sqlOutput }} ```"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "66f2a959-e184-47ba-a526-ccfc57151b45",
+      "name": "Final Output",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1700,
+        1280
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6a810bd4-6a39-46ff-81ed-d6791c87d4ca",
+              "name": "sqlOutput",
+              "type": "string",
+              "value": "=*📋 Servicios disponibles:*\n\n🧾 *{{ Object.keys($jmespath($input.all(),'[].json')[0]).join(' | ') }}*\n\n{{ ($jmespath($input.all(),'[].json')).map(obj => Object.values(obj).join(' | ')).join('\\n\\n') }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f8b3dd0b-1915-4dae-b080-d71736e307df",
+      "name": "Get SQL Output",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        216,
+        2545
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "url": "=http://172.17.0.1:3001",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "to"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "25971db1-1ae5-47a2-ae10-23cd7c994bb9",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1920,
+        1800
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {},
+      "id": "ab50ed3c-0bb5-43f9-8731-b92f40c5aaf6",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        -892,
+        2640
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:11434/api/chat",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"model\": \"llama3.2:1b\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Hola, ¿cómo estás?\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "id": "d8178f59-3e7d-4afa-8f50-b33d02e647dc",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1920,
+        1540
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1012,
+        2640
+      ],
+      "id": "bae1b55c-1f3e-49ec-9702-992f61c852fe",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yhO0JwAZmpzFaM1U",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1a534e54-68a2-4299-a834-ef1d76977465",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -4,
+        2495
+      ],
+      "id": "d21bd90f-aabe-413b-8aa9-aa85bb5049d7",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.reponse }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2b0689c1-3bc0-4dba-be9e-6baa6342b359",
+      "name": "HTTP Request3",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        436,
+        2320
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa9c890b-0cf4-40da-92d6-cea430c6daaa",
+              "name": "reponse",
+              "value": "={{ $('Webhook').item.json.body.raw.pushName }} No tengo información sobre eso, ¿puedes estrucuturar mejor tu mensaje?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        216,
+        2320
+      ],
+      "id": "93da3908-8afe-4170-b4a5-50e170cdf2fe",
+      "name": "Error Message Build"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1091f940-034d-4ae2-85fe-021008805fab",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.query }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "51f4224a-0da9-45b1-bbaf-95170088cb7d",
+      "name": "If - SQL QUERY",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -444,
+        2420
+      ],
+      "typeVersion": 2.2,
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Final Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Extract SQL Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "All tables": {
+      "main": [
+        [
+          {
+            "node": "MySQL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get SQL Output": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract SQL Query": {
+      "main": [
+        [
+          {
+            "node": "If - SQL QUERY",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "All tables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Error Message Build",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get SQL Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Message Build": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - SQL QUERY": {
+      "main": [
+        [
+          {
+            "node": "MySQL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Message Build",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c49d0968-a33c-4935-88fc-d514613342a8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a351cb4fc32096dbaad1207a796624f97b4bf4bdedc65d536d935ae10ba49a2e"
+  },
+  "id": "nbKM3gsbudf1REQS",
+  "tags": []
+}
