@@ -42,19 +42,37 @@ CREATE TABLE citas (
 
 # Obtén la dirección IP de tu host. En Linux, puedes usar:
 
-```BASH
+```bash
 ip addr show docker0 | grep inet | awk '{ print $2 }' | cut -d/ -f1
 ```
 
 # O
 
-```BASH
+```bash
 hostname -I
 ```
 
 # Modelo de Prueba
 
-```Bash
+```bash
 models/gemini-2.5-flash-preview-05-20
 
 ```
+
+# Eliminar carpeta del respositorio
+
+```bash
+git rm -r --cached nombre_de_la_carpeta
+git commit -m "Eliminar carpeta no deseada del repositorio"
+```
+
+# ¿Y si quiero borrar también su historial completamente?
+
+```bash
+git filter-branch --force --index-filter "git rm -r --cached --ignore-unmatch nombre_de_la_carpeta" --prune-empty --tag-name-filter cat -- --all
+
+
+git filter-repo --path nombre_de_la_carpeta --invert-paths
+```
+
+⚠️ Este tipo de limpieza reescribe la historia de Git, por lo tanto es destructiva y debes comunicar a otros colaboradores que vuelvan a clonar el repositorio.
