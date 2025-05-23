@@ -51,11 +51,11 @@ ip addr show docker0 | grep inet | awk '{ print $2 }' | cut -d/ -f1
 hostname -I
 ```
 
-# Modelo de Prueba
+# Modelos de Prueba
 
 ```bash
-models/gemini-2.5-flash-preview-05-20
-
+models/gemini-2.5-flash-preview-05-20 (Resultados buenos, algo demorado)
+models/gemini-2.0-flash-preview-02-05 (Rapito, Resultados buenos)
 ```
 
 # Eliminar carpeta del respositorio

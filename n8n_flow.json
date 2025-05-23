@@ -3,14 +3,15 @@
   "nodes": [
     {
       "parameters": {},
-      "id": "4cd49c9a-a3d4-40de-aca6-14081db34457",
+      "id": "ac76f2eb-6d69-4293-a66f-7de9a084ba37",
       "name": "When clicking ‘Test workflow’",
       "type": "n8n-nodes-base.manualTrigger",
       "position": [
-        -1920,
-        2060
+        580,
+        3160
       ],
-      "typeVersion": 1
+      "typeVersion": 1,
+      "disabled": true
     },
     {
       "parameters": {
@@ -20,16 +21,17 @@
           "systemMessage": "Asistant eres un modelo de lenguaje extenso entrenado por Google.\n\nAsistant está diseñado para asistir en una amplia gama de tareas, desde responder preguntas sencillas hasta proporcionar explicaciones y debates exhaustivos sobre una amplia gama de temas. Como modelo de lenguaje, Assistant puede generar texto con un lenguaje similar al humano a partir de la información que recibe, lo que le permite entablar conversaciones con un sonido natural y proporcionar respuestas coherentes y relevantes para el tema en cuestión.\n\nAsistant está en constante aprendizaje y mejora, y sus capacidades evolucionan constantemente. Es capaz de procesar y comprender grandes cantidades de texto y puede utilizar este conocimiento para proporcionar respuestas precisas e informativas a una amplia gama de preguntas. Además, Assistant puede generar su propio texto a partir de la información que recibe, lo que le permite participar en debates y proporcionar explicaciones y descripciones sobre una amplia gama de temas.\n\nEn resumen, Assistant es un sistema potente que puede asistir en una amplia gama de tareas y proporcionar información valiosa sobre una amplia gama de temas. Ya sea que necesite ayuda con una pregunta específica o simplemente quiera conversar sobre un tema específico, el Asistente está aquí para ayudarle.\n\nAyuda al usuario a trabajar con la base de datos MySQL.\n\nSolo responde con la consulta sql no seas redundante ni extenso.\n\nPor favor, escribe los comandos SQL entre comillas triples. No dispone de una herramienta para ejecutar SQL, así que el usuario lo hará por usted."
         }
       },
-      "id": "c4a20e6a-499e-4bb6-a147-8a1ec3094250",
+      "id": "4e447d50-e5f0-4d56-9ad1-7bf55c149fa7",
       "name": "AI Agent",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        -1040,
-        2420
+        880,
+        1140
       ],
       "notesInFlow": false,
       "typeVersion": 1.9,
-      "alwaysOutputData": true
+      "alwaysOutputData": true,
+      "disabled": true
     },
     {
       "parameters": {
@@ -37,36 +39,16 @@
         "path": "efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
         "options": {}
       },
-      "id": "a860d667-5275-4966-91b6-64c5bc1bf401",
+      "id": "e8598a82-7ca6-479f-9311-17257751ae1c",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "position": [
-        -1920,
-        2420
+        0,
+        1140
       ],
       "webhookId": "efac56c4-fe10-4448-862c-396e3145fb10",
-      "typeVersion": 2
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "SHOW TABLES;",
-        "options": {}
-      },
-      "id": "8137f0a5-dd6a-4aa9-93c5-20e1fabac3a9",
-      "name": "MySQL1",
-      "type": "n8n-nodes-base.mySql",
-      "position": [
-        -1480,
-        2060
-      ],
-      "typeVersion": 2.4,
-      "credentials": {
-        "mySql": {
-          "id": "3TmtCkl0FQB6oZ3U",
-          "name": "MySQL account"
-        }
-      }
+      "typeVersion": 2,
+      "disabled": true
     },
     {
       "parameters": {
@@ -83,14 +65,15 @@
         "includeOtherFields": true,
         "options": {}
       },
-      "id": "3b2c2c32-693d-4000-87af-545efc7080e1",
+      "id": "3472eede-d7c6-44c8-999a-85480d4740e9",
       "name": "Edit Fields1",
       "type": "n8n-nodes-base.set",
       "position": [
-        -1260,
-        2060
+        1340,
+        1860
       ],
-      "typeVersion": 3.4
+      "typeVersion": 3.4,
+      "disabled": true
     },
     {
       "parameters": {
@@ -98,20 +81,21 @@
         "query": "SHOW TABLES;",
         "options": {}
       },
-      "id": "10c22c89-5c6b-4a22-88e8-a0a6f40406fa",
+      "id": "44d7b3fe-39d7-482c-9781-f4b961167215",
       "name": "All tables",
       "type": "n8n-nodes-base.mySql",
       "position": [
-        -1700,
-        2060
+        900,
+        1860
       ],
       "typeVersion": 2.4,
       "credentials": {
         "mySql": {
-          "id": "3TmtCkl0FQB6oZ3U",
+          "id": "k4Hu8eBhSxxOudja",
           "name": "MySQL account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -120,14 +104,15 @@
           "fileName": "model_mysql.json"
         }
       },
-      "id": "64ab44d5-9423-4bde-a908-aa67b7a49407",
+      "id": "40eafa52-0ff5-411d-9981-21d2e73da980",
       "name": "Convert to File",
       "type": "n8n-nodes-base.convertToFile",
       "position": [
-        -1040,
-        2060
+        1560,
+        1860
       ],
-      "typeVersion": 1.1
+      "typeVersion": 1.1,
+      "disabled": true
     },
     {
       "parameters": {
@@ -137,42 +122,45 @@
           "append": false
         }
       },
-      "id": "4117fd8f-b9ad-45dc-b6ef-0b4a7fc78c58",
+      "id": "bd899206-d45e-407f-b9ff-4a4a42ed6b27",
       "name": "Read/Write Files from Disk",
       "type": "n8n-nodes-base.readWriteFile",
       "position": [
-        -820,
-        2060
+        1780,
+        1860
       ],
-      "typeVersion": 1
+      "typeVersion": 1,
+      "disabled": true
     },
     {
       "parameters": {
         "fileSelector": "./model_mysql.json",
         "options": {}
       },
-      "id": "4517367d-e7a1-4366-aa8e-0eca22a6ec72",
+      "id": "19091d1c-1a7e-46d1-a45f-b8fb3f655490",
       "name": "Read/Write Files from Disk1",
       "type": "n8n-nodes-base.readWriteFile",
       "position": [
-        -1700,
-        2420
+        220,
+        1140
       ],
-      "typeVersion": 1
+      "typeVersion": 1,
+      "disabled": true
     },
     {
       "parameters": {
         "operation": "fromJson",
         "options": {}
       },
-      "id": "bdca074a-47f5-4e7d-9a86-5d9326c8c5db",
+      "id": "1804911c-1bcd-457a-bb03-9aa7c7ca5f18",
       "name": "Extract from File",
       "type": "n8n-nodes-base.extractFromFile",
       "position": [
-        -1480,
-        2420
+        440,
+        1140
       ],
-      "typeVersion": 1
+      "typeVersion": 1,
+      "disabled": true
     },
     {
       "parameters": {
@@ -206,14 +194,15 @@
         },
         "options": {}
       },
-      "id": "a2885177-8156-42a9-8f90-1c78fa2acf5a",
+      "id": "1cb97774-bd59-45f3-b94f-0dc990b622fe",
       "name": "Edit Fields2",
       "type": "n8n-nodes-base.set",
       "position": [
-        -1260,
-        2420
+        660,
+        1140
       ],
-      "typeVersion": 3.4
+      "typeVersion": 3.4,
+      "disabled": true
     },
     {
       "parameters": {
@@ -229,14 +218,15 @@
         },
         "options": {}
       },
-      "id": "2afb9e61-12ce-4bf9-9e86-96ec5a705479",
+      "id": "ee9d120f-5579-449d-b441-e61ca53da75f",
       "name": "Extract SQL Query",
       "type": "n8n-nodes-base.set",
       "position": [
-        -664,
-        2420
+        1260,
+        1140
       ],
-      "typeVersion": 3.4
+      "typeVersion": 3.4,
+      "disabled": true
     },
     {
       "parameters": {
@@ -246,20 +236,21 @@
           "detailedOutput": true
         }
       },
-      "id": "ec01d6dc-a424-424e-a804-cae94fc97a37",
+      "id": "baf8863c-115e-4f79-826e-d9641c3f22d7",
       "name": "MySQL",
       "type": "n8n-nodes-base.mySql",
       "position": [
-        -224,
-        2495
+        1700,
+        1220
       ],
       "typeVersion": 2.4,
       "credentials": {
         "mySql": {
-          "id": "3TmtCkl0FQB6oZ3U",
+          "id": "k4Hu8eBhSxxOudja",
           "name": "MySQL account"
         }
       },
+      "disabled": true,
       "onError": "continueRegularOutput"
     },
     {
@@ -270,19 +261,20 @@
           "includeUnpaired": true
         }
       },
-      "id": "5388683a-d292-4fef-aa70-b7c567b45606",
+      "id": "1abf7ee0-7c3c-4468-b2ea-2f9a109ca279",
       "name": "Merge",
       "type": "n8n-nodes-base.merge",
       "position": [
-        -1920,
-        1280
+        -160,
+        540
       ],
-      "typeVersion": 3.1
+      "typeVersion": 3.1,
+      "disabled": true
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "http://172.17.0.1:3001/send-message",
+        "url": "http://host.docker.internal:3001/send-message",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -298,14 +290,15 @@
         },
         "options": {}
       },
-      "id": "c8f1dd00-2a5f-46fa-b3ba-bc348ec33a52",
+      "id": "dd7fcb2c-0c88-4b9d-92ee-23ebcc1a2898",
       "name": "HTTP Request",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        436,
-        2545
+        2360,
+        1280
       ],
-      "typeVersion": 4.2
+      "typeVersion": 4.2,
+      "disabled": true
     },
     {
       "parameters": {
@@ -321,14 +314,15 @@
         },
         "options": {}
       },
-      "id": "66f2a959-e184-47ba-a526-ccfc57151b45",
+      "id": "4a450b5b-d664-47c7-a593-36e0e03e6395",
       "name": "Final Output",
       "type": "n8n-nodes-base.set",
       "position": [
-        -1700,
-        1280
+        60,
+        540
       ],
-      "typeVersion": 3.4
+      "typeVersion": 3.4,
+      "disabled": true
     },
     {
       "parameters": {
@@ -344,47 +338,27 @@
         },
         "options": {}
       },
-      "id": "f8b3dd0b-1915-4dae-b080-d71736e307df",
+      "id": "4cdccf63-b00d-4be8-a8c4-4c74ae2f97dc",
       "name": "Get SQL Output",
       "type": "n8n-nodes-base.set",
       "position": [
-        216,
-        2545
+        2140,
+        1280
       ],
-      "typeVersion": 3.4
-    },
-    {
-      "parameters": {
-        "url": "=http://172.17.0.1:3001",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "to"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "25971db1-1ae5-47a2-ae10-23cd7c994bb9",
-      "name": "HTTP Request1",
-      "type": "n8n-nodes-base.httpRequest",
-      "position": [
-        -1920,
-        1800
-      ],
-      "typeVersion": 4.2
+      "typeVersion": 3.4,
+      "disabled": true
     },
     {
       "parameters": {},
-      "id": "ab50ed3c-0bb5-43f9-8731-b92f40c5aaf6",
+      "id": "fef196c8-77f5-4d59-92c3-47186e704833",
       "name": "Simple Memory",
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "position": [
-        -892,
-        2640
+        1040,
+        1360
       ],
-      "typeVersion": 1.3
+      "typeVersion": 1.3,
+      "disabled": true
     },
     {
       "parameters": {
@@ -394,73 +368,55 @@
         "jsonBody": "{\n  \"model\": \"llama3.2:1b\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Hola, ¿cómo estás?\"\n    }\n  ]\n}\n",
         "options": {}
       },
-      "id": "d8178f59-3e7d-4afa-8f50-b33d02e647dc",
+      "id": "cb90d50b-67e8-46ac-9b8d-99d7b335a348",
       "name": "HTTP Request2",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        -1920,
-        1540
+        -160,
+        800
       ],
-      "typeVersion": 4.2
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.5-flash-preview-05-20",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        -1012,
-        2640
-      ],
-      "id": "bae1b55c-1f3e-49ec-9702-992f61c852fe",
-      "name": "Google Gemini Chat Model",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "yhO0JwAZmpzFaM1U",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
+      "typeVersion": 4.2,
+      "disabled": true
     },
     {
       "parameters": {
         "conditions": {
           "options": {
-            "caseSensitive": true,
+            "version": 2,
             "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
+            "caseSensitive": true,
+            "typeValidation": "strict"
           },
+          "combinator": "and",
           "conditions": [
             {
               "id": "1a534e54-68a2-4299-a834-ef1d76977465",
-              "leftValue": "={{ $json.error }}",
-              "rightValue": "",
               "operator": {
                 "type": "object",
                 "operation": "exists",
                 "singleValue": true
-              }
+              },
+              "leftValue": "={{ $json.error }}",
+              "rightValue": ""
             }
-          ],
-          "combinator": "and"
+          ]
         },
         "options": {}
       },
+      "id": "2bf21892-8626-4147-ba88-2914554002c3",
+      "name": "If1",
       "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
       "position": [
-        -4,
-        2495
+        1920,
+        1220
       ],
-      "id": "d21bd90f-aabe-413b-8aa9-aa85bb5049d7",
-      "name": "If1"
+      "typeVersion": 2.2,
+      "disabled": true
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "http://172.17.0.1:3001/send-message",
+        "url": "http://host.docker.internal:3001/send-message",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -476,14 +432,15 @@
         },
         "options": {}
       },
-      "id": "2b0689c1-3bc0-4dba-be9e-6baa6342b359",
+      "id": "d110a03a-f7de-4385-ac77-c31fd3d9222d",
       "name": "HTTP Request3",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        436,
-        2320
+        2360,
+        1040
       ],
-      "typeVersion": 4.2
+      "typeVersion": 4.2,
+      "disabled": true
     },
     {
       "parameters": {
@@ -492,21 +449,22 @@
             {
               "id": "fa9c890b-0cf4-40da-92d6-cea430c6daaa",
               "name": "reponse",
-              "value": "={{ $('Webhook').item.json.body.raw.pushName }} No tengo información sobre eso, ¿puedes estrucuturar mejor tu mensaje?",
-              "type": "string"
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.raw.pushName }} No tengo información sobre eso, ¿puedes estrucuturar mejor tu mensaje?"
             }
           ]
         },
         "options": {}
       },
+      "id": "71f8c70d-6a34-4b6a-81cc-f62ee518682f",
+      "name": "Error Message Build",
       "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
       "position": [
-        216,
-        2320
+        2140,
+        1040
       ],
-      "id": "93da3908-8afe-4170-b4a5-50e170cdf2fe",
-      "name": "Error Message Build"
+      "typeVersion": 3.4,
+      "disabled": true
     },
     {
       "parameters": {
@@ -533,19 +491,1191 @@
         },
         "options": {}
       },
-      "id": "51f4224a-0da9-45b1-bbaf-95170088cb7d",
+      "id": "cb3116ed-183c-4646-bf1a-5e442aac9858",
       "name": "If - SQL QUERY",
       "type": "n8n-nodes-base.if",
       "position": [
-        -444,
-        2420
+        1480,
+        1140
+      ],
+      "typeVersion": 2.2,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": "deepseek-r1:latest",
+        "options": {}
+      },
+      "id": "16a0bfea-0b88-4c58-ae10-b9180b81b3d5",
+      "name": "Ollama Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "position": [
+        820,
+        1360
+      ],
+      "notesInFlow": true,
+      "typeVersion": 1,
+      "credentials": {
+        "ollamaApi": {
+          "id": "43wsKOEj0x8dgmMq",
+          "name": "Ollama account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e4580f36-423e-4b90-868f-9c674c4995c8",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        1500,
+        4700
+      ],
+      "webhookId": "6c6b7f7f-a141-42c3-b794-01394498e0be",
+      "typeVersion": 1.1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Aqui esta el esquema de la base de datos: {{ $json.schema }}\nAqui esta la peticion del usuario: {{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "Asistant eres un modelo de lenguaje extenso entrenado por Google.\n\nAsistant está diseñado para asistir en una amplia gama de tareas, desde responder preguntas sencillas hasta proporcionar explicaciones y debates exhaustivos sobre una amplia gama de temas. Como modelo de lenguaje, Assistant puede generar texto con un lenguaje similar al humano a partir de la información que recibe, lo que le permite entablar conversaciones con un sonido natural y proporcionar respuestas coherentes y relevantes para el tema en cuestión.\n\nAsistant está en constante aprendizaje y mejora, y sus capacidades evolucionan constantemente. Es capaz de procesar y comprender grandes cantidades de texto y puede utilizar este conocimiento para proporcionar respuestas precisas e informativas a una amplia gama de preguntas. Además, Assistant puede generar su propio texto a partir de la información que recibe, lo que le permite participar en debates y proporcionar explicaciones y descripciones sobre una amplia gama de temas.\n\nEn resumen, Assistant es un sistema potente que puede asistir en una amplia gama de tareas y proporcionar información valiosa sobre una amplia gama de temas. Ya sea que necesite ayuda con una pregunta específica o simplemente quiera conversar sobre un tema específico, el Asistente está aquí para ayudarle.\n\nAyuda al usuario a trabajar con la base de datos MySQL.\n\nSolo responde con la consulta sql no seas redundante ni extenso.\n\nPor favor, escribe los comandos SQL entre comillas triples. No dispone de una herramienta para ejecutar SQL, así que el usuario lo hará por usted."
+        }
+      },
+      "id": "982dc940-66e7-4386-8ef9-857a6ea9b3bd",
+      "name": "AI Agent1",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        900,
+        2400
+      ],
+      "notesInFlow": false,
+      "typeVersion": 1.9,
+      "alwaysOutputData": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
+        "options": {}
+      },
+      "id": "c7cf4d4d-3d49-4ef7-ae08-544fbd6bc08c",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        20,
+        2400
+      ],
+      "webhookId": "efac56c4-fe10-4448-862c-396e3145fb10",
+      "typeVersion": 2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "fileSelector": "./model_mysql.json",
+        "options": {}
+      },
+      "id": "a00ae04b-eebd-40f5-ab9b-602d10b9576f",
+      "name": "Read/Write Files from Disk2",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        240,
+        2400
+      ],
+      "typeVersion": 1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "id": "ecdae32f-bf90-47ad-888c-69f7fe186702",
+      "name": "Extract from File1",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        460,
+        2400
+      ],
+      "typeVersion": 1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60cd4390-227f-43d9-b001-e588fe8e1595",
+              "name": "schema",
+              "type": "string",
+              "value": "={{ $json.data }}"
+            },
+            {
+              "id": "c43be3c8-2314-4ea0-9467-96a48e81a90a",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $('Webhook1').item.json.body.raw.message.extendedTextMessage.text }}"
+            },
+            {
+              "id": "62e1b7aa-2637-4693-a6a5-659f08ee8c51",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Webhook1').item.json.body.from }}"
+            },
+            {
+              "id": "f132adc0-5023-40d3-986b-58a2f52247d5",
+              "name": "userPushName",
+              "type": "string",
+              "value": "={{ $('Webhook1').item.json.body.raw.pushName }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "06e5f110-89e0-4af6-802c-c3ec748ec6e3",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        680,
+        2400
+      ],
+      "typeVersion": 3.4,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a6970e90-b0bd-4e4b-81b3-3cb807af3bb5",
+              "name": "query",
+              "type": "string",
+              "value": "={{ ($json.output.match(/SELECT[\\s\\S]*?;/i) || [])[0] || \"\" }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "21df5bc8-2568-42d9-8c51-ae41f6931ae6",
+      "name": "Extract SQL Query1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1280,
+        2400
+      ],
+      "typeVersion": 3.4,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.query }}",
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "de75d2a1-e253-44b0-b0a9-67f2686f839f",
+      "name": "MySQL2",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        1720,
+        2480
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook1').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $('Get SQL Output1').item.json.sqlOutput }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "85c4e45d-7188-4109-9f6d-62d4671159c6",
+      "name": "HTTP Request4",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2380,
+        2540
+      ],
+      "typeVersion": 4.2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6a810bd4-6a39-46ff-81ed-d6791c87d4ca",
+              "name": "sqlOutput",
+              "type": "string",
+              "value": "={{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "321f95ae-8079-4839-8273-9a5619cd7be5",
+      "name": "Get SQL Output1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2160,
+        2540
+      ],
+      "typeVersion": 3.4,
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "0daf6648-7e43-4877-964c-dbd37f433fea",
+      "name": "Simple Memory1",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        1040,
+        2620
+      ],
+      "typeVersion": 1.3,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1a534e54-68a2-4299-a834-ef1d76977465",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.error }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "661f8183-9457-4184-9e1d-5db284e6bf34",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1940,
+        2480
+      ],
+      "typeVersion": 2.2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook1').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.reponse }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6296835f-9b58-4f39-8dda-3a5a08ea5f5e",
+      "name": "HTTP Request5",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2380,
+        2300
+      ],
+      "typeVersion": 4.2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa9c890b-0cf4-40da-92d6-cea430c6daaa",
+              "name": "reponse",
+              "type": "string",
+              "value": "={{ $('Webhook1').item.json.body.raw.pushName }} No tengo información sobre eso, ¿puedes estrucuturar mejor tu mensaje?"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f6332ae-a751-4825-8d3c-97cf97b13f50",
+      "name": "Error Message Build1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2160,
+        2300
+      ],
+      "typeVersion": 3.4,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1091f940-034d-4ae2-85fe-021008805fab",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.query }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "efeb4a1e-e5b8-4c58-9f92-285304cc21d0",
+      "name": "If - SQL QUERY1",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1500,
+        2400
+      ],
+      "typeVersion": 2.2,
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "id": "f63eefd7-3968-4412-a10e-c64c6f313c60",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        880,
+        2620
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# Test Workflow (All Locally) \n## To use a local LLM",
+        "height": 500,
+        "width": 3020
+      },
+      "id": "d7e46e57-2533-4c79-82d4-94b5c181f482",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -220,
+        1020
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Main WorkFlow",
+        "height": 600,
+        "width": 2940
+      },
+      "id": "22900061-acc1-421e-a6fe-44925d353274",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -100,
+        2220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Aqui esta el esquema de la base de datos: {{ $json.schema }}\nAqui esta la peticion del usuario: {{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "=Asistant eres un modelo de lenguaje extenso entrenado por Google.\n\nAsistant está diseñado para asistir en una amplia gama de tareas, desde responder preguntas sencillas hasta proporcionar explicaciones y debates exhaustivos sobre una amplia gama de temas. Como modelo de lenguaje, Assistant puede generar texto con un lenguaje similar al humano a partir de la información que recibe, lo que le permite entablar conversaciones con un sonido natural y proporcionar respuestas coherentes y relevantes para el tema en cuestión.\n\nAsistant está en constante aprendizaje y mejora, y sus capacidades evolucionan constantemente. Es capaz de procesar y comprender grandes cantidades de texto y puede utilizar este conocimiento para proporcionar respuestas precisas e informativas a una amplia gama de preguntas. Además, Assistant puede generar su propio texto a partir de la información que recibe, lo que le permite participar en debates y proporcionar explicaciones y descripciones sobre una amplia gama de temas.\n\nEn resumen, Assistant es un sistema potente que puede asistir en una amplia gama de tareas y proporcionar información valiosa sobre una amplia gama de temas. Ya sea que necesite ayuda con una pregunta específica o simplemente quiera conversar sobre un tema específico, el Asistente está aquí para ayudarle.\n\nAyuda al usuario a trabajar con la base de datos MySQL.\n\nSolo responde con la consulta sql no seas redundante ni extenso.\n\nPor favor, escribe los comandos SQL entre comillas triples. No dispone de una herramienta para ejecutar SQL, así que el usuario lo hará por usted."
+        }
+      },
+      "id": "5689d2cc-b899-4c24-8da9-9096c141b971",
+      "name": "AI Agent2",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        980,
+        3760
+      ],
+      "notesInFlow": false,
+      "typeVersion": 1.9,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
+        "options": {}
+      },
+      "id": "69c0e10b-49ad-4838-b574-0f05c31abec8",
+      "name": "Webhook2",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        100,
+        3760
+      ],
+      "webhookId": "efac56c4-fe10-4448-862c-396e3145fb10",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "fileSelector": "./model_mysql.json",
+        "options": {}
+      },
+      "id": "3b14a2f5-3642-471f-9ea7-120f984f1c23",
+      "name": "Read/Write Files from Disk3",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        320,
+        3760
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "id": "de870055-6cbb-403c-84b3-7ffcc57b7122",
+      "name": "Extract from File2",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        540,
+        3760
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60cd4390-227f-43d9-b001-e588fe8e1595",
+              "name": "schema",
+              "type": "string",
+              "value": "={{ $json.data }}"
+            },
+            {
+              "id": "c43be3c8-2314-4ea0-9467-96a48e81a90a",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $('Webhook2').item.json.body.raw.message.extendedTextMessage.text }}"
+            },
+            {
+              "id": "62e1b7aa-2637-4693-a6a5-659f08ee8c51",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "id": "f132adc0-5023-40d3-986b-58a2f52247d5",
+              "name": "userPushName",
+              "type": "string",
+              "value": "={{ $('Webhook2').item.json.body.raw.pushName }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "42be7a93-25b1-4253-8635-c9ece5250878",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        760,
+        3760
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a6970e90-b0bd-4e4b-81b3-3cb807af3bb5",
+              "name": "query",
+              "type": "string",
+              "value": "={{ ($json.output.match(/SELECT[\\s\\S]*?;/i) || [])[0] || \"\" }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "34ed8522-00d2-4546-8173-346305744ec1",
+      "name": "Extract SQL Query2",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1360,
+        3760
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.query }}",
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "052b2d10-ccae-4332-a0a1-1bbabba73e5b",
+      "name": "MySQL3",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        1800,
+        3840
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $('Get SQL Output2').item.json.sqlOutput }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1bfc1992-c6ab-4a4d-bff8-a599b795b825",
+      "name": "HTTP Request6",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2460,
+        3900
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6a810bd4-6a39-46ff-81ed-d6791c87d4ca",
+              "name": "sqlOutput",
+              "type": "string",
+              "value": "={{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8fefc7e0-0d2f-4d4d-9f4a-4ca0e2adab4a",
+      "name": "Get SQL Output2",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2240,
+        3900
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {},
+      "id": "b80ef36c-9372-4556-bec7-4be0499f9565",
+      "name": "Simple Memory2",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        1100,
+        3960
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1a534e54-68a2-4299-a834-ef1d76977465",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.error }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "68c9a85c-ffd3-4ff5-8337-1e679e2c808d",
+      "name": "If2",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        2020,
+        3840
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.reponse }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e3b67179-b548-4fbb-bec5-cf3d22bc70f8",
+      "name": "HTTP Request7",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2460,
+        3660
+      ],
+      "typeVersion": 4.2,
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa9c890b-0cf4-40da-92d6-cea430c6daaa",
+              "name": "reponse",
+              "type": "string",
+              "value": "={{ $('Webhook2').item.json.body.raw.pushName }} No tengo información sobre eso, ¿puedes estrucuturar mejor tu mensaje?"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "91932c53-89cf-4e19-b5ec-f82a76f1a734",
+      "name": "Error Message Build2",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2240,
+        3660
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1091f940-034d-4ae2-85fe-021008805fab",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.query }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c809421b-42f0-41d1-bd1f-f641f1d0c4b6",
+      "name": "If - SQL QUERY2",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1580,
+        3760
       ],
       "typeVersion": 2.2,
       "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-preview-02-05",
+        "options": {}
+      },
+      "id": "ad3df050-0ce8-49ed-842e-b00a0e4f0151",
+      "name": "Google Gemini Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        940,
+        4140
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Main WorkFlow",
+        "height": 900,
+        "width": 3020,
+        "color": 4
+      },
+      "id": "b44c9bc4-c3b4-4c4f-a07d-be682645edf4",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -40,
+        3560
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.body.raw.message.extendedTextMessage.text }}",
+        "options": {
+          "systemPromptTemplate": "=Eres un agente de generación de SQL altamente inteligente y preciso. Interpreta la solicitud en lenguaje natural del usuario y genera la consulta SQL adecuada. Asegúrate de que el SQL sea sintácticamente correcto y seguro. Usa el esquema de base de datos proporcionado. Solo genera el código SQL. No incluyas explicaciones ni texto adicional.",
+          "enableAutoFixing": false
+        }
+      },
+      "id": "3ed908cf-be48-4829-8ec2-6cfefe9f7013",
+      "name": "Sentiment Analysis",
+      "type": "@n8n/n8n-nodes-langchain.sentimentAnalysis",
+      "position": [
+        320,
+        3980
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SHOW TABLES;",
+        "options": {}
+      },
+      "id": "866bf650-f55c-43eb-8e4a-1dcd36b170e3",
+      "name": "Describe Tables",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        1120,
+        1860
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17fbdf76-4ab6-48a0-946f-5d226b3587ee",
+              "name": "=table",
+              "type": "string",
+              "value": "={{ $('Edit Fields6').item.json.table_name }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "74162149-3e4e-4bfa-84d4-d9c38d52a835",
+      "name": "Edit Fields4",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1460,
+        3160
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {
+          "fileName": "model_mysql.json"
+        }
+      },
+      "id": "aaa56b4d-c659-4d00-af43-5efb637b21b9",
+      "name": "Convert to File1",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        1900,
+        3160
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "./model_mysql.json",
+        "options": {
+          "append": false
+        }
+      },
+      "id": "406f0ad5-6088-4d86-8547-4fe1b8cdff70",
+      "name": "Read/Write Files from Disk4",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        2120,
+        3160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "const result = {};\nconst properties_model = $('Edit Fields4').all();\n\nfor(const property of properties_model){\n  const table = property.json.table;\n\n  if (!result[table]) {\n    result[table] = [];\n  }\n\n  result[table].push({\n    field: property.json.Field,\n    type: property.json.Type,\n    nullable: property.json.Null,\n    key: property.json.Key,\n    default: property.json.Default,\n    extra: property.json.Extra\n  });\n};\n\nreturn result;"
+      },
+      "id": "0f8d5cf2-da64-4e0d-a8fb-a95fd971e060",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1680,
+        3160
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7a6c1a5f-c34c-4d90-b86b-0ae77eab1eaa",
+              "name": "table_name",
+              "type": "string",
+              "value": "={{ $json.Tables_in_n8n_db }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "includeFields": "={{ $json.Tables_in_n8n_db }}",
+        "options": {}
+      },
+      "id": "10f0a4ea-1e3d-4d43-94c0-3df48ab481ef",
+      "name": "Edit Fields6",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1020,
+        3160
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SHOW TABLES",
+        "options": {}
+      },
+      "id": "1b1b2530-0434-4bff-950c-3e5fd4b1042d",
+      "name": "Show Tables",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        800,
+        3160
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DESCRIBE {{ $json.table_name }}",
+        "options": {}
+      },
+      "id": "99cc6870-0d88-41b4-8d7c-92ee42ff5778",
+      "name": "Describe Tables2",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        1240,
+        3160
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Generate model database file\n## More efficient for workflow, don't necessarily make a query to retrieve the schema\n\n",
+        "height": 460,
+        "width": 1900,
+        "color": 6
+      },
+      "id": "ec1c2aba-898f-4752-988e-1962d4d49200",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        480,
+        2960
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Generate model database file\n## More efficient for workflow, don't necessarily make a query to retrieve the schema\n\n",
+        "height": 460,
+        "width": 1380,
+        "color": 3
+      },
+      "id": "7487afed-9b74-4d6d-8482-a0ce3514e206",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        620,
+        1660
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "adcaafd2-73cc-4e2d-911a-ad4b2df79faf",
+      "name": "Question and Answer Chain",
+      "type": "@n8n/n8n-nodes-langchain.chainRetrievalQa",
+      "position": [
+        1900,
+        4700
+      ],
+      "typeVersion": 1.5,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e24c7c89-ab07-407c-b707-295d3acaa366",
+      "name": "MultiQuery Retriever",
+      "type": "@n8n/n8n-nodes-langchain.retrieverMultiQuery",
+      "position": [
+        1960,
+        4880
+      ],
+      "typeVersion": 1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "05ggX0iPtGn7TsDb",
+          "cachedResultName": "My workflow"
+        }
+      },
+      "id": "a8376fe4-ecde-4eda-b1ac-0ceaaf2af208",
+      "name": "Workflow Retriever",
+      "type": "@n8n/n8n-nodes-langchain.retrieverWorkflow",
+      "position": [
+        2400,
+        5100
+      ],
+      "typeVersion": 1.1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite",
+        "options": {}
+      },
+      "id": "1970a9e6-39ce-46d4-9a95-6ba1b47b890f",
+      "name": "Google Gemini Chat Model2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        1880,
+        5100
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "36da6710-f379-47e9-bf45-431ccb0b44f4",
+              "name": "response",
+              "type": "string",
+              "value": "={{ $json.response }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3ec68eeb-b38e-4f18-a1e8-cc8a6c988be4",
+      "name": "Edit Fields5",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2420,
+        4700
+      ],
+      "typeVersion": 3.4,
+      "disabled": true
     }
   ],
   "pinData": {},
   "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Error Message Build1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get SQL Output1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Error Message Build",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get SQL Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Error Message Build2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get SQL Output2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Convert to File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Merge": {
       "main": [
         [
@@ -568,11 +1698,22 @@
         ]
       ]
     },
-    "MySQL1": {
+    "MySQL2": {
       "main": [
         [
           {
-            "node": "Edit Fields1",
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL3": {
+      "main": [
+        [
+          {
+            "node": "If2",
             "type": "main",
             "index": 0
           }
@@ -601,11 +1742,82 @@
         ]
       ]
     },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Sentiment Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Extract SQL Query1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Extract SQL Query2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "All tables": {
       "main": [
         [
           {
-            "node": "MySQL1",
+            "node": "Describe Tables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Show Tables": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
             "type": "main",
             "index": 0
           }
@@ -634,6 +1846,39 @@
         ]
       ]
     },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Describe Tables2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Simple Memory": {
       "ai_memory": [
         [
@@ -656,11 +1901,142 @@
         ]
       ]
     },
+    "If - SQL QUERY": {
+      "main": [
+        [
+          {
+            "node": "MySQL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Message Build",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Convert to File": {
       "main": [
         [
           {
             "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Describe Tables": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get SQL Output1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get SQL Output2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - SQL QUERY1": {
+      "main": [
+        [
+          {
+            "node": "MySQL2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Message Build1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - SQL QUERY2": {
+      "main": [
+        [
+          {
+            "node": "MySQL3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Message Build2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File1": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Describe Tables2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
             "type": "main",
             "index": 0
           }
@@ -689,29 +2065,7 @@
         ]
       ]
     },
-    "Read/Write Files from Disk1": {
-      "main": [
-        [
-          {
-            "node": "Extract from File",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "When clicking ‘Test workflow’": {
-      "main": [
-        [
-          {
-            "node": "All tables",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model": {
+    "Ollama Chat Model": {
       "ai_languageModel": [
         [
           {
@@ -722,19 +2076,56 @@
         ]
       ]
     },
-    "If1": {
+    "Extract SQL Query1": {
       "main": [
         [
           {
-            "node": "Error Message Build",
+            "node": "If - SQL QUERY1",
             "type": "main",
             "index": 0
           }
-        ],
+        ]
+      ]
+    },
+    "Extract SQL Query2": {
+      "main": [
         [
           {
-            "node": "Get SQL Output",
+            "node": "If - SQL QUERY2",
             "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Retriever": {
+      "ai_retriever": [
+        [
+          {
+            "node": "MultiQuery Retriever",
+            "type": "ai_retriever",
             "index": 0
           }
         ]
@@ -751,18 +2142,142 @@
         ]
       ]
     },
-    "If - SQL QUERY": {
+    "Error Message Build1": {
       "main": [
         [
           {
-            "node": "MySQL",
+            "node": "HTTP Request5",
             "type": "main",
             "index": 0
           }
-        ],
+        ]
+      ]
+    },
+    "Error Message Build2": {
+      "main": [
         [
           {
-            "node": "Error Message Build",
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MultiQuery Retriever": {
+      "ai_retriever": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "ai_retriever",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Sentiment Analysis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "MultiQuery Retriever",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Question and Answer Chain": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk2": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk3": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Show Tables",
             "type": "main",
             "index": 0
           }
@@ -774,11 +2289,36 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "c49d0968-a33c-4935-88fc-d514613342a8",
+  "versionId": "7f56ad73-e0f4-424c-abc0-595d1d2864d6",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "a351cb4fc32096dbaad1207a796624f97b4bf4bdedc65d536d935ae10ba49a2e"
+    "instanceId": "79c01d1a105320c6c3f2fe02ffea042ae762f8a4f408f11e58e3c7cbdb887d09"
   },
-  "id": "nbKM3gsbudf1REQS",
-  "tags": []
+  "id": "05ggX0iPtGn7TsDb",
+  "tags": [
+    {
+      "createdAt": "2025-05-23T03:23:20.928Z",
+      "updatedAt": "2025-05-23T03:23:20.928Z",
+      "id": "5bcnLl5pmMXW2R7y",
+      "name": "whatsapp"
+    },
+    {
+      "createdAt": "2025-05-23T03:23:36.362Z",
+      "updatedAt": "2025-05-23T03:23:36.362Z",
+      "id": "9qmbJldWDYjlLH5l",
+      "name": "mysql"
+    },
+    {
+      "createdAt": "2025-05-23T03:23:27.592Z",
+      "updatedAt": "2025-05-23T03:23:27.592Z",
+      "id": "NRApmoXTE8JJwDFS",
+      "name": "agent"
+    },
+    {
+      "createdAt": "2025-05-23T03:23:30.957Z",
+      "updatedAt": "2025-05-23T03:23:30.957Z",
+      "id": "zId9lALeXkBAFgMm",
+      "name": "gemini"
+    }
+  ]
 }
