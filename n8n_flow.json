@@ -1102,6 +1102,14 @@
             {
               "name": "message",
               "value": "={{ $('Get SQL Output2').item.json.sqlOutput }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
             }
           ]
         },
@@ -1114,7 +1122,8 @@
         2460,
         3900
       ],
-      "typeVersion": 4.2
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -1198,6 +1207,14 @@
             {
               "name": "message",
               "value": "={{ $json.reponse }}"
+            },
+            {
+              "name": "fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "=from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
             }
           ]
         },
@@ -1210,8 +1227,8 @@
         2460,
         3660
       ],
-      "typeVersion": 4.2,
-      "retryOnFail": true
+      "retryOnFail": true,
+      "typeVersion": 4.2
     },
     {
       "parameters": {
@@ -2289,7 +2306,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "7f56ad73-e0f4-424c-abc0-595d1d2864d6",
+  "versionId": "ca749056-2f45-41a6-80ea-c3df6b0f9e0f",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "79c01d1a105320c6c3f2fe02ffea042ae762f8a4f408f11e58e3c7cbdb887d09"
