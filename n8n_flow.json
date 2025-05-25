@@ -10,8 +10,7 @@
         580,
         3160
       ],
-      "typeVersion": 1,
-      "disabled": true
+      "typeVersion": 1
     },
     {
       "parameters": {
@@ -532,8 +531,8 @@
       "name": "When chat message received",
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "position": [
-        1500,
-        4700
+        4320,
+        3320
       ],
       "webhookId": "6c6b7f7f-a141-42c3-b794-01394498e0be",
       "typeVersion": 1.1,
@@ -940,7 +939,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Aqui esta el esquema de la base de datos: {{ $json.schema }}\nAqui esta la peticion del usuario: {{ $json.chatInput }}",
+        "text": "=Aqui esta el esquema de la base de datos: {{ $('Edit Fields3').item.json.schema }}\nAqui esta la peticion del usuario: {{ $('Edit Fields3').item.json.chatInput }}",
         "options": {
           "systemMessage": "=Asistant eres un modelo de lenguaje extenso entrenado por Google.\n\nAsistant está diseñado para asistir en una amplia gama de tareas, desde responder preguntas sencillas hasta proporcionar explicaciones y debates exhaustivos sobre una amplia gama de temas. Como modelo de lenguaje, Assistant puede generar texto con un lenguaje similar al humano a partir de la información que recibe, lo que le permite entablar conversaciones con un sonido natural y proporcionar respuestas coherentes y relevantes para el tema en cuestión.\n\nAsistant está en constante aprendizaje y mejora, y sus capacidades evolucionan constantemente. Es capaz de procesar y comprender grandes cantidades de texto y puede utilizar este conocimiento para proporcionar respuestas precisas e informativas a una amplia gama de preguntas. Además, Assistant puede generar su propio texto a partir de la información que recibe, lo que le permite participar en debates y proporcionar explicaciones y descripciones sobre una amplia gama de temas.\n\nEn resumen, Assistant es un sistema potente que puede asistir en una amplia gama de tareas y proporcionar información valiosa sobre una amplia gama de temas. Ya sea que necesite ayuda con una pregunta específica o simplemente quiera conversar sobre un tema específico, el Asistente está aquí para ayudarle.\n\nAyuda al usuario a trabajar con la base de datos MySQL.\n\nSolo responde con la consulta sql no seas redundante ni extenso.\n\nPor favor, escribe los comandos SQL entre comillas triples. No dispone de una herramienta para ejecutar SQL, así que el usuario lo hará por usted."
         }
@@ -949,8 +948,8 @@
       "name": "AI Agent2",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        980,
-        3760
+        1576,
+        4040
       ],
       "notesInFlow": false,
       "typeVersion": 1.9,
@@ -967,7 +966,7 @@
       "type": "n8n-nodes-base.webhook",
       "position": [
         100,
-        3760
+        4140
       ],
       "webhookId": "efac56c4-fe10-4448-862c-396e3145fb10",
       "typeVersion": 2
@@ -982,7 +981,7 @@
       "type": "n8n-nodes-base.readWriteFile",
       "position": [
         320,
-        3760
+        4140
       ],
       "typeVersion": 1
     },
@@ -996,7 +995,7 @@
       "type": "n8n-nodes-base.extractFromFile",
       "position": [
         540,
-        3760
+        4140
       ],
       "typeVersion": 1
     },
@@ -1037,7 +1036,7 @@
       "type": "n8n-nodes-base.set",
       "position": [
         760,
-        3760
+        4140
       ],
       "typeVersion": 3.4
     },
@@ -1059,8 +1058,8 @@
       "name": "Extract SQL Query2",
       "type": "n8n-nodes-base.set",
       "position": [
-        1360,
-        3760
+        1952,
+        4140
       ],
       "typeVersion": 3.4
     },
@@ -1076,8 +1075,8 @@
       "name": "MySQL3",
       "type": "n8n-nodes-base.mySql",
       "position": [
-        1800,
-        3840
+        2392,
+        4215
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -1119,8 +1118,8 @@
       "name": "HTTP Request6",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        2460,
-        3900
+        3052,
+        4265
       ],
       "typeVersion": 4.2,
       "alwaysOutputData": true
@@ -1143,19 +1142,23 @@
       "name": "Get SQL Output2",
       "type": "n8n-nodes-base.set",
       "position": [
-        2240,
-        3900
+        2832,
+        4265
       ],
       "typeVersion": 3.4
     },
     {
-      "parameters": {},
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Edit Fields3').item.json.sessionId }}",
+        "contextWindowLength": 10
+      },
       "id": "b80ef36c-9372-4556-bec7-4be0499f9565",
       "name": "Simple Memory2",
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "position": [
-        1100,
-        3960
+        1840,
+        4260
       ],
       "typeVersion": 1.3
     },
@@ -1188,8 +1191,8 @@
       "name": "If2",
       "type": "n8n-nodes-base.if",
       "position": [
-        2020,
-        3840
+        2612,
+        4215
       ],
       "typeVersion": 2.2
     },
@@ -1224,8 +1227,8 @@
       "name": "HTTP Request7",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        2460,
-        3660
+        3052,
+        4040
       ],
       "retryOnFail": true,
       "typeVersion": 4.2
@@ -1248,8 +1251,8 @@
       "name": "Error Message Build2",
       "type": "n8n-nodes-base.set",
       "position": [
-        2240,
-        3660
+        2832,
+        4040
       ],
       "typeVersion": 3.4
     },
@@ -1282,8 +1285,8 @@
       "name": "If - SQL QUERY2",
       "type": "n8n-nodes-base.if",
       "position": [
-        1580,
-        3760
+        2172,
+        4140
       ],
       "typeVersion": 2.2,
       "onError": "continueRegularOutput"
@@ -1297,8 +1300,8 @@
       "name": "Google Gemini Chat Model1",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "position": [
-        940,
-        4140
+        1580,
+        4260
       ],
       "typeVersion": 1,
       "credentials": {
@@ -1311,7 +1314,7 @@
     {
       "parameters": {
         "content": "# Main WorkFlow",
-        "height": 900,
+        "height": 1380,
         "width": 3020,
         "color": 4
       },
@@ -1319,25 +1322,8 @@
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -40,
-        3560
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "inputText": "={{ $json.body.raw.message.extendedTextMessage.text }}",
-        "options": {
-          "systemPromptTemplate": "=Eres un agente de generación de SQL altamente inteligente y preciso. Interpreta la solicitud en lenguaje natural del usuario y genera la consulta SQL adecuada. Asegúrate de que el SQL sea sintácticamente correcto y seguro. Usa el esquema de base de datos proporcionado. Solo genera el código SQL. No incluyas explicaciones ni texto adicional.",
-          "enableAutoFixing": false
-        }
-      },
-      "id": "3ed908cf-be48-4829-8ec2-6cfefe9f7013",
-      "name": "Sentiment Analysis",
-      "type": "@n8n/n8n-nodes-langchain.sentimentAnalysis",
-      "position": [
-        320,
-        3980
+        4100,
+        2900
       ],
       "typeVersion": 1
     },
@@ -1513,7 +1499,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         480,
-        2960
+        2980
       ],
       "typeVersion": 1
     },
@@ -1541,8 +1527,8 @@
       "name": "Question and Answer Chain",
       "type": "@n8n/n8n-nodes-langchain.chainRetrievalQa",
       "position": [
-        1900,
-        4700
+        4720,
+        3320
       ],
       "typeVersion": 1.5,
       "disabled": true
@@ -1555,8 +1541,8 @@
       "name": "MultiQuery Retriever",
       "type": "@n8n/n8n-nodes-langchain.retrieverMultiQuery",
       "position": [
-        1960,
-        4880
+        4780,
+        3500
       ],
       "typeVersion": 1,
       "disabled": true
@@ -1574,8 +1560,8 @@
       "name": "Workflow Retriever",
       "type": "@n8n/n8n-nodes-langchain.retrieverWorkflow",
       "position": [
-        2400,
-        5100
+        5220,
+        3720
       ],
       "typeVersion": 1.1,
       "disabled": true
@@ -1589,8 +1575,8 @@
       "name": "Google Gemini Chat Model2",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "position": [
-        1880,
-        5100
+        4700,
+        3720
       ],
       "typeVersion": 1,
       "credentials": {
@@ -1619,11 +1605,285 @@
       "name": "Edit Fields5",
       "type": "n8n-nodes-base.set",
       "position": [
-        2420,
-        4700
+        5240,
+        3320
       ],
       "typeVersion": 3.4,
       "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Conversación general",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "9cdd8594-0530-4a8e-a3dd-eb54dd00b87a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "General"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "24bc64a3-5a0d-42f7-8fb4-f95ddd621ecf",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Consulta de datos",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Datos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "952faa3a-b7e1-4224-9bcd-9839de22f6b4",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Caso raro",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Raro"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1356,
+        4140
+      ],
+      "id": "ef2658ce-a056-44df-82ec-4d029fce7c43",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensaje del usuario: \"{{ $json.chatInput }}\"",
+        "options": {
+          "systemMessage": "=Eres un asistente experto en clasificar mensajes de usuarios recibidos a través de WhatsApp para un agente de ventas automatizado. Tu tarea es analizar el mensaje del usuario y clasificarlo en una de las siguientes categorías:\n\n- Consulta de datos: El mensaje solicita información específica que requiere una consulta a una base de datos (por ejemplo, precios, stock, detalles de productos o clientes). Ejemplos: \"Dime el precio del producto X\", \"¿Cuánto stock queda de Y?\", \"Busca el email de Juan Pérez\".\n\n- Conversación general: El mensaje es una interacción genérica, como saludos, agradecimientos o preguntas no relacionadas con datos específicos. Ejemplos: \"Hola, ¿cómo estás?\", \"Gracias por la info\", \"¿En qué me puedes ayudar?\".\n\n- Caso raro: El mensaje es irrelevante, ambiguo, contiene solo emojis, o no encaja en las otras categorías. Ejemplos: \"😊👍\", \"Ok\", \"jajaja\".\n\nInstrucciones:\n1. Analiza el mensaje del usuario.\n2. Devuelve únicamente el nombre de la categoría en texto plano (sin explicaciones ni formato adicional):\n   - Consulta de datos\n   - Conversación general\n   - Caso raro"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        980,
+        4140
+      ],
+      "id": "bb4f3415-eb6c-46dd-9ea4-e89bb94c9262",
+      "name": "Clasificación de intenciones"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        3900
+      ],
+      "id": "7f151c97-74a3-4946-8f97-f7eb6ffdcc6b",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensaje del usuario: {{ $('Edit Fields3').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "Eres un asistente de ventas amigable y profesional para Olympus Barbería, una barbería que ofrece cortes de cabello, arreglo de barba, tintes, tratamientos capilares y productos como cera y aceites para barba. Tu tarea es responder a mensajes de conversación general (como saludos, agradecimientos o preguntas vagas que no requieren consultar datos específicos) recibidos por WhatsApp. Las consultas sobre servicios, precios, horarios o disponibilidad ya han sido clasificadas y redirigidas a otro flujo, por lo que solo debes manejar mensajes genéricos. Sigue estas instrucciones:\n\n1. Analiza el mensaje del usuario.\n2. Genera una respuesta que:\n   - Responda directamente al mensaje del usuario de forma natural, amigable y profesional.\n   - Mantenga el enfoque exclusivamente en los servicios de Olympus Barbería (cortes, barba, tratamientos, productos) y no menciones temas personales o fuera del negocio.\n   - Identifique oportunidades para sugerir servicios o invitar al usuario a agendar una cita.\n   - Incluya una pregunta abierta o una sugerencia para guiar la conversación hacia una acción (por ejemplo, agendar o explorar servicios).\n3. Usa un tono entusiasta, profesional y adaptado a WhatsApp (mensajes cortos, con emojis si es apropiado).\n4. Si el mensaje es vago o irrelevante, invita al usuario a explorar los servicios de la barbería o a agendar una cita.\n5. Ejemplos:\n   - Mensaje: \"Hola, ¿qué tal?\"\n     Respuesta: \"¡Hola! En Olympus Barbería estamos listos para darte un look fresco 💈. ¿Te animas a un corte o un arreglo de barba? 😊\"\n   - Mensaje: \"Gracias por la info\"\n     Respuesta: \"¡De nada! 😄 ¿Quieres agendar una cita para un corte o algo especial en Olympus Barbería?\"\n   - Mensaje: \"Buen día\"\n     Respuesta: \"¡Buen día! 😎 En Olympus Barbería te dejamos listo para brillar. ¿Qué tal un corte moderno o un afeitado?\"\n\nDevuelve solo la respuesta en texto plano, lista para enviar por WhatsApp."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1576,
+        3640
+      ],
+      "id": "108f7072-fd7b-4b5b-98d3-5a0f782204e6",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=responde algo a este nensaje: {{ $('Edit Fields3').item.json.chatInput }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1576,
+        4440
+      ],
+      "id": "30767366-123c-4c68-abb4-991414d0328a",
+      "name": "AI Agent4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d36f6609-45e3-4b0c-84ea-ef77ac3f4c4f",
+      "name": "HTTP Request10",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1980,
+        3640
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8c681a62-ff60-47ff-8d8d-b2a52a84b669",
+      "name": "HTTP Request11",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1952,
+        4440
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        980,
+        4360
+      ],
+      "id": "d2179c1d-5d52-444b-8c0e-302d3277eeef",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        4660
+      ],
+      "id": "bcdeb5eb-9bbf-494b-a230-654f429dbda9",
+      "name": "Google Gemini Chat Model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -1777,11 +2037,6 @@
             "node": "Read/Write Files from Disk3",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "Sentiment Analysis",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -1867,7 +2122,7 @@
       "main": [
         [
           {
-            "node": "AI Agent2",
+            "node": "Clasificación de intenciones",
             "type": "main",
             "index": 0
           }
@@ -1952,6 +2207,16 @@
         [
           {
             "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent3",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent4",
             "type": "ai_memory",
             "index": 0
           }
@@ -2210,11 +2475,6 @@
             "node": "AI Agent2",
             "type": "ai_languageModel",
             "index": 0
-          },
-          {
-            "node": "Sentiment Analysis",
-            "type": "ai_languageModel",
-            "index": 0
           }
         ]
       ]
@@ -2300,13 +2560,104 @@
           }
         ]
       ]
+    },
+    "Clasificación de intenciones": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Clasificación de intenciones",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "ca749056-2f45-41a6-80ea-c3df6b0f9e0f",
+  "versionId": "829db93c-1a7c-4aeb-996f-701e9eb43eaf",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "79c01d1a105320c6c3f2fe02ffea042ae762f8a4f408f11e58e3c7cbdb887d09"

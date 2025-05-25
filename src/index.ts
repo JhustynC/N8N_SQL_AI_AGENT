@@ -626,7 +626,6 @@ function extractMessageText(message: proto.IMessage): string {
 //   res.send(html);
 // });
 
-
 //TODO: Crear un weebhook para gentionar cuando se cierra o falla la sesion
 //TODO: Para no tener que hacer poling desde el frontend (mandar request a esta ruta cada cierto tiempo, no X)
 //? Endpoint para obtener el estado actual

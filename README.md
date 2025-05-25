@@ -55,7 +55,7 @@ hostname -I
 
 ```bash
 models/gemini-2.5-flash-preview-05-20 (Resultados buenos, algo demorado)
-models/gemini-2.0-flash-preview-02-05 (Rapito, Resultados buenos)
+models/gemini-2.0-flash-preview-02-05 (Rapido, Resultados buenos)
 ```
 
 # Eliminar carpeta del respositorio
