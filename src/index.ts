@@ -680,29 +680,29 @@ app.post("/send-message", async (req: Request, res: Response): Promise<void> => 
   // if (!fromMe) return;
 
   //TODO: CAMBAIR PARA ENVIAR MENSAJES A CUALQUIER NUMERO
-  if ((to as String).includes("593999898554")) {
-    if (!to || !message) {
-      res.status(400).json({ error: 'Faltan parámetros: "to" y "message" son requeridos.' });
-      return;
-    }
-
-    if (!isLoggedIn || !sock) {
-      res.status(503).json({ error: "WhatsApp no está conectado. Por favor, escanea el código QR primero." });
-      return;
-    }
-
-    try {
-      await sock.sendMessage(to, { text: message });
-      console.log(to === from);
-      res.status(200).json({ status: "Mensaje enviado con éxito." });
-      console.log(`Mensaje enviado a ${to}: ${message}`);
-    } catch (error) {
-      console.error("Error al enviar el mensaje:", error);
-      res.status(500).json({ error: "Error al enviar el mensaje." });
-    }
-  } else {
-    console.log("Se enviara el mensaje a otro chat");
+  // if ((to as String).includes("593999898554")) {
+  if (!to || !message) {
+    res.status(400).json({ error: 'Faltan parámetros: "to" y "message" son requeridos.' });
+    return;
   }
+
+  if (!isLoggedIn || !sock) {
+    res.status(503).json({ error: "WhatsApp no está conectado. Por favor, escanea el código QR primero." });
+    return;
+  }
+
+  try {
+    await sock.sendMessage(to, { text: message });
+    console.log(to === from);
+    res.status(200).json({ status: "Mensaje enviado con éxito." });
+    console.log(`Mensaje enviado a ${to}: ${message}`);
+  } catch (error) {
+    console.error("Error al enviar el mensaje:", error);
+    res.status(500).json({ error: "Error al enviar el mensaje." });
+  }
+  // } else {
+  //   console.log("Se enviara el mensaje a otro chat");
+  // }
 });
 
 //? Endpoint para limpiar sesión

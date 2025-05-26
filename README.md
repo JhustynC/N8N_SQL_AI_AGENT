@@ -80,3 +80,14 @@ git filter-repo --path nombre_de_la_carpeta --invert-paths
 ````bash
  docker exec -it ollama_container /bin/bash
 ```
+
+# Cosas importatantes
+
+- Lo horarios de atencion (10am - 6:30pm)
+- Verficacion de los campos de usuario  (Nombre y Correo) en formatos correctos
+- Formas de pago (Transferencias y efectivo todo en el local)
+- Formatos de respuesta más llamativos cuando se validad o se manda algun mensaje (barberos, servicios o agendamiento)
+
+
+- ¿Como referir a un Agente Humano?
+- Especificar más los tipos de servicios (tiempo,  duracion)
