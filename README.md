@@ -77,17 +77,22 @@ git filter-repo --path nombre_de_la_carpeta --invert-paths
 
 # Entrar a un contenedor
 
-````bash
+```bash
  docker exec -it ollama_container /bin/bash
 ```
+# Para mejora de performance activar el modo QUEUE en N8N
+## Referencias
 
-# Cosas importatantes
+- https://www.youtube.com/watch?v=n8FQlBj9XMY
+- n8n-autoscaling: https://github.com/conor-is-my-name/n8n-autoscaling/blob/main/docker-compose.yml
 
-- Lo horarios de atencion (10am - 6:30pm)
-- Verficacion de los campos de usuario  (Nombre y Correo) en formatos correctos
-- Formas de pago (Transferencias y efectivo todo en el local)
-- Formatos de respuesta más llamativos cuando se validad o se manda algun mensaje (barberos, servicios o agendamiento)
+Importante revisar el de auto escalado para proyectos con mucha concurrencia
 
+# Referencias para el agente
 
-- ¿Como referir a un Agente Humano?
-- Especificar más los tipos de servicios (tiempo,  duracion)
+- https://www.youtube.com/watch?v=yAn4J4WT4N4
+- https://www.youtube.com/watch?v=9FuNtfsnRNo
+
+# Temas a revisas
+
+- auto seleccion de LLM: https://www.youtube.com/watch?v=xDdrU0o_Bgk
