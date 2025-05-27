@@ -33,6 +33,18 @@ services:
               count: all
               capabilities: [gpu]
 
+  redis:
+    image: redis:alpine
+    container_name: redis-n8n
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - n8n-network
+
   n8n:
     image: n8nio/n8n
     container_name: n8n
@@ -55,6 +67,7 @@ services:
     depends_on:
       - mysql
       - ollama
+      - redis
     networks:
       - n8n-network
   
@@ -62,6 +75,7 @@ volumes:
   mysql_data:
   n8n_data:
   ollama_data:
+  redis_data:
 
 networks:
   n8n-network:
