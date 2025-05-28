@@ -1,0 +1,3368 @@
+{
+  "name": "V0.2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
+        "options": {}
+      },
+      "id": "b4799085-7318-489b-83a1-120eb503ed54",
+      "name": "Webhook2",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -2440,
+        1080
+      ],
+      "webhookId": "efac56c4-fe10-4448-862c-396e3145fb10",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "fileSelector": "./model_mysql.json",
+        "options": {}
+      },
+      "id": "8334e230-6035-4f38-b5b4-82090045a2a7",
+      "name": "Read/Write Files from Disk3",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        -2200,
+        1080
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "id": "2212f406-4079-48d6-a3d0-479fbe105fe1",
+      "name": "Extract from File2",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        -1980,
+        1080
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60cd4390-227f-43d9-b001-e588fe8e1595",
+              "name": "schema",
+              "type": "string",
+              "value": "={{ $json.data }}"
+            },
+            {
+              "id": "c43be3c8-2314-4ea0-9467-96a48e81a90a",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $('Webhook2').item.json.body.raw.message.extendedTextMessage.text }}"
+            },
+            {
+              "id": "62e1b7aa-2637-4693-a6a5-659f08ee8c51",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "id": "f132adc0-5023-40d3-986b-58a2f52247d5",
+              "name": "userPushName",
+              "type": "string",
+              "value": "={{ $('Webhook2').item.json.body.raw.pushName }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "89f943af-126e-45c3-8492-6a2bc979acf8",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1760,
+        1080
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a6970e90-b0bd-4e4b-81b3-3cb807af3bb5",
+              "name": "query",
+              "type": "string",
+              "value": "={{ ($json.output.match(/SELECT[\\s\\S]*?;/i) || [])[0] || \"\" }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aa5e613f-1758-46d8-9003-8f4b507fae27",
+      "name": "Extract SQL Query2",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        20,
+        780
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.query }}",
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "11b70945-59d7-4429-b535-db46f6715dac",
+      "name": "MySQL3",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        500,
+        880
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "54f7ea7d-1f3d-47fb-a93e-b9f02961bac6",
+      "name": "HTTP Request6",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1540,
+        920
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6a810bd4-6a39-46ff-81ed-d6791c87d4ca",
+              "name": "sqlOutput",
+              "type": "string",
+              "value": "={{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b07c18cf-c0de-48f6-b8e1-e5b9c62df033",
+      "name": "Get SQL Output2",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        960,
+        900
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{('Switch')}}",
+        "contextWindowLength": 20
+      },
+      "id": "b4a68fc0-7b92-42cd-b005-7958b73e70df",
+      "name": "Simple Memory2",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        -1440,
+        1560
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1a534e54-68a2-4299-a834-ef1d76977465",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.error }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4e5d4ba7-5092-4118-ba85-57b90fb350a5",
+      "name": "If2",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        680,
+        880
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.reponse }}"
+            },
+            {
+              "name": "fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "=from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3a80f45e-d25f-4d34-be4f-0a6cb451f42c",
+      "name": "HTTP Request7",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1520,
+        580
+      ],
+      "retryOnFail": true,
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa9c890b-0cf4-40da-92d6-cea430c6daaa",
+              "name": "reponse",
+              "type": "string",
+              "value": "={{ $('Webhook2').item.json.body.raw.pushName }} No tengo información sobre eso, ¿puedes estrucuturar mejor tu mensaje?"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8488368c-a2dd-4d58-a1a9-eab87353ca64",
+      "name": "Error Message Build2",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1300,
+        580
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1091f940-034d-4ae2-85fe-021008805fab",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.query }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "141bd5bf-e72b-4433-8d0f-660762332339",
+      "name": "If - SQL QUERY2",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        240,
+        780
+      ],
+      "typeVersion": 2.2,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-preview-02-05",
+        "options": {}
+      },
+      "id": "efe2cf17-697b-431b-86c2-774d930a945f",
+      "name": "Google Gemini Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -320,
+        960
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "9cdd8594-0530-4a8e-a3dd-eb54dd00b87a",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Conversación general"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "General"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "24bc64a3-5a0d-42f7-8fb4-f95ddd621ecf",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Consulta de datos"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Datos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "952faa3a-b7e1-4224-9bcd-9839de22f6b4",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Caso raro"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Raro"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "89e8c82b-7e54-49d5-b867-11ef43b3ab23",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Agendar cita"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Cita"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "c17ec4c8-ea6e-453c-95d2-5686b3498295",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Registro cliente"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Registro cliente"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1bd18ad5-9096-4030-8177-eec6aff302f6",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        -1160,
+        1040
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensaje del usuario: \"{{ $json.chatInput }}\"",
+        "options": {
+          "systemMessage": "=Eres un asistente experto en clasificar mensajes de usuarios recibidos a través de WhatsApp para un agente de ventas automatizado. Tu tarea es analizar el mensaje del usuario y clasificarlo en una de las siguientes categorías:\n\n- Consulta de datos: El mensaje solicita información específica que requiere una consulta a una base de datos (por ejemplo, precios, stock, detalles de productos o clientes). Ejemplos: \"Dime el precio del producto X\", \"¿Cuánto stock queda de Y?\", \"Busca el email de Juan Pérez\".\n\n- Conversación general: El mensaje es una interacción genérica, como saludos, agradecimientos o preguntas no relacionadas con datos específicos. Ejemplos: \"Hola, ¿cómo estás?\", \"Gracias por la info\", \"¿En qué me puedes ayudar?\".\n\n- Caso raro: El mensaje es irrelevante, ambiguo, contiene solo emojis, o no encaja en las otras categorías. Ejemplos: \"😊👍\", \"Ok\", \"jajaja\".\n\n- Agendar cita o servicio: El mensaje del usuario incluye expresiones como “Quiero una cita”, “Agendar cita”, “Reservar”, “¿Puedo agendar?”, \"Quiero una cita\", etc., clasifícalo en una categoría “Agendar cita”.\n\n- Registro de Usuario: El mensaje del usuario contiene su nombre y correo que se pide para su registro: \"Me llamo Juan, juan@gmail.com\", \"Karolina, karo123@hotmail.com\", \"Mi nombre es Jhustyn, y mi correo es jhustyncarvajal@gmail.com\", etc.\nclasifícalo en una categoría “Registro cliente” siempre y cuando el menasje no contenga algun contexto más especifico antes de los datos mencionados, ejm: \"Me encanta su barberia soy Jhustyn el que fue el otro dia para un corte\" o \"No me gusot el servico soy Juan y su barbero me lastimo\".\n\nInstrucciones:\n\n1. Analiza el mensaje del usuario tomando encuenta los mensajes anteriores para mantener coherencia en la cenversación.\n\n2. Devuelve únicamente el nombre de la categoría en texto plano (sin explicaciones ni formato adicional):\n   - Consulta de datos\n   - Conversación general\n   - Caso raro\n   - Agendar cita\n   - Registro cliente"
+        }
+      },
+      "id": "4f911a1f-44c5-45ef-921f-fdef5333e90b",
+      "name": "Clasificación de intenciones",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -1540,
+        1080
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "id": "816e69f1-808a-4808-a433-3272ae02de07",
+      "name": "Google Gemini Chat Model3",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -320,
+        400
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "62065216-13eb-453a-ba22-121e3e259f2b",
+      "name": "HTTP Request10",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        80,
+        180
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "id": "93c06416-74d4-43ec-ad2c-f97f20641cda",
+      "name": "Google Gemini Chat Model4",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -1540,
+        1300
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensaje del usuario: \"{{ $('Edit Fields3').item.json.chatInput }}\" \nresultados de la consulta SQL: {{ $json.sqlOutput }}.",
+        "options": {
+          "systemMessage": "Eres un asistente de ventas amigable y profesional para Olympus Barbería, una barbería que ofrece cortes de cabello, arreglo de barba, tintes, tratamientos capilares y productos como cera y aceites para barba. Tu tarea es tomar los resultados de una consulta SQL y el mensaje original del usuario, y generar una respuesta clara, amigable y profesional para enviar por WhatsApp. Sigue estas instrucciones:\n\n1. Analiza el mensaje del usuario y los resultados de la consulta SQ.\n2. Genera una respuesta que:\n   - Responda directamente a la consulta del usuario, incorporando los datos de la consulta SQL de forma clara y natural.\n   - Mantenga el enfoque exclusivamente en los servicios de Olympus Barbería (cortes, barba, tratamientos, productos) y no menciones temas personales o fuera del negocio.\n   - Use un tono entusiasta, profesional y adaptado a WhatsApp (mensajes cortos, con emojis si es apropiado).\n   - Incluya una llamada a la acción, como agendar una cita o explorar otros servicios.\n3. Si los resultados de la consulta SQL están vacíos o no aplican, ofrece una respuesta alternativa que invite al usuario a explorar otros servicios o a agendar una cita.\n4. Ejemplos:\n   - Mensaje: \"¿Cuánto cuesta un corte de cabello?\"\n     Resultados SQL: precio = 20\n     Respuesta: \"¡Un corte de cabello en Olympus Barbería cuesta $20! 💈 ¿Quieres agendar una cita para un look fresco? 😊\"\n   - Mensaje: \"¿Qué horarios tienen mañana?\"\n     Resultados SQL: horarios = \"10:00-13:00, 14:00-19:00\"\n     Respuesta: \"¡Mañana estamos disponibles de 10:00-13:00 y de 14:00-19:00! 😎 ¿A qué hora te vendría bien visitarnos?\"\n   - Mensaje: \"¿Tienen tinte para el cabello?\"\n     Resultados SQL: [] (vacío)\n     Respuesta: \"Lo siento, no tenemos tintes disponibles ahora, pero ofrecemos cortes increíbles y arreglos de barba. ¿Te interesa agendar algo? 😊\"\n\nDevuelve solo la respuesta en texto plano, lista para enviar por WhatsApp."
+        }
+      },
+      "id": "9ac755c7-ea76-4694-82ab-af0279e468f7",
+      "name": "AI Agent5",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1160,
+        920
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "id": "aa0ff02a-6066-4294-887f-e4859ddc268a",
+      "name": "Google Gemini Chat Model6",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        1180,
+        1120
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "30383a3e-7d86-4a65-9d14-62dfcbc36a54",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -2280,
+        -520
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17fbdf76-4ab6-48a0-946f-5d226b3587ee",
+              "name": "=table",
+              "type": "string",
+              "value": "={{ $('Edit Fields6').item.json.table_name }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "677f7b2a-ac39-4f8b-aa79-70044f8abbd9",
+      "name": "Edit Fields4",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1400,
+        -520
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {
+          "fileName": "model_mysql.json"
+        }
+      },
+      "id": "a1726a06-7997-402c-924d-4eb804b08300",
+      "name": "Convert to File1",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        -960,
+        -520
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "./model_mysql.json",
+        "options": {
+          "append": false
+        }
+      },
+      "id": "f718517b-0fa4-48df-b161-423e849c2e9c",
+      "name": "Read/Write Files from Disk4",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        -740,
+        -520
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "const result = {};\nconst properties_model = $('Edit Fields4').all();\n\nfor(const property of properties_model){\n  const table = property.json.table;\n\n  if (!result[table]) {\n    result[table] = [];\n  }\n\n  result[table].push({\n    field: property.json.Field,\n    type: property.json.Type,\n    nullable: property.json.Null,\n    key: property.json.Key,\n    default: property.json.Default,\n    extra: property.json.Extra\n  });\n};\n\nreturn result;"
+      },
+      "id": "161ff95d-7840-4536-8b3b-b3645d5fb195",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -1180,
+        -520
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7a6c1a5f-c34c-4d90-b86b-0ae77eab1eaa",
+              "name": "table_name",
+              "type": "string",
+              "value": "={{ $json.Tables_in_olympus_barberia }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "includeFields": "={{ $json.Tables_in_olympus_barberia }}",
+        "options": {}
+      },
+      "id": "787b5a6a-b915-4b10-a9f2-08754cdce5ab",
+      "name": "Edit Fields6",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1840,
+        -520
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SHOW TABLES",
+        "options": {}
+      },
+      "id": "57550186-d942-4224-a114-f5c878368f20",
+      "name": "Show Tables",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        -2060,
+        -520
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DESCRIBE {{ $json.table_name }}",
+        "options": {}
+      },
+      "id": "e0cd3388-b18a-4c18-af37-4db3eec91b62",
+      "name": "Describe Tables2",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        -1620,
+        -520
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Generate model database file\n## More efficient for workflow, don't necessarily make a query to retrieve the schema\n\n",
+        "height": 460,
+        "width": 1920,
+        "color": 6
+      },
+      "id": "62bbda5d-2d47-4657-8707-3fb1ae2e2b45",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2400,
+        -700
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensaje del usuario: {{ $('Edit Fields3').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "Eres un asistente de ventas amigable y profesional para Olympus Barbería, una barbería que ofrece cortes de cabello, arreglo de barba, tintes, tratamientos capilares y productos como cera y aceites para barba. Tu tarea es responder a mensajes de conversación general (como saludos, agradecimientos o preguntas vagas que no requieren consultar datos específicos) recibidos por WhatsApp. Las consultas sobre servicios, precios, horarios o disponibilidad ya han sido clasificadas y redirigidas a otro flujo, por lo que solo debes manejar mensajes genéricos. Sigue estas instrucciones:\n\n1. Analiza el mensaje del usuario.\n2. Genera una respuesta que:\n   - Responda directamente al mensaje del usuario de forma natural, amigable y profesional.\n   - Mantenga el enfoque exclusivamente en los servicios de Olympus Barbería (cortes, barba, tratamientos, productos) y no menciones temas personales o fuera del negocio.\n   - Identifique oportunidades para sugerir servicios o invitar al usuario a agendar una cita.\n   - Incluya una pregunta abierta o una sugerencia para guiar la conversación hacia una acción (por ejemplo, agendar o explorar servicios).\n3. Usa un tono entusiasta, profesional y adaptado a WhatsApp (mensajes cortos, con emojis si es apropiado).\n4. Si el mensaje es vago o irrelevante, invita al usuario a explorar los servicios de la barbería o a agendar una cita.\n5. Ejemplos:\n   - Mensaje: \"Hola, ¿qué tal?\"\n     Respuesta: \"¡Hola! En Olympus Barbería estamos listos para darte un look fresco 💈. ¿Te animas a un corte o un arreglo de barba? 😊\"\n   - Mensaje: \"Gracias por la info\"\n     Respuesta: \"¡De nada! 😄 ¿Quieres agendar una cita para un corte o algo especial en Olympus Barbería?\"\n   - Mensaje: \"Buen día\"\n     Respuesta: \"¡Buen día! 😎 En Olympus Barbería te dejamos listo para brillar. ¿Qué tal un corte moderno o un afeitado?\"\n\nDevuelve solo la respuesta en texto plano, lista para enviar por WhatsApp."
+        }
+      },
+      "id": "28460c5d-103f-42e1-9df1-f62a2d701145",
+      "name": "AI Agent  - Conversación General",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -340,
+        180
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=- Esquema de la base de datos: {{ $('Edit Fields3').item.json.schema }}\n- Mensaje del usuario: {{ $('Edit Fields3').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "=Eres un asistente experto en generar consultas SQL para Olympus Barbería, una barbería que ofrece cortes de cabello, arreglo de barba, tintes, tratamientos capilares y productos. Tu tarea es analizar el mensaje del usuario y generar una consulta SQL válida para consultar información o preparar datos para agendar citas en la base de datos con las siguientes tablas:\n\n\n\nInstrucciones:\n1. Analiza el mensaje del usuario: \"{{ $('Webhook2').item.json.body.raw.message.extendedTextMessage.text }}\" y el número de teléfono: \"{{ $('Webhook2').item.json.body.from }}\".\n\n2. Genera una consulta SQL válida que:\n\n   - Responda a la solicitud del usuario (por ejemplo, precio de un servicio, horarios disponibles, barberos disponibles, citas del cliente).\n\n   - Para agendamiento, genere una consulta SELECT para verificar disponibilidad (por ejemplo, horarios libres o barberos disponibles) en lugar de INSERT, ya que la inserción se manejará en otro flujo.\n\n   - Use las tablas `clientes`, `servicios`, `barberos`, `citas` según corresponda, respetando llaves foráneas.\n\n   - Sea segura (solo SELECT, evita DELETE, UPDATE, INSERT) y use sintaxis SQL estándar compatible con MySQL.\n\n   - Si el mensaje menciona \"mañana\", usa 'Date.now()' (por ejemplo, '2025-05-24' para 2025-05-23).\n\n   - Use '{{ $('Webhook2').item.json.body.from }}' para identificar al cliente en consultas de citas.\n\n3. Si el mensaje es ambiguo, genera una consulta genérica relevante (por ejemplo, listar servicios o barberos disponibles).\n\n4. Si el mensaje implica agendamiento (por ejemplo, \"Quiero una cita\"), genera una consulta para verificar disponibilidad de horarios o barberos para la fecha solicitada.\n\n5. Ejemplos:\n\n   - Mensaje: \"¿Cuánto cuesta un corte de cabello?\"\n     Consulta SQL: SELECT precio FROM servicios WHERE nombre_servicio = 'Corte de cabello';\n\n   - Mensaje: \"¿Qué horarios tienen mañana?\"\n     Consulta SQL: SELECT hora FROM citas WHERE fecha = 'fecha_manana' AND estado = 'pendiente';\n\n   - Mensaje: \"¿Qué barberos están disponibles?\"\n     Consulta SQL: SELECT nombre, especialidad FROM barberos WHERE disponible = TRUE;\n\n   - Mensaje: \"¿Tengo citas programadas?\"\n     Consulta SQL: SELECT c.fecha, c.hora, s.nombre_servicio, b.nombre AS barbero FROM citas c JOIN servicios s ON c.servicio_id = s.id LEFT JOIN barberos b ON c.barbero_id = b.id WHERE c.cliente_id = (SELECT id FROM clientes WHERE telefono = '{{ $('Webhook2').item.json.body.from }}') AND c.estado = 'pendiente';\n\n   - Mensaje: \"Quiero una cita para un corte mañana\"\n     Consulta SQL: SELECT b.nombre, b.especialidad FROM barberos b WHERE b.disponible = TRUE AND NOT EXISTS (SELECT 1 FROM citas c WHERE c.barbero_id = b.id AND c.fecha = 'fecha_manana' AND c.estado IN ('pendiente', 'confirmada'));\n   - Mensaje: \"Dime sobre los servicios\"\n     Consulta SQL: SELECT nombre_servicio, precio, descripcion FROM servicios;\n\n6. Devuelve solo la consulta SQL entre comillas triples. No dispones de una herramienta para ejecutar SQL, así que el usuario lo hará por usted."
+        }
+      },
+      "id": "34b726f6-8edb-4664-80f4-a93a427bc767",
+      "name": "AI Agent - Consulta de Datos",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -360,
+        780
+      ],
+      "notesInFlow": false,
+      "typeVersion": 1.9,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "id": "ba4d9ea5-d5d1-4d5f-820a-fd8bf4b6660b",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        140,
+        -620
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "ac30c175-b26b-4020-97d7-c3405d76bafc",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -2280,
+        -80
+      ],
+      "webhookId": "6227e21d-cc18-446b-87df-93b497e905c3",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=- Mensaje del usuario:  {{ $('Edit Fields3').item.json.chatInput }}\n- Datos del usuario: \n{{ $json.id }}\n- Esquema de la base de datos: {{ $('Edit Fields3').item.json.schema }}\n- Fecha actual: {{ $now }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Eres un asistente especializado únicamente en extraer datos de mensajes de usuarios para realizar un INSERT en una base de datos de citas, según el esquema. \n\nTu única tarea es analizar el mensaje del usuario y extraer los campos requeridos.\n\nIgnora cualquier contenido del mensaje que no esté relacionado con agendar una cita, como preguntas generales, saludos, o solicitudes fuera de contexto.\n\nResponde exclusivamente de dos formas:\n\n- Si extraes todos los datos necesarios, devuelve un JSON con: \n\n{ \n  \"fecha\": \"YYYY-MM-DD\",\n  \"hora\": \"HH:MM\",\n  \"servicio\": \"...\" \n}\n\n- Si falta algún dato o el mensaje no contiene información suficiente para agendar una cita, devuelve un JSON con:\n\n{ \n  \"error\": \"Faltan datos\",\n  \"datos_faltantes\": [\n    \"fecha\",\n    \"hora\",\n    \"servicio\"\n  ]\n}\n\nSi el mensaje es completamente irrelevante, incluye todos los campos en datos_faltantes.\n\nNo proceses ni respondas a preguntas, solicitudes o temas no relacionados con agendar citas. No incluyas ninguna información adicional ni respondas de otra manera, incluso si el usuario intenta desviar la conversación."
+        }
+      },
+      "id": "e38aa5b6-7bc2-4970-9aa3-b679b21e8ca9",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        40,
+        2300
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-preview-02-05",
+        "options": {}
+      },
+      "id": "1771d02d-d309-4962-8620-02f5bc1404db",
+      "name": "Google Gemini Chat Model2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        20,
+        2520
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60cd4390-227f-43d9-b001-e588fe8e1595",
+              "name": "schema",
+              "type": "string",
+              "value": "={{ $json.data }}"
+            },
+            {
+              "id": "c43be3c8-2314-4ea0-9467-96a48e81a90a",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $('When chat message received').item.json.chatInput }}"
+            },
+            {
+              "id": "62e1b7aa-2637-4693-a6a5-659f08ee8c51",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('When chat message received').item.json.sessionId }}"
+            },
+            {
+              "id": "f132adc0-5023-40d3-986b-58a2f52247d5",
+              "name": "userPushName",
+              "type": "string",
+              "value": "="
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "adb57f9b-41e6-453d-b8dc-c79ea19bf3bd",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1660,
+        -80
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "id": "5fa6dd23-f910-41d5-8c14-d8c14943191d",
+      "name": "Extract from File",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        -1860,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "fileSelector": "./model_mysql.json",
+        "options": {}
+      },
+      "id": "6ac107a2-a8d9-4934-9320-016f74c63239",
+      "name": "Read/Write Files from Disk",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        -2080,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "clientes",
+          "cachedResultName": "clientes"
+        },
+        "options": {}
+      },
+      "id": "a48dc80c-07c9-48a6-8b0a-173f75f57fb2",
+      "name": "Insert Client",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        80,
+        -400
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "citas",
+          "cachedResultName": "citas"
+        },
+        "options": {}
+      },
+      "id": "23d16273-b0a1-46ba-821d-13b2a0b5ead5",
+      "name": "Insert Appointment",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        200,
+        -400
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "27ef831f-c37d-48e7-9607-2285ea074b19",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1180,
+        -1000
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "# Main flow ",
+        "height": 1740,
+        "width": 150,
+        "color": 4
+      },
+      "id": "7ab10531-5466-4e16-ae8e-2ba4c773dc34",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -4120,
+        -40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
+        "options": {}
+      },
+      "id": "0fbb3337-135e-4023-a7a1-4174bb2ad621",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -140,
+        -1380
+      ],
+      "webhookId": "efac56c4-fe10-4448-862c-396e3145fb10",
+      "typeVersion": 2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "fileSelector": "./model_mysql.json",
+        "options": {}
+      },
+      "id": "55ad9e43-b767-48a2-8bcd-cb57ab3930d3",
+      "name": "Read/Write Files from Disk5",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        80,
+        -1380
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "id": "570721d4-cd18-4a88-8b62-4fbc33d2282b",
+      "name": "Extract from File3",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        300,
+        -1380
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60cd4390-227f-43d9-b001-e588fe8e1595",
+              "name": "schema",
+              "type": "string",
+              "value": "={{ $json.data }}"
+            },
+            {
+              "id": "c43be3c8-2314-4ea0-9467-96a48e81a90a",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.raw.message.extendedTextMessage.text }}"
+            },
+            {
+              "id": "62e1b7aa-2637-4693-a6a5-659f08ee8c51",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.from }}"
+            },
+            {
+              "id": "f132adc0-5023-40d3-986b-58a2f52247d5",
+              "name": "userPushName",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.raw.pushName }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "66f6e616-e5d0-480a-9606-68f22c33cc7d",
+      "name": "Edit Fields5",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        520,
+        -1380
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "9cdd8594-0530-4a8e-a3dd-eb54dd00b87a",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Conversación general"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "General"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "24bc64a3-5a0d-42f7-8fb4-f95ddd621ecf",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Consulta de datos"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Datos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "952faa3a-b7e1-4224-9bcd-9839de22f6b4",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Caso raro"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Raro"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "89e8c82b-7e54-49d5-b867-11ef43b3ab23",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Agendar cita"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Cita"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d6ad80c6-f066-4280-8118-3ad70e566881",
+      "name": "Switch1",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        1120,
+        -1400
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensaje del usuario: \"{{ $json.chatInput }}\"",
+        "options": {
+          "systemMessage": "=Eres un asistente experto en clasificar mensajes de usuarios recibidos a través de WhatsApp para un agente de ventas automatizado. Tu tarea es analizar el mensaje del usuario y clasificarlo en una de las siguientes categorías:\n\n- Consulta de datos: El mensaje solicita información específica que requiere una consulta a una base de datos (por ejemplo, precios, stock, detalles de productos o clientes). Ejemplos: \"Dime el precio del producto X\", \"¿Cuánto stock queda de Y?\", \"Busca el email de Juan Pérez\".\n\n- Conversación general: El mensaje es una interacción genérica, como saludos, agradecimientos o preguntas no relacionadas con datos específicos. Ejemplos: \"Hola, ¿cómo estás?\", \"Gracias por la info\", \"¿En qué me puedes ayudar?\".\n\n- Caso raro: El mensaje es irrelevante, ambiguo, contiene solo emojis, o no encaja en las otras categorías. Ejemplos: \"😊👍\", \"Ok\", \"jajaja\".\n\n- Agendar cita o servicio: El mensaje del usuario incluye expresiones como “Quiero una cita”, “Agendar cita”, “Reservar”, “¿Puedo agendar?”, \"Quiero una cita\", etc., clasifícalo en una categoría “Agendar cita”.\n\nInstrucciones:\n1. Analiza el mensaje del usuario tomando encuenta los mensajes anteriores para mantener coherencia en la cenversación.\n2. Devuelve únicamente el nombre de la categoría en texto plano (sin explicaciones ni formato adicional):\n   - Consulta de datos\n   - Conversación general\n   - Caso raro\n   - Agendar cita  "
+        }
+      },
+      "id": "8f528440-fcce-4b8b-b6be-6b65c0c58446",
+      "name": "Clasificación de intenciones1",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        740,
+        -1380
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "id": "0b4a59a3-8cde-47ac-a220-51d6f2aa436b",
+      "name": "Google Gemini Chat Model7",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        740,
+        -1160
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "7491a57a-3309-4a8e-9fdd-db6cd750f1c7",
+      "name": "Auto-fixing Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "position": [
+        140,
+        2520
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-preview-02-05",
+        "options": {}
+      },
+      "id": "b826242d-2091-4fa9-b0c8-8f0bd6177b32",
+      "name": "Google Gemini Chat Model8",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        180,
+        2720
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{ \n  \"error\": \"Faltan datos\",\n  \"datos_faltantes\": [\n    \"cliente_nombre\",\n    \"fecha\",\n    \"hora\",\n    \"servicio\"\n  ]\n}"
+      },
+      "id": "8730a523-844c-4a04-8415-c65e795cea87",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        300,
+        2720
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "18dfb90c-d39d-4d4a-bfa5-b19fbd0be837",
+              "name": "output",
+              "type": "string",
+              "value": "=Para agendar una cita necesito algunos datos\n\nDatos faltantes:\n {{ $('AI Agent').item.json.output.datos_faltantes }}\n\nAsegurate de enviar todos los datos en tu mensaje.\n\nEjm: Quiero un corte de pelo el 30 de mayo alas 3pm, gracias\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3840d526-023e-48e6-887b-cee04d5ab8ea",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        820,
+        2640
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=- Datos para el insert: \n{{ $json.output.servicio }}\n{{ $json.output.cliente_nombre }}\n{{ $json.output.hora }}\n{{ $json.output.fecha }}\n\n- Esquema de la base de datos: {{ $('Edit Fields3').item.json.schema }}",
+        "options": {
+          "systemMessage": "=Eres un asistente experto en generar consultas SQL de tipo INSERT para la tabla citas con el esquema que se te proporcionara.\n\nTu única tarea es analizar los datos extraídos del mensaje del usuario y generar una consulta SQL válida para insertar un registro en la tabla citas. \n\nInstrucciones:\n1. Usa los datos proporcionados para generar una consulta SQL con la estructura correcta.\n\n2. Asegúrate de que la consulta sea sintácticamente correcta y use comillas simples para valores de texto.\n\n3. Si los datos son incompletos o inválidos, devuelve: `ERROR: Faltan o son inválidos los datos: [campo1, campo2, ...]`.\n\n4. Devuelve únicamente la consulta SQL o el mensaje de error entre comillas triples (```). No incluyas explicaciones ni información adicional.\n\n5. No tienes acceso a una base de datos para ejecutar la consulta; el usuario la ejecutará.\n"
+        }
+      },
+      "id": "107b3bc7-6682-45cf-9463-680834797167",
+      "name": "AI Agent1",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        740,
+        2240
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-preview-02-05",
+        "options": {}
+      },
+      "id": "e8c965b5-186b-42f6-a51c-aa171a493b2c",
+      "name": "Google Gemini Chat Model9",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        840,
+        2460
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a6970e90-b0bd-4e4b-81b3-3cb807af3bb5",
+              "name": "query",
+              "type": "string",
+              "value": "={{ ($json.output.match(/INSERT INTO citas\\s*\\([\\s\\S]*?\\)\\s*VALUES\\s*\\([\\s\\S]*?\\);/i) || [])[0] || \"\" }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9dfd4ed8-9203-4203-9c66-d1e909a96180",
+      "name": "Extract SQL Query",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1120,
+        2340
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.query }}",
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "e542d9e7-b76f-496b-9168-f0e3f2c9c30a",
+      "name": "MySQL4",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        1560,
+        2260
+      ],
+      "typeVersion": 2.4,
+      "alwaysOutputData": true,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1091f940-034d-4ae2-85fe-021008805fab",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.query }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1523d4a3-f1c8-4f57-9944-e4790d9af293",
+      "name": "If - SQL QUERY",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1340,
+        2340
+      ],
+      "typeVersion": 2.2,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=- Esquema de la base de datos:  \n{{ $('Edit Fields3').item.json.schema }}\n- El mensaje del usuario: {{ $('Edit Fields3').item.json.chatInput }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Eres un asistente encargado de encaminar a los usuarios en la agendación de sus cita donde tendras que crear los usuarios (si no existe) y agendar las citas (agregar un nuevo registro a la base de datos) para una barberia (Olympus Barberia) en donde analizando el esquema de de base de datos haras las respctivas insenciones"
+        }
+      },
+      "id": "c5e9f57d-099d-4e5c-a2dc-5b7274d9e776",
+      "name": "AI Agent - Extraer Parámetros",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        120,
+        -800
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "4a3ce4e7-6d13-4af1-ad54-cdeea1da70cc",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -140,
+        -820
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9d54ed01-01f9-4a5e-b083-35708d6de9a8",
+      "name": "HTTP Request8",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1120,
+        2840
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "=Se genero tu cita perfectamente para el {{ $('Datos suficientes cita?').item.json.output.fecha }} a las {{ $('Datos suficientes cita?').item.json.output.hora }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0289cb66-6b08-4248-9971-75a9a89d06e2",
+      "name": "HTTP Request9",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2000,
+        2220
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "=Hubo algun error porfavor intente de nuevo"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "44f8823e-46db-4f60-bcea-c13f8bb68511",
+      "name": "HTTP Request11",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2000,
+        2440
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=- Datos para el insert: \n{{ $json.output.servicio }}\n{{ $json.output.cliente_nombre }}\n{{ $json.output.hora }}\n{{ $json.output.fecha }}\n\n- Esquema de la base de datos: {{ $('Edit Fields3').item.json.schema }}",
+        "options": {
+          "systemMessage": "=Eres un asistente experto en generar consultas SQL de tipo INSERT. \nTu tarea es analizar los datos extraidos del mensaje del usuario y generar una consulta SQL válida para insertar un registro en la tabla citas en la base de datos, trendras acceso al esquema.\n\nInstrucciones:\n1. Analiza los Datos para el INSERT.\n\n2. Genera una consulta SQL válida que permita insertar registros en la tabla citas con los datos proporcionados.\n\n6. Devuelve solo la consulta SQL entre comillas triples. No dispones de una herramienta para ejecutar SQL, así que el usuario lo hará por usted."
+        }
+      },
+      "id": "6ad435db-47d4-4429-9efb-990995771171",
+      "name": "AI Agent2",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        640,
+        -800
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "operation": "executeQuery",
+        "query": "{{$fromAI('sql_statement')}}",
+        "options": {}
+      },
+      "id": "9ea87fdd-bde8-4311-a25e-6a20e60b2903",
+      "name": "MySQL",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        1220,
+        -540
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Insert data in MySQL",
+        "table": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ $fromAI('Table', ``, 'string') }}"
+        },
+        "options": {}
+      },
+      "id": "f2d850e4-6e23-4435-838d-0a70fc9b42a5",
+      "name": "MySQL1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        1080,
+        -540
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get data in MySQL",
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Table', ``, 'string') }}"
+        },
+        "returnAll": "={{ $fromAI('Return_All', `Para buscar informacion del negocio`, 'boolean') }}",
+        "options": {}
+      },
+      "id": "b8c1fa0c-79e9-465c-9d71-640b8d63dfde",
+      "name": "MySQL2",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        880,
+        -540
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-preview-02-05",
+        "options": {}
+      },
+      "id": "668ebfb5-d96a-4fa5-b146-32b188af5efb",
+      "name": "Google Gemini Chat Model10",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        680,
+        -540
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "=Veo que no estas registrado como cliente, porfavor enviame tu nombre y correo para continuar\n\nEjm: Me llamo Juan Sanchez, juansc@gmail.com"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3a2b2693-5e30-494f-9c34-7672fa47eb55",
+      "name": "HTTP No Cliente",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -420,
+        3000
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "aa73c07a-6be8-4c15-a2be-206b69605ce0",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.id }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bc055130-d356-4d51-98c1-dda4a42935f5",
+      "name": "Es cliente?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -660,
+        2660
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-preview-02-05",
+        "options": {}
+      },
+      "id": "cc97f715-605c-4b38-9f7a-356f2930d393",
+      "name": "Google Gemini Chat Model5",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -360,
+        1780
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "=Hubo algun error porfavor intente de nuevo\nO verifique si su numero ya se encuentra registrado.\n\nEjm: ¿Este numero ya esta registrado com cliente?"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cb8c208a-456a-4a24-a198-55e3e688c677",
+      "name": "HTTP Request12",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        780,
+        1600
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "=Registro de {{ $('Name and mail extractor').item.json.output.nombre }} exitoso"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "961a6a9f-7f12-4a38-b36a-3fc23ffe2813",
+      "name": "HTTP Request13",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        780,
+        1400
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "467915e6-b749-4af8-8dc0-2d265cf08eb3",
+      "name": "Auto-fixing Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "position": [
+        -240,
+        1780
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-preview-02-05",
+        "options": {}
+      },
+      "id": "918f2e12-2ad0-40fa-9ebc-21a77db872bc",
+      "name": "Google Gemini Chat Model11",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -220,
+        1980
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "DWXCpnS9wGemeHjd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"nombre\": \"Juan Pérez\",\n  \"correo\": \"juan.perez@gmail.com\"\n}"
+      },
+      "id": "b0218ad1-02a9-4470-9878-193dac103137",
+      "name": "Structured Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        -100,
+        1980
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.output.datos_faltantes }}\n\nHubo algun error porfavor intente de nuevo"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "93fc8e20-0c71-4775-9db6-87da24b47036",
+      "name": "HTTP Request14",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        780,
+        1800
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c58c847d-43d4-4215-a703-30224e69b031",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.output }}",
+              "rightValue": ""
+            },
+            {
+              "id": "8929437a-c846-4eec-bd91-dbc4162df519",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.output.error }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "289c7637-c727-4f3c-bb76-5f0f71d98787",
+      "name": "Datos suficientes cita?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        520,
+        2500
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "3e708992-b804-4f7d-9773-3883315ef4ff",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.data }}",
+              "rightValue": "="
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9bab6895-36d7-4566-b8ee-1adb303a6b35",
+      "name": "QUERY FAILS",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1780,
+        2260
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "servicios",
+          "cachedResultName": "servicios"
+        },
+        "returnAll": true,
+        "options": {}
+      },
+      "id": "fdb7ddbc-2293-4f83-9c9d-4dbd29fe3438",
+      "name": "MySQL6",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        80,
+        2980
+      ],
+      "typeVersion": 2.4,
+      "alwaysOutputData": true,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "barberos",
+          "cachedResultName": "barberos"
+        },
+        "returnAll": true,
+        "options": {}
+      },
+      "id": "39e373b9-6f47-4b64-8d8c-7864913806e1",
+      "name": "MySQL7",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        80,
+        3160
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "6261b382-2b50-4f8d-bfb2-fe154af0b49d",
+              "operator": {
+                "type": "boolean",
+                "operation": "notExists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.error }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cbc9b7f1-ee05-4fa3-871d-93c4ddf93424",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        300,
+        3160
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "436462a0-7aa3-417f-802b-d0c4f008ca54",
+              "operator": {
+                "type": "boolean",
+                "operation": "notExists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.error }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c2ccefda-12ed-46c7-a6c9-4a5d3171dcdc",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        300,
+        2980
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "content": "# TODO\n# - Check baberos and services to make an apoinment \n# Check ",
+        "height": 460,
+        "width": 600
+      },
+      "id": "3fb7de4e-9998-4c1a-af04-76c3db2aecd1",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -4120,
+        1700
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensaje del usuario: {{ $('Edit Fields3').item.json.chatInput }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Eres un asistente especializado únicamente en extraer el nombre y el correo electrónico de mensajes de usuarios. Tu tarea es analizar el mensaje y extraer únicamente los campos `nombre` (texto, nombre completo o nombre propio) y `correo` (formato válido de correo electrónico, ej. usuario@dominio.com). Ignora cualquier contenido no relacionado, como saludos, preguntas o información adicional.\n\nInstrucciones:\n1. Extrae el `nombre` y el `correo` del mensaje del usuario.\n\n2. Valida que el correo tenga un formato correcto (contiene @ y un dominio válido), en caso de que algo este en mayusculas corrigelo y transformalo todo a minusculas.\n\n3. Responde exclusivamente con un JSON en una de estas dos formas:\n\n - Si se extraen ambos datos: \n{\n  \"nombre\": \"...\", \n  \"correo\": \"...\"\n}\n\n- Si falta algún dato o el mensaje es irrelevante: \n{\n  \"error\": \"Faltan datos o mensaje irrelevante\",\n  \"datos_faltantes\": [\"nombre\", \"correo\"]\n}\n\n4. Si el correo no es válido, incluye `correo` en `datos_faltantes`.\n\n5. No proceses ni respondas a solicitudes fuera de la extracción de nombre y correo. No incluyas información adicional ni respondas de otra manera.\n\nEjemplo de entrada: \"Hola, soy Juan Pérez y mi correo es juan.perez@gmail.com\"\n\nSalida esperada:\n\n{\n  \"nombre\": \"Juan Pérez\",\n  \"correo\": \"juan.perez@gmail.com\"\n}"
+        }
+      },
+      "id": "10bf2cb8-5e45-4d26-98b8-761ecf40a6e9",
+      "name": "Name and mail extractor",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -360,
+        1560
+      ],
+      "typeVersion": 1.9,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "bf16aa5d-45eb-4b12-b0a4-8e4ff245f1a7",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.output.nombre }}",
+              "rightValue": ""
+            },
+            {
+              "id": "b1c89b00-e07f-4ceb-8bc5-5b457cf47b0d",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.output.correo }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f86905dd-e04f-493b-ba4f-83db1ed95e36",
+      "name": "the data exists?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        120,
+        1560
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "clientes",
+          "cachedResultName": "clientes"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "nombre",
+              "value": "={{ $json.output.nombre }}"
+            },
+            {
+              "column": "telefono",
+              "value": "={{ $('Edit Fields3').item.json.sessionId }}"
+            },
+            {
+              "column": "correo",
+              "value": "={{ $json.output.correo }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3e27342a-4abf-4ea5-8abc-b00677d15a4f",
+      "name": "Insert Client1",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        340,
+        1460
+      ],
+      "typeVersion": 2.4,
+      "alwaysOutputData": true,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "3e708992-b804-4f7d-9773-3883315ef4ff",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.success }}",
+              "rightValue": "="
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0294d302-eb69-419b-befb-45125fb44995",
+      "name": "Query Done?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        560,
+        1460
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "f21c495a-2386-4582-b466-0ee3da868168",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "{{ $json.output.error }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9ef4694c-01ce-4c28-bec3-f1a14b47a659",
+      "name": "Query Exists?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        560,
+        1800
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "clientes",
+          "cachedResultName": "clientes"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "telefono",
+              "value": "={{ $('Edit Fields3').item.json.sessionId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fa1fab74-d2f2-43c6-90d2-5cbc1313b69e",
+      "name": "Fetch Client",
+      "type": "n8n-nodes-base.mySql",
+      "position": [
+        -880,
+        2660
+      ],
+      "typeVersion": 2.4,
+      "alwaysOutputData": true,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Error Message Build2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get SQL Output2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Convert to File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL2": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL3": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL4": {
+      "main": [
+        [
+          {
+            "node": "QUERY FAILS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL6": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL7": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent  - Conversación General",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent - Consulta de Datos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent  - Conversación General",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Client",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Name and mail extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Datos suficientes cita?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Extract SQL Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent5": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    },
+    "Es cliente?": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MySQL6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MySQL7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP No Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QUERY FAILS": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Done?": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request13",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Show Tables": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Clasificación de intenciones",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Clasificación de intenciones1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Describe Tables2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Client": {
+      "main": [
+        [
+          {
+            "node": "Es cliente?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "Insert Client": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Query Exists?": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request14",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - SQL QUERY": {
+      "main": [
+        [
+          {
+            "node": "MySQL4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Client1": {
+      "main": [
+        [
+          {
+            "node": "Query Done?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent  - Conversación General",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent5",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent - Consulta de Datos",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Clasificación de intenciones",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get SQL Output2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP No Cliente": {
+      "main": [
+        []
+      ]
+    },
+    "If - SQL QUERY2": {
+      "main": [
+        [
+          {
+            "node": "MySQL3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Message Build2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent - Extraer Parámetros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File1": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Describe Tables2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "the data exists?": {
+      "main": [
+        [
+          {
+            "node": "Insert Client1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Query Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract SQL Query": {
+      "main": [
+        [
+          {
+            "node": "If - SQL QUERY",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract SQL Query2": {
+      "main": [
+        [
+          {
+            "node": "If - SQL QUERY2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Appointment": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Error Message Build2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos suficientes cita?": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Name and mail extractor": {
+      "main": [
+        [
+          {
+            "node": "the data exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Extraer Parámetros",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Consulta de Datos",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent  - Conversación General",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Clasificación de intenciones",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Name and mail extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Clasificación de intenciones1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model9": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Name and mail extractor",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model10": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model11": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk3": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk5": {
+      "main": [
+        [
+          {
+            "node": "Extract from File3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Consulta de Datos": {
+      "main": [
+        [
+          {
+            "node": "Extract SQL Query2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clasificación de intenciones": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clasificación de intenciones1": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent  - Conversación General": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Show Tables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cc343619-9870-4201-9e57-90df748834a3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "79c01d1a105320c6c3f2fe02ffea042ae762f8a4f408f11e58e3c7cbdb887d09"
+  },
+  "id": "YjSRw78gH7dvPATT",
+  "tags": []
+}

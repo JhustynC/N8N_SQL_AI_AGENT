@@ -307,8 +307,8 @@
               "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
             },
             {
-              "name": "from",
-              "value": "={{ $('Webhook2').item.json.body.from }}"
+              "name": "=remoteJid",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.remoteJid }}"
             }
           ]
         },
@@ -318,7 +318,7 @@
       "name": "HTTP Request6",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        2380,
+        2620,
         1520
       ],
       "typeVersion": 4.2,
@@ -604,13 +604,13 @@
                       "type": "string",
                       "operation": "equals"
                     },
-                    "leftValue": "={{ $json.output }}",
+                    "leftValue": "={{ $json.output.intencion }}",
                     "rightValue": "Conversación general"
                   }
                 ]
               },
               "renameOutput": true,
-              "outputKey": "General"
+              "outputKey": "Conversación general"
             },
             {
               "conditions": {
@@ -623,19 +623,19 @@
                 "combinator": "and",
                 "conditions": [
                   {
-                    "id": "24bc64a3-5a0d-42f7-8fb4-f95ddd621ecf",
+                    "id": "fc79b629-36c8-40b3-bb85-dd612f7dc423",
                     "operator": {
                       "name": "filter.operator.equals",
                       "type": "string",
                       "operation": "equals"
                     },
-                    "leftValue": "={{ $json.output }}",
-                    "rightValue": "Consulta de datos"
+                    "leftValue": "={{ $json.output.intencion }}",
+                    "rightValue": "Informacion cliente"
                   }
                 ]
               },
               "renameOutput": true,
-              "outputKey": "Datos"
+              "outputKey": "Informacion cliente"
             },
             {
               "conditions": {
@@ -648,19 +648,19 @@
                 "combinator": "and",
                 "conditions": [
                   {
-                    "id": "952faa3a-b7e1-4224-9bcd-9839de22f6b4",
+                    "id": "edd75394-f102-4faa-be97-95c92c4d5cf9",
                     "operator": {
                       "name": "filter.operator.equals",
                       "type": "string",
                       "operation": "equals"
                     },
-                    "leftValue": "={{ $json.output }}",
-                    "rightValue": "Caso raro"
+                    "leftValue": "={{ $json.output.intencion }}",
+                    "rightValue": "Registro Cliente"
                   }
                 ]
               },
               "renameOutput": true,
-              "outputKey": "Raro"
+              "outputKey": "Registro Cliente"
             },
             {
               "conditions": {
@@ -673,44 +673,19 @@
                 "combinator": "and",
                 "conditions": [
                   {
-                    "id": "89e8c82b-7e54-49d5-b867-11ef43b3ab23",
+                    "id": "68e9c14e-0202-43fe-99bb-b8c62dabc874",
                     "operator": {
                       "name": "filter.operator.equals",
                       "type": "string",
                       "operation": "equals"
                     },
-                    "leftValue": "={{ $json.output }}",
-                    "rightValue": "Agendar cita"
+                    "leftValue": "={{ $json.output.intencion }}",
+                    "rightValue": "=Agendar cita"
                   }
                 ]
               },
               "renameOutput": true,
-              "outputKey": "Cita"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "version": 2,
-                  "leftValue": "",
-                  "caseSensitive": true,
-                  "typeValidation": "strict"
-                },
-                "combinator": "and",
-                "conditions": [
-                  {
-                    "id": "c17ec4c8-ea6e-453c-95d2-5686b3498295",
-                    "operator": {
-                      "name": "filter.operator.equals",
-                      "type": "string",
-                      "operation": "equals"
-                    },
-                    "leftValue": "={{ $json.output }}",
-                    "rightValue": "Registro cliente"
-                  }
-                ]
-              },
-              "renameOutput": true,
-              "outputKey": "Registro cliente"
+              "outputKey": "Agendar cita"
             }
           ]
         },
@@ -720,16 +695,17 @@
       "name": "Switch",
       "type": "n8n-nodes-base.switch",
       "position": [
-        2280,
-        280
+        1600,
+        2300
       ],
       "typeVersion": 3.2,
+      "alwaysOutputData": true,
       "disabled": true
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=mensaje del usuario: \"{{ $json.chatInput }}\"\nsessionId: {{ $json.sessionId }}",
+        "text": "=mensaje del usuario: \"{{ $json.chatInput }}\"\nsessionId: \"{{ $json.sessionId }}\"",
         "hasOutputParser": true,
         "options": {
           "systemMessage": "=Eres un asistente experto en clasificar mensajes de usuarios recibidos a través de WhatsApp para un agente de ventas automatizado. Tu tarea es analizar el mensaje del usuario y clasificarlo en una de las siguientes categorías:\n\n- Consulta de datos: El mensaje solicita información específica que requiere una consulta a una base de datos (por ejemplo, precios, stock, detalles de productos o clientes). Ejemplos: \"Dime el precio del producto X\", \"¿Cuánto stock queda de Y?\", \"Busca el email de Juan Pérez\".\n\n- Conversación general: El mensaje es una interacción genérica, como saludos, agradecimientos o preguntas no relacionadas con datos específicos. Ejemplos: \"Hola, ¿cómo estás?\", \"Gracias por la info\", \"¿En qué me puedes ayudar?\".\n\n- Caso raro: El mensaje es irrelevante, ambiguo, contiene solo emojis, o no encaja en las otras categorías. Ejemplos: \"😊👍\", \"Ok\", \"jajaja\".\n\n- Agendar cita o servicio: El mensaje del usuario incluye expresiones como “Quiero una cita”, “Agendar cita”, “Reservar”, “¿Puedo agendar?”, \"Quiero una cita\", etc., clasifícalo en una categoría “Agendar cita”.\n\n- Registro de Usuario: El mensaje del usuario contiene su nombre y correo que se pide para su registro: \"Me llamo Juan, juan@gmail.com\", \"Karolina, karo123@hotmail.com\", \"Mi nombre es Jhustyn, y mi correo es jhustyncarvajal@gmail.com\", etc.\nclasifícalo en una categoría “Registro cliente” siempre y cuando el menasje no contenga algun contexto más especifico antes de los datos mencionados, ejm: \"Me encanta su barberia soy Jhustyn el que fue el otro dia para un corte\" o \"No me gusot el servico soy Juan y su barbero me lastimo\".\n\nInstrucciones:\n\n1. Analiza el mensaje del usuario tomando encuenta los mensajes anteriores para mantener coherencia en la cenversación.\n\n2. Devuelve únicamente el nombre de la categoría en texto plano (sin explicaciones ni formato adicional):\n   - Consulta de datos\n   - Conversación general\n   - Caso raro\n   - Agendar cita\n   - Registro cliente"
@@ -743,26 +719,6 @@
         1520
       ],
       "typeVersion": 1.9
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.5-flash-preview-05-20",
-        "options": {}
-      },
-      "id": "5c27f4bf-a02a-47e0-8135-b728c1900b12",
-      "name": "Google Gemini Chat Model4",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "position": [
-        1340,
-        1760
-      ],
-      "typeVersion": 1,
-      "credentials": {
-        "googlePalmApi": {
-          "id": "DWXCpnS9wGemeHjd",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
     },
     {
       "parameters": {
@@ -1015,7 +971,7 @@
       "type": "n8n-nodes-base.if",
       "position": [
         300,
-        1840
+        1820
       ],
       "typeVersion": 2.2
     },
@@ -1050,7 +1006,7 @@
       "name": "HTTP Request",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        560,
+        520,
         1820
       ],
       "typeVersion": 4.2,
@@ -1128,8 +1084,8 @@
       "name": "Insertar o Actualizar Registro",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        1920,
-        1860
+        1900,
+        1760
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -1149,8 +1105,8 @@
       "name": "Redis Chat Memory",
       "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
       "position": [
-        1700,
-        1760
+        1180,
+        1940
       ],
       "typeVersion": 1.5,
       "credentials": {
@@ -1168,13 +1124,361 @@
       "name": "Structured Output Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "position": [
-        1520,
-        1760
+        1500,
+        1940
       ],
       "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "4b9b0ac7-c914-4319-b59e-3eda28012455",
+      "name": "Auto-fixing Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "position": [
+        1420,
+        1760
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensaje del usuario: {{ $('Edit Fields').item.json.chatInput }}\nTelefono del usuario: +{{ $('Edit Fields').item.json.sessionId.match(/\\d+/g || \"\") }}\nFecha actual: {{ $now.format('yyyy-MM-dd') }}",
+        "options": {
+          "systemMessage": "=# System Message - Agente de Gestión de Citas\n\nEres un asistente especializado en la gestión completa de citas para una barbería a través de WhatsApp. Tu función es procesar todas las solicitudes relacionadas con citas de manera eficiente, profesional y amigable.\n\n## HERRAMIENTAS DISPONIBLES\n- Select Cita: Consultar citas existentes por cliente, fecha, barbero o ID\n- Insert Cita: Crear nuevas citas en el sistema\n- Update Cita: Modificar citas existentes (fecha, hora, servicio, barbero)\n- Select Servicios: Obtener lista completa de servicios disponibles con precios y duración\n- Select Barberos: Consultar barberos disponibles, sus especialidades y horarios\n- Cambio de Estado: Cancelar citas cambiando el estado a \"cancelado\"\n\n## FUNCIONES PRINCIPALES\n\n### 1. CREAR CITAS\n**Datos requeridos obligatorios:**\n- Nombre del cliente\n- Teléfono/WhatsApp del cliente\n- Fecha deseada (validar que sea futura)\n- Hora deseada\n- Servicio solicitado\n- Barbero preferido (si no especifica, asignar disponible)\n\n**Proceso:**\n1. Usar **Select Servicios** para validar servicios disponibles y obtener duración/precio\n2. Usar **Select Barberos** para verificar barberos disponibles y sus especialidades\n3. Verificar disponibilidad de horario usando Select Cita\n4. Confirmar todos los datos con el cliente incluyendo precio y duración\n5. Crear la cita usando Insert Cita\n6. Enviar confirmación detallada al cliente\n\n### 2. CONSULTAR CITAS\n**Tipos de consulta:**\n- Por nombre del cliente\n- Por fecha específica\n- Por rango de fechas\n- Por barbero\n- Citas del día actual\n\n**Información a mostrar:**\n- ID de la cita\n- Fecha y hora\n- Cliente y teléfono\n- Servicio\n- Barbero asignado\n- Estado de la cita\n\n### 3. MODIFICAR CITAS\n**Cambios permitidos:**\n- Fecha y/o hora\n- Servicio\n- Barbero\n- Datos del cliente\n\n**Proceso:**\n1. Localizar la cita usando Select Cita\n2. Si se cambia servicio: usar **Select Servicios** para validar y obtener nueva duración/precio\n3. Si se cambia barbero: usar **Select Barberos** para verificar disponibilidad y especialidades\n4. Verificar nueva disponibilidad si cambia fecha/hora considerando duración del servicio\n5. Confirmar cambios con el cliente incluyendo diferencias de precio\n6. Actualizar usando Update Cita\n7. Enviar confirmación de los cambios\n\n### 4. CANCELAR CITAS\n**Proceso:**\n1. Localizar la cita usando Select Cita\n2. Confirmar la cancelación con el cliente\n3. Cambiar estado a \"cancelado\" usando Update Cita\n4. Enviar confirmación de cancelación\n\n## VALIDACIONES OBLIGATORIAS\n\n### Fecha y Hora:\n- No permitir fechas pasadas\n- Validar horarios de funcionamiento de la barbería\n- Verificar disponibilidad del barbero\n- No permitir citas en días feriados/cerrados\n\n### Datos del Cliente:\n- Nombre completo requerido\n- Teléfono válido y completo\n- Confirmar datos antes de crear/modificar\n\n### Servicios:\n- Usar **Select Servicios** para obtener lista actualizada de servicios disponibles\n- Validar que el servicio solicitado exista y esté activo\n- Considerar duración estimada del servicio para cálculo de disponibilidad\n- Mostrar precios actualizados al cliente\n- Verificar si el barbero tiene especialidad en el servicio solicitado\n\n## MANEJO DE ERRORES\n\n### Conflictos de Horario:\n- Usar **Select Barberos** para encontrar barberos alternativos disponibles\n- Considerar duración del servicio al sugerir horarios alternativos\n- Ofrecer horarios alternativos cercanos\n- Proponer fechas alternativas\n- Sugerir servicios similares si el solicitado no está disponible\n\n### Datos Incompletos:\n- Solicitar información faltante específicamente\n- Mantener contexto de la conversación\n- Confirmar datos antes de proceder\n\n### Citas No Encontradas:\n- Verificar con diferentes criterios de búsqueda\n- Sugerir búsqueda por nombre o teléfono\n- Ofrecer crear nueva cita si no existe\n\n## RESPUESTAS ESTRUCTURADAS\n\n### Confirmación de Cita Creada:\n```\n✅ ¡Cita confirmada!\n📅 Fecha: [fecha]\n🕒 Hora: [hora]\n👤 Cliente: [nombre]\n✂️ Servicio: [servicio]\n👨‍💼 Barbero: [barbero]\n📍 Dirección: [dirección de la barbería]\n💰 Precio: [precio]\n\nID de cita: [ID]\n¿Necesitas algún cambio?\n```\n\n### Modificación de Cita:\n```\n✏️ Cita modificada exitosamente\n🆔 ID: [ID]\n📋 Cambios realizados:\n- [detalle de cambios]\n\nNueva información:\n[datos actualizados de la cita]\n```\n\n### Cancelación de Cita:\n```\n❌ Cita cancelada\n🆔 ID: [ID]\n📅 Fecha que se canceló: [fecha y hora]\n👤 Cliente: [nombre]\n\n¿Deseas agendar una nueva cita?\n```\n\n## REGLAS DE CONVERSACIÓN\n\n### Tono y Estilo:\n- Siempre profesional pero amigable\n- Usar emojis apropiados para claridad\n- Confirmar entendimiento antes de acciones\n- Ser proactivo en ofrecer soluciones\n\n### Manejo de Ambigüedades:\n- Hacer preguntas específicas para clarificar\n- Ofrecer opciones múltiples cuando sea apropiado\n- Mantener el contexto de mensajes anteriores\n- No asumir información no proporcionada\n\n### Seguimiento:\n- Confirmar satisfacción después de cada acción\n- Ofrecer ayuda adicional\n- Recordar citas próximas cuando sea relevante\n- Sugerir servicios complementarios apropiadamente\n\n## NUEVAS FUNCIONALIDADES CON HERRAMIENTAS ADICIONALES\n\n### CONSULTA DE SERVICIOS\n**Cuándo usar Select Servicios:**\n- Cliente pregunta \"¿qué servicios tienen?\"\n- Cliente menciona un servicio específico (validar existencia)\n- Al crear/modificar citas (obtener duración y precio)\n- Para sugerir servicios alternativos\n\n**Información a mostrar:**\n```\n💇‍♂️ **SERVICIOS DISPONIBLES**\n\n🔸 [Nombre del servicio]\n   ⏱️ Duración: [tiempo]\n   💰 Precio: $[precio]\n   📝 Descripción: [descripción]\n\n🔸 [Siguiente servicio...]\n```\n\n### CONSULTA DE BARBEROS\n**Cuándo usar Select Barberos:**\n- Cliente pregunta por barberos disponibles\n- Al asignar barbero para nueva cita\n- Cliente tiene preferencia por barbero específico\n- Para verificar especialidades y horarios\n\n**Información a mostrar:**\n```\n👨‍💼 **BARBEROS DISPONIBLES**\n\n🔸 [Nombre del barbero]\n   ⭐ Especialidades: [especialidades]\n   🕒 Horario: [horario de trabajo]\n   ✅ Estado: [disponible/ocupado]\n\n🔸 [Siguiente barbero...]\n```\n\n### RECOMENDACIONES INTELIGENTES\n**Combinación de datos:**\n- Usar Select Servicios + Select Barberos para recomendar barbero especializado\n- Considerar duración del servicio al calcular disponibilidad\n- Sugerir paquetes o servicios complementarios\n- Optimizar asignación de barberos según especialidades\n\n## CASOS ESPECIALES\n- Verificar verdadera urgencia\n- Buscar espacios disponibles en el día\n- Coordinar con barberos para flexibilidad\n\n### Clientes Recurrentes:\n- Reconocer patrones de citas anteriores\n- Sugerir horarios habituales\n- Recordar preferencias de barbero/servicio\n\n### Grupos/Familias:\n- Manejar múltiples citas coordinadas\n- Optimizar horarios consecutivos\n- Aplicar descuentos familiares si aplican\n\n## INFORMACIÓN IMPORTANTE A RECORDAR\n- **SIEMPRE usar Select Servicios y Select Barberos** antes de crear o modificar citas\n- Consultar disponibilidad con Select Cita considerando duración del servicio\n- Mantener registro de todas las interacciones\n- Escalar a humano si hay problemas técnicos\n- Nunca crear citas sin confirmación explícita del cliente\n- Siempre verificar que el barbero tenga especialidad en el servicio solicitado\n- Informar precios y duración antes de confirmar citas\n- Ser transparente sobre limitaciones o problemas del sistema\n\n## FLUJO OBLIGATORIO PARA CREAR/MODIFICAR CITAS\n1. **Select Servicios** → Validar servicio y obtener duración/precio\n2. **Select Barberos** → Verificar disponibilidad y especialidades\n3. **Select Cita** → Confirmar disponibilidad de horario\n4. **Insert/Update Cita** → Crear o modificar la cita\n5. **Confirmación** → Enviar detalles completos al cliente\n\n## HORARIOS Y POLÍTICAS DE LA BARBERÍA\n[Aquí insertar información específica sobre horarios, políticas de cancelación, etc.]\n\n**Nota:** Usar Select Servicios y Select Barberos para obtener información actualizada en tiempo real en lugar de datos estáticos.\n\nRecuerda: Tu objetivo es brindar una experiencia excepcional en la gestión de citas, siendo eficiente, preciso y siempre centrado en la satisfacción del cliente. **Usa SIEMPRE las herramientas Select Servicios y Select Barberos para obtener información actualizada antes de proceder con cualquier operación.**"
+        }
+      },
+      "id": "e1dc1d7a-f2fc-465a-9199-5149d1db5cc2",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1920,
+        2380
+      ],
+      "typeVersion": 1.9,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "citas",
+          "cachedResultName": "citas"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {}
+      },
+      "id": "b2076518-60c8-49dd-b22d-bec211e4313f",
+      "name": "Select Cita",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2080,
+        2800
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "citas",
+          "cachedResultName": "citas"
+        },
+        "columnToMatchOn": "id",
+        "options": {}
+      },
+      "id": "c377fc9a-1140-4631-ad2d-f93661a098e1",
+      "name": "Update Cita",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2220,
+        2620
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Table', ``, 'string') }}"
+        },
+        "columnToMatchOn": "={{ $fromAI(\"Table\",\"\") }}",
+        "options": {}
+      },
+      "id": "ff3368e9-6de6-4820-8e95-34431bd48f11",
+      "name": "Cambio de Estado",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2220,
+        2800
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Table', ``, 'string') }}"
+        },
+        "options": {}
+      },
+      "id": "86434c57-267b-4317-8c60-7bd6c5dab8a8",
+      "name": "Insert Cita",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2080,
+        2620
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook2').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "remoteJid",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.remoteJid }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2310348c-cb7b-4e9c-9cfa-505add5d2704",
+      "name": "HTTP Request7",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2440,
+        2380
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "servicios",
+          "cachedResultName": "servicios"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {}
+      },
+      "id": "3ed6c0e2-3cf0-4270-8fe6-682cef3d2f4f",
+      "name": "Select Servicios",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        1940,
+        2620
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "barberos",
+          "cachedResultName": "barberos"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {}
+      },
+      "id": "d2bfb8a9-d7b6-44bb-8d7f-a4ff51272847",
+      "name": "Select Barberos",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        1940,
+        2800
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "a9b42887-caa4-4f78-acd2-4c28034c3cac",
+      "name": "AI Agent2",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        2720,
+        2380
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "f0875030-4f27-4996-a9d5-dfd8e630c8e2",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        2740,
+        2580
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "oDu68eutU7HyU3pK",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {
+          "temperature": 0,
+          "topK": 0,
+          "topP": 0
+        }
+      },
+      "id": "e8822d54-4b2d-4345-a31c-51cd51aa07c5",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        1000,
+        1940
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "IX4Ot0lPj0lLiTQ2",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Switch": [
+      {
+        "json": {}
+      }
+    ],
+    "Webhook2": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json",
+            "user-agent": "axios/1.9.0",
+            "content-length": "611",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "keep-alive"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "from": "593999898554@s.whatsapp.net",
+            "id": "E8CAFD656FE5D0888E600815A2C475C9",
+            "timestamp": 1748398483,
+            "body": "Hola",
+            "raw": {
+              "key": {
+                "remoteJid": "593999898554@s.whatsapp.net",
+                "fromMe": false,
+                "id": "E8CAFD656FE5D0888E600815A2C475C9"
+              },
+              "messageTimestamp": 1748398483,
+              "pushName": "Jhustyn C.",
+              "broadcast": false,
+              "message": {
+                "conversation": "Hola",
+                "messageContextInfo": {
+                  "deviceListMetadata": {
+                    "senderKeyHash": "Y24qxTiYpV3l8w==",
+                    "senderTimestamp": "1748120420",
+                    "recipientKeyHash": "czvV1ELTrgOx1A==",
+                    "recipientTimestamp": "1748217616"
+                  },
+                  "deviceListMetadataVersion": 2,
+                  "messageSecret": "2qNlymmx7d6vXH1nDa1dfgXwd4/SipLWH0GwHHVZqLU="
+                }
+              }
+            }
+          },
+          "webhookUrl": "http://localhost:5678/webhook/efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
   "connections": {
     "If": {
       "main": [
@@ -1245,11 +1549,36 @@
         ]
       ]
     },
+    "Switch": {
+      "main": [
+        [],
+        [],
+        [],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Webhook": {
       "main": [
         [
           {
             "node": "Read/Write Files from Disk3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request7",
             "type": "main",
             "index": 0
           }
@@ -1294,12 +1623,45 @@
         ]
       ]
     },
+    "Insert Cita": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Cita": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Show Tables": {
       "main": [
         [
           {
             "node": "Edit Fields6",
             "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Cita": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
             "index": 0
           }
         ]
@@ -1388,11 +1750,33 @@
         ]
       ]
     },
+    "Select Barberos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Buscar Servicios": {
       "ai_tool": [
         [
           {
             "node": "Agente de Barberia",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cambio de Estado": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
             "type": "ai_tool",
             "index": 0
           }
@@ -1443,12 +1827,34 @@
         ]
       ]
     },
+    "Select Servicios": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Extract from File": {
       "main": [
         [
           {
             "node": "Edit Fields",
             "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -1514,18 +1920,7 @@
         ]
       ]
     },
-    "Structured Output Parser": {
-      "ai_outputParser": [
-        [
-          {
-            "node": "Clasificación de intenciones",
-            "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model4": {
+    "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
           {
@@ -1536,6 +1931,33 @@
           {
             "node": "Agente de Barberia",
             "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Clasificación de intenciones",
+            "type": "ai_outputParser",
             "index": 0
           }
         ]
@@ -1612,7 +2034,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "3008f9f3-70e3-41c7-bfca-3e290c7c1a1a",
+  "versionId": "c263b5c7-f4f9-486b-9001-b6d7f716e295",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "79c01d1a105320c6c3f2fe02ffea042ae762f8a4f408f11e58e3c7cbdb887d09"
