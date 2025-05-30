@@ -264,21 +264,22 @@ async function start() {
 
       try {
         if (webHookUrl) {
-          await sock.sendPresenceUpdate("unavailable", m.key.remoteJid!);
+          // await sock.sendPresenceUpdate("unavailable", m.key.remoteJid!); //para mostrar como desconectado
 
           //? Leer los mensajes
           await sleep(1000);
           await sock.readMessages([m.key]);
-          
+
           //* Enviar mensaje a n8n
           await axios.post(webHookUrl, payload, {
             headers: { "Content-Type": "application/json" },
             timeout: 10000,
           });
           console.log("Mensaje reenviado a n8n");
-          
-          
-          //* Animacion de leer los mensajes 
+
+          await sock.sendPresenceUpdate("paused", m.key.remoteJid!);
+
+          //* Animacion de leer los mensajes
           //? Siempre y cuando se haya enviado a n8n primero
           await sock.sendPresenceUpdate("composing", m.key.remoteJid!);
           // await sleep(1000);

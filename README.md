@@ -96,3 +96,6 @@ Importante revisar el de auto escalado para proyectos con mucha concurrencia
 # Temas a revisas
 
 - auto seleccion de LLM: https://www.youtube.com/watch?v=xDdrU0o_Bgk
+
+
+
