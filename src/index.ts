@@ -266,9 +266,10 @@ async function start() {
         if (webHookUrl) {
           // await sock.sendPresenceUpdate("unavailable", m.key.remoteJid!); //para mostrar como desconectado
 
-          //? Leer los mensajes
+          //? LEER EL MENSAJE
           await sleep(1000);
           await sock.readMessages([m.key]);
+          await sleep(1000);
 
           //* Enviar mensaje a n8n
           await axios.post(webHookUrl, payload, {
@@ -276,8 +277,6 @@ async function start() {
             timeout: 10000,
           });
           console.log("Mensaje reenviado a n8n");
-
-          await sock.sendPresenceUpdate("paused", m.key.remoteJid!);
 
           //* Animacion de leer los mensajes
           //? Siempre y cuando se haya enviado a n8n primero
@@ -377,6 +376,9 @@ app.post("/reconnect", (req: Request, res: Response) => {
 app.post("/send-message", async (req: Request, res: Response): Promise<void> => {
   const { remoteJid, to, message } = req.body;
 
+  //? To change the readding animation state
+  await sock.sendPresenceUpdate("paused", remoteJid!);
+
   console.log("FROM ME:", req.body);
   // if (!fromMe) return;
 
@@ -393,9 +395,6 @@ app.post("/send-message", async (req: Request, res: Response): Promise<void> => 
   }
 
   try {
-    //? Change the message reading animation's state.
-    await sock.sendPresenceUpdate("paused", remoteJid!);
-
     await sock.sendMessage(to, { text: message });
     // console.log(to === from);
     res.status(200).json({ status: "Mensaje enviado con éxito." });
