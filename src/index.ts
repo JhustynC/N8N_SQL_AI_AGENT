@@ -1,15 +1,11 @@
-import { TsconfigRaw } from "./../node_modules/esbuild/lib/main.d";
-// import makeWASocket, { DisconnectReason, fetchLatestBaileysVersion, useMultiFileAuthState, WASocket, proto, ConnectionState } from "@whiskeysockets/baileys";
 import { Boom } from "@hapi/boom";
 import QRCode from "qrcode";
 import axios from "axios";
 import dotenv from "dotenv";
 import express from "express";
-import bodyParser from "body-parser";
 import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
-import { error } from "console";
 import {
   makeWASocket,
   DisconnectReason,
@@ -17,10 +13,8 @@ import {
   useMultiFileAuthState,
   WASocket,
   proto,
-  ConnectionState,
   downloadMediaMessage,
 } from "@whiskeysockets/baileys";
-import fileType from "file-type";
 
 dotenv.config();
 

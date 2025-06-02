@@ -4,7 +4,7 @@
 CREATE DATABASE IF NOT EXISTS olympus_barberia;
 USE olympus_barberia;
 
-CREATE TABLE clientes (
+CREATE TABLE cliente (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     telefono VARCHAR(20) NOT NULL UNIQUE,
@@ -12,21 +12,21 @@ CREATE TABLE clientes (
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE servicios (
+CREATE TABLE servicio (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_servicio VARCHAR(100) NOT NULL,
     descripcion TEXT,
     precio DECIMAL(6,2) NOT NULL
 );
 
-CREATE TABLE barberos (
+CREATE TABLE barbero (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     especialidad VARCHAR(100),
     disponible BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE citas (
+CREATE TABLE cita (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
     servicio_id INT NOT NULL,
@@ -34,9 +34,9 @@ CREATE TABLE citas (
     hora TIME NOT NULL,
     estado ENUM('pendiente', 'confirmada', 'cancelada') DEFAULT 'pendiente',
     barbero_id INT,
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
-    FOREIGN KEY (servicio_id) REFERENCES servicios(id) ON DELETE CASCADE,
-    FOREIGN KEY (barbero_id) REFERENCES barberos(id) ON DELETE SET NULL
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE,
+    FOREIGN KEY (servicio_id) REFERENCES servicio(id) ON DELETE CASCADE,
+    FOREIGN KEY (barbero_id) REFERENCES barbero(id) ON DELETE SET NULL
 );
 ```
 # Obtén la dirección IP de tu host. En Linux, puedes usar:
