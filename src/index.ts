@@ -271,6 +271,9 @@ async function start() {
       // if (!m.message || !m.key.fromMe) return; // Ignorar mensajes propios
       if (!m.message) return;
 
+      await sock.sendPresenceUpdate("paused", m.key.remoteJid!);
+      await sock.sendPresenceUpdate("available", m.key.remoteJid!!);
+
       // Preparar el payload base
       const payload: any = {
         from: m.key.remoteJid,
