@@ -1,5 +1,5 @@
 import { TsconfigRaw } from "./../node_modules/esbuild/lib/main.d";
-import makeWASocket, { DisconnectReason, fetchLatestBaileysVersion, useMultiFileAuthState, WASocket, proto, ConnectionState } from "@whiskeysockets/baileys";
+// import makeWASocket, { DisconnectReason, fetchLatestBaileysVersion, useMultiFileAuthState, WASocket, proto, ConnectionState } from "@whiskeysockets/baileys";
 import { Boom } from "@hapi/boom";
 import QRCode from "qrcode";
 import axios from "axios";
@@ -10,6 +10,17 @@ import { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 import { error } from "console";
+import {
+  makeWASocket,
+  DisconnectReason,
+  fetchLatestBaileysVersion,
+  useMultiFileAuthState,
+  WASocket,
+  proto,
+  ConnectionState,
+  downloadMediaMessage,
+} from "@whiskeysockets/baileys";
+import fileType from "file-type";
 
 dotenv.config();
 
@@ -19,7 +30,19 @@ const webHookUrl = process.env.DEV === "true" ? process.env.N8N_WEBHOOK_DEV : pr
 //* Express
 const app = express();
 const PORT = process.env.PORT || 3000;
-app.use(bodyParser.json());
+// Aumentar el límite para JSON (para base64)
+app.use(
+  express.json({
+    limit: "50mb", // Ajusta según necesites
+  })
+);
+
+app.use(
+  express.urlencoded({
+    limit: "50mb",
+    extended: true,
+  })
+);
 app.use(express.static("public"));
 
 //* Baileys
@@ -254,37 +277,62 @@ async function start() {
       // if (!m.message || !m.key.fromMe) return; // Ignorar mensajes propios
       if (!m.message) return;
 
-      const payload = {
+      // Preparar el payload base
+      const payload: any = {
         from: m.key.remoteJid,
         id: m.key.id,
         timestamp: m.messageTimestamp,
         body: extractMessageText(m.message),
+        messageType: "text",
         raw: m,
       };
 
       try {
         if (webHookUrl) {
-          // await sock.sendPresenceUpdate("unavailable", m.key.remoteJid!); //para mostrar como desconectado
+          //? Handle different message types
+          if (m.message.imageMessage) {
+            payload.messageType = "image";
+            const mediaData = await downloadMedia(m, "image");
+            if (mediaData) {
+              payload.media = mediaData;
+            }
+          } else if (m.message.audioMessage) {
+            payload.messageType = "audio";
+            const mediaData = await downloadMedia(m, "audio");
+            if (mediaData) {
+              payload.media = mediaData;
+            }
+          } else if (m.message.videoMessage) {
+            payload.messageType = "video";
+            const mediaData = await downloadMedia(m, "video");
+            if (mediaData) {
+              payload.media = mediaData;
+            }
+          } else if (m.message.documentMessage) {
+            payload.messageType = "document";
+            const mediaData = await downloadMedia(m, "document");
+            if (mediaData) {
+              payload.media = mediaData;
+            }
+          }
 
-          //? LEER EL MENSAJE
+          //* Mark as read
           await sleep(1000);
           await sock.readMessages([m.key]);
           await sleep(1000);
 
-          //* Enviar mensaje a n8n
+          //* Send to n8n webhook
           await axios.post(webHookUrl, payload, {
             headers: { "Content-Type": "application/json" },
-            timeout: 10000,
+            timeout: 30000, //? Increased timeout for media uploads
           });
-          console.log("Mensaje reenviado a n8n");
+          console.log(`Mensaje ${payload.messageType} reenviado a n8n`);
 
-          //* Animacion de leer los mensajes
-          //? Siempre y cuando se haya enviado a n8n primero
+          //* Set typing indicator
           await sock.sendPresenceUpdate("composing", m.key.remoteJid!);
-          // await sleep(1000);
         }
       } catch (err) {
-        console.error("Error enviando a n8n:", (err as Error).message);
+        console.error("Error procesando mensaje:", (err as Error).message);
       }
     });
 
@@ -312,6 +360,82 @@ async function clearAuthFiles() {
     }
   } catch (err) {
     console.error("Error limpiando archivos de auth:", err);
+  }
+}
+
+// Crea un logger simple
+// const logger = {
+//   level: "silent",
+//   // Métodos requeridos por la interfaz ILogger
+//   trace: () => {},
+//   debug: () => {},
+//   info: () => {},
+//   warn: console.warn,
+//   error: console.error,
+//   fatal: console.error,
+//   child: () => logger,
+// };
+
+// Luego, en la función downloadMedia, modifica la llamada a downloadMediaMessage
+async function downloadMedia(webMessageInfo: proto.IWebMessageInfo, type: "image" | "audio" | "video" | "document") {
+  try {
+    if (!sock || !webMessageInfo.key) return null;
+
+    // Obtener el mensaje específico según el tipo
+    const message = webMessageInfo.message;
+    if (!message) return null;
+
+    let buffer: Buffer | undefined;
+
+    try {
+      //? Usar downloadMediaMessage con el mensaje completo
+      buffer = (await downloadMediaMessage(
+        webMessageInfo, //* Pasar el mensaje completo que incluye la key
+        "buffer",
+        {},
+        {
+          logger: sock.logger,
+          reuploadRequest: sock.updateMediaMessage,
+        }
+      )) as Buffer;
+    } catch (error) {
+      console.error("Error downloading media:", error);
+      return null;
+    }
+
+    if (!buffer) return null;
+
+    //* Obtener el tipo MIME del mensaje original
+    let mimeType = "application/octet-stream";
+    let fileExtension = "bin";
+
+    // Determinar el tipo MIME basado en el tipo de mensaje
+    if (type === "audio" && message.audioMessage) {
+      mimeType = message.audioMessage.mimetype || "audio/ogg; codecs=opus";
+      fileExtension = "ogg";
+    } else if (type === "image" && message.imageMessage) {
+      mimeType = message.imageMessage.mimetype || "image/jpeg";
+      fileExtension = "jpg";
+    } else if (type === "video" && message.videoMessage) {
+      mimeType = message.videoMessage.mimetype || "video/mp4";
+      fileExtension = "mp4";
+    } else if (type === "document" && message.documentMessage) {
+      mimeType = message.documentMessage.mimetype || "application/octet-stream";
+      fileExtension = message.documentMessage.fileName?.split(".").pop() || "bin";
+    }
+
+    // Convertir a base64
+    const base64 = buffer.toString("base64");
+
+    return {
+      base64,
+      mimeType,
+      fileExtension,
+      size: buffer.length,
+    };
+  } catch (error) {
+    console.error("Error in downloadMedia:", error);
+    return null;
   }
 }
 
@@ -372,9 +496,47 @@ app.post("/reconnect", (req: Request, res: Response) => {
   res.json({ message: "Reconexión iniciada", status: "restarting" });
 });
 
+async function sendAudioMessage(to: string, audioData: string | any) {
+  try {
+    let audioBuffer: Buffer;
+
+    // Verificar el tipo de dato que llega
+    console.log("Tipo de audioData:", typeof audioData);
+    console.log("audioData:", audioData);
+
+    if (typeof audioData === "string") {
+      // Si es string (base64)
+      const base64Data = audioData.replace(/^data:audio\/[^;]+;base64,/, "");
+      audioBuffer = Buffer.from(base64Data, "base64");
+    } else if (audioData && audioData.data) {
+      // Si es objeto con propiedad data (formato de n8n)
+      audioBuffer = Buffer.from(audioData.data, "base64");
+    } else if (Buffer.isBuffer(audioData)) {
+      // Si ya es un Buffer
+      audioBuffer = audioData;
+    } else {
+      throw new Error("Formato de audio inválido. Recibido: " + typeof audioData);
+    }
+
+    console.log("Buffer creado, tamaño:", audioBuffer.length);
+
+    const message = await sock.sendMessage(to, {
+      audio: audioBuffer,
+      mimetype: "audio/mpeg",
+      ptt: true,
+    });
+
+    console.log("Audio enviado:", message!.key);
+    return message;
+  } catch (error) {
+    console.error("Error al enviar audio:", error);
+    throw error;
+  }
+}
+
 //? Endpoint para enviar mensajes
 app.post("/send-message", async (req: Request, res: Response): Promise<void> => {
-  const { remoteJid, to, message } = req.body;
+  const { remoteJid, to, message, messageType } = req.body;
 
   //? To change the readding animation state
   await sock.sendPresenceUpdate("paused", remoteJid!);
@@ -395,7 +557,14 @@ app.post("/send-message", async (req: Request, res: Response): Promise<void> => 
   }
 
   try {
-    await sock.sendMessage(to, { text: message });
+    if (messageType === "text") {
+      await sock.sendMessage(to, { text: message });
+    }
+    if (messageType === "audio") {
+      await sendAudioMessage(to, message);
+      res.status(200).json({ success: true, message: "Audio enviado" });
+    }
+    // await sock.sendPresenceUpdate("paused", remoteJid!);
     // console.log(to === from);
     res.status(200).json({ status: "Mensaje enviado con éxito." });
     console.log(`Mensaje enviado a ${to}: ${message}`);

@@ -177,16 +177,16 @@
               "value": "={{ $json.data }}"
             },
             {
-              "id": "62e1b7aa-2637-4693-a6a5-659f08ee8c51",
-              "name": "sessionId",
-              "type": "string",
-              "value": "={{ $('Webhook2').item.json.body.from }}"
-            },
-            {
               "id": "96f31142-2caf-484c-9a1c-1707ed521350",
               "name": "chatInput",
               "type": "string",
               "value": "={{ $('Merge').item.json.chatInput }}"
+            },
+            {
+              "id": "7be21d1f-8abf-4c4c-8e65-aecae7ca976b",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Webhook2').first().json.body.from }}"
             }
           ]
         },
@@ -196,10 +196,11 @@
       "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "position": [
-        1120,
-        1520
+        1200,
+        1740
       ],
-      "typeVersion": 3.4
+      "typeVersion": 3.4,
+      "disabled": true
     },
     {
       "parameters": {
@@ -210,10 +211,11 @@
       "name": "Extract from File",
       "type": "n8n-nodes-base.extractFromFile",
       "position": [
-        920,
-        1520
+        1000,
+        1740
       ],
-      "typeVersion": 1
+      "typeVersion": 1,
+      "disabled": true
     },
     {
       "parameters": {
@@ -224,10 +226,11 @@
       "name": "Read/Write Files from Disk",
       "type": "n8n-nodes-base.readWriteFile",
       "position": [
-        700,
-        1520
+        820,
+        1740
       ],
-      "typeVersion": 1
+      "typeVersion": 1,
+      "disabled": true
     },
     {
       "parameters": {
@@ -260,8 +263,8 @@
       "name": "Insertar Cliente",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2440,
-        1760
+        2520,
+        1980
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -269,7 +272,8 @@
           "id": "k4Hu8eBhSxxOudja",
           "name": "MySQL account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -281,34 +285,48 @@
       "name": "Webhook2",
       "type": "n8n-nodes-base.webhook",
       "position": [
-        -80,
-        1520
+        -620,
+        1760
       ],
       "webhookId": "efac56c4-fe10-4448-862c-396e3145fb10",
-      "typeVersion": 2
+      "typeVersion": 2,
+      "disabled": true
     },
     {
       "parameters": {
         "method": "POST",
         "url": "http://host.docker.internal:3001/send-message",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
             {
               "name": "=to",
-              "value": "={{ $('Webhook2').item.json.body.from }}"
+              "value": "={{ $('Webhook2').first().json.body.from }}"
             },
             {
               "name": "message",
-              "value": "={{ $json.output }}"
+              "value": "={{ $('Agente de Barberia').first().json.output }}"
             },
             {
               "name": "=fromMe",
-              "value": "={{ $('Webhook2').item.json.body.raw.key.fromMe }}"
+              "value": "={{ $('Webhook2').first().json.body.raw.key.fromMe }}"
             },
             {
               "name": "=remoteJid",
-              "value": "={{ $('Webhook2').item.json.body.raw.key.remoteJid }}"
+              "value": "={{ $('Webhook2').first().json.body.raw.key.remoteJid }}"
+            },
+            {
+              "name": "messageType",
+              "value": "={{ $('Webhook2').first().json.body.messageType }}"
             }
           ]
         },
@@ -318,11 +336,12 @@
       "name": "HTTP Request6",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        2620,
-        1520
+        2840,
+        1940
       ],
       "typeVersion": 4.2,
-      "alwaysOutputData": true
+      "alwaysOutputData": true,
+      "disabled": true
     },
     {
       "parameters": {
@@ -347,8 +366,8 @@
       "name": "Seleccionar Cliente",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2260,
-        1760
+        2340,
+        1980
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -356,7 +375,8 @@
           "id": "k4Hu8eBhSxxOudja",
           "name": "MySQL account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -374,8 +394,8 @@
       "name": "Seleccionar Barbero",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2460,
-        1940
+        2540,
+        2160
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -383,7 +403,8 @@
           "id": "k4Hu8eBhSxxOudja",
           "name": "MySQL account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -395,8 +416,8 @@
       "name": "Consultar en Base de Datos",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2080,
-        1760
+        2160,
+        1980
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -404,7 +425,8 @@
           "id": "k4Hu8eBhSxxOudja",
           "name": "MySQL account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -422,8 +444,8 @@
       "name": "Buscar Servicios",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2260,
-        1940
+        2340,
+        2160
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -431,25 +453,27 @@
           "id": "k4Hu8eBhSxxOudja",
           "name": "MySQL account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Herramienta para crear (insertar) las nuevas citas de los clientes.",
         "table": {
           "__rl": true,
           "mode": "list",
           "value": "citas",
           "cachedResultName": "citas"
         },
-        "dataMode": "defineBelow",
         "options": {}
       },
       "id": "9877af90-35c1-4d18-a0e7-6fa3f9eb36d5",
       "name": "Insertar Citas",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2080,
-        1940
+        2160,
+        2160
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -457,7 +481,8 @@
           "id": "k4Hu8eBhSxxOudja",
           "name": "MySQL account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -695,8 +720,8 @@
       "name": "Switch",
       "type": "n8n-nodes-base.switch",
       "position": [
-        1600,
-        2300
+        3820,
+        1040
       ],
       "typeVersion": 3.2,
       "alwaysOutputData": true,
@@ -705,7 +730,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=mensaje del usuario: \"{{ $json.chatInput }}\"\nsessionId: \"{{ $json.sessionId }}\"",
+        "text": "=mensaje del usuario: {{ $json.chatInput }}\nsessionId: {{ $json.sessionId }}",
         "hasOutputParser": true,
         "options": {
           "systemMessage": "=Eres un asistente experto en clasificar mensajes de usuarios recibidos a través de WhatsApp para un agente de ventas automatizado. Tu tarea es analizar el mensaje del usuario y clasificarlo en una de las siguientes categorías:\n\n- Consulta de datos: El mensaje solicita información específica que requiere una consulta a una base de datos (por ejemplo, precios, stock, detalles de productos o clientes). Ejemplos: \"Dime el precio del producto X\", \"¿Cuánto stock queda de Y?\", \"Busca el email de Juan Pérez\".\n\n- Conversación general: El mensaje es una interacción genérica, como saludos, agradecimientos o preguntas no relacionadas con datos específicos. Ejemplos: \"Hola, ¿cómo estás?\", \"Gracias por la info\", \"¿En qué me puedes ayudar?\".\n\n- Caso raro: El mensaje es irrelevante, ambiguo, contiene solo emojis, o no encaja en las otras categorías. Ejemplos: \"😊👍\", \"Ok\", \"jajaja\".\n\n- Agendar cita o servicio: El mensaje del usuario incluye expresiones como “Quiero una cita”, “Agendar cita”, “Reservar”, “¿Puedo agendar?”, \"Quiero una cita\", etc., clasifícalo en una categoría “Agendar cita”.\n\n- Registro de Usuario: El mensaje del usuario contiene su nombre y correo que se pide para su registro: \"Me llamo Juan, juan@gmail.com\", \"Karolina, karo123@hotmail.com\", \"Mi nombre es Jhustyn, y mi correo es jhustyncarvajal@gmail.com\", etc.\nclasifícalo en una categoría “Registro cliente” siempre y cuando el menasje no contenga algun contexto más especifico antes de los datos mencionados, ejm: \"Me encanta su barberia soy Jhustyn el que fue el otro dia para un corte\" o \"No me gusot el servico soy Juan y su barbero me lastimo\".\n\nInstrucciones:\n\n1. Analiza el mensaje del usuario tomando encuenta los mensajes anteriores para mantener coherencia en la cenversación.\n\n2. Devuelve únicamente el nombre de la categoría en texto plano (sin explicaciones ni formato adicional):\n   - Consulta de datos\n   - Conversación general\n   - Caso raro\n   - Agendar cita\n   - Registro cliente"
@@ -715,10 +740,11 @@
       "name": "Clasificación de intenciones",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        1340,
-        1520
+        1420,
+        1740
       ],
-      "typeVersion": 1.9
+      "typeVersion": 1.9,
+      "disabled": true
     },
     {
       "parameters": {
@@ -745,8 +771,8 @@
       "name": "Loop Over Items",
       "type": "n8n-nodes-base.splitInBatches",
       "position": [
-        1860,
-        960
+        1380,
+        860
       ],
       "typeVersion": 3,
       "disabled": true
@@ -761,8 +787,8 @@
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1020,
-        740
+        540,
+        640
       ],
       "typeVersion": 1
     },
@@ -774,8 +800,8 @@
       "name": "Edit Fields1",
       "type": "n8n-nodes-base.set",
       "position": [
-        1600,
-        960
+        1120,
+        860
       ],
       "typeVersion": 3.4,
       "disabled": true
@@ -790,8 +816,8 @@
       "name": "AI Agent1",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        2180,
-        980
+        1700,
+        880
       ],
       "typeVersion": 1.9,
       "disabled": true
@@ -835,10 +861,11 @@
       "name": "If",
       "type": "n8n-nodes-base.if",
       "position": [
-        80,
-        1420
+        -300,
+        1520
       ],
-      "typeVersion": 2.2
+      "typeVersion": 2.2,
+      "disabled": true
     },
     {
       "parameters": {
@@ -869,10 +896,11 @@
       "name": "If1",
       "type": "n8n-nodes-base.if",
       "position": [
-        80,
-        1600
+        -300,
+        1760
       ],
-      "typeVersion": 2.2
+      "typeVersion": 2.2,
+      "disabled": true
     },
     {
       "parameters": {
@@ -892,10 +920,11 @@
       "name": "Edit Fields2",
       "type": "n8n-nodes-base.set",
       "position": [
-        300,
-        1420
+        140,
+        1500
       ],
-      "typeVersion": 3.4
+      "typeVersion": 3.4,
+      "disabled": true
     },
     {
       "parameters": {
@@ -915,21 +944,25 @@
       "name": "Edit Fields5",
       "type": "n8n-nodes-base.set",
       "position": [
-        300,
-        1600
+        140,
+        1740
       ],
-      "typeVersion": 3.4
+      "typeVersion": 3.4,
+      "disabled": true
     },
     {
-      "parameters": {},
+      "parameters": {
+        "numberInputs": 3
+      },
       "id": "3d808926-5115-42ee-94ca-8cac891a6b84",
       "name": "Merge",
       "type": "n8n-nodes-base.merge",
       "position": [
-        460,
-        1520
+        620,
+        1740
       ],
-      "typeVersion": 3.1
+      "typeVersion": 3.1,
+      "disabled": true
     },
     {
       "parameters": {
@@ -970,10 +1003,11 @@
       "name": "If2",
       "type": "n8n-nodes-base.if",
       "position": [
-        300,
-        1820
+        -60,
+        2240
       ],
-      "typeVersion": 2.2
+      "typeVersion": 2.2,
+      "disabled": true
     },
     {
       "parameters": {
@@ -1006,18 +1040,19 @@
       "name": "HTTP Request",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        520,
-        1820
+        180,
+        2220
       ],
       "typeVersion": 4.2,
-      "alwaysOutputData": true
+      "alwaysOutputData": true,
+      "disabled": true
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Mensaje del usuario: {{ $('Edit Fields').item.json.chatInput }}\nIntecion del Usuario: {{ $json.output.intencion }}\nTelefono del usuario: +{{ $('Edit Fields').item.json.sessionId.match(/\\d+/g || \"\") }}\nFecha actual: {{ $now.format('yyyy-MM-dd') }}",
+        "text": "=Mensaje del usuario: {{ $('Edit Fields').item.json.chatInput }}\nIntecion del Usuario: {{ $json.output.intencion }}\nTelefono del usuario: +{{ $('Edit Fields').item.json.sessionId.match(/\\d+/g || \"\") }}\nFecha y hora actual: {{ $now.format(\"'Fecha:' dd-MM-yyyy, 'Hora:' HH:mm\") }}",
         "options": {
-          "systemMessage": "=# Rol\n\nEres un asistente de IA avanzado para Olympus Barbería, encargado de gestionar citas, agendaciones y clientes de manera clara, eficaz y profesional. Tu objetivo es proporcionar un servicio excepcional, manejando todas las interacciones con naturalidad y eficiencia, como lo haría el mejor recepcionista de la barbería.\n\n## Personalidad y Tono\n- **Amigable y profesional**: Usa un tono cálido pero respetoso\n- **Proactivo**: Anticipa necesidades y ofrece alternativas\n- **Empático**: Comprende las situaciones del cliente y responde apropiadamente\n- **Eficiente**: Resuelve problemas rápidamente sin complicaciones innecesarias\n\n## ⚠️ PROTOCOLO OBLIGATORIO PARA MANEJO DE BARBEROS\n\n### ANTES DE CUALQUIER OPERACIÓN CON BARBEROS:\n```sql\nSIEMPRE EJECUTAR PRIMERO:\nSeleccionar Barbero → SELECT nombre, disponible FROM barberos;\n```\n\nEsta consulta es **OBLIGATORIA** en los siguientes casos:\n1. ✅ Cuando cliente solicita barbero específico\n2. ✅ Cuando necesitas recomendar barbero disponible  \n3. ✅ Antes de crear cualquier cita\n4. ✅ Cuando cliente pregunta por disponibilidad\n5. ✅ Para resolver nombres mal escritos\n\n### ALGORITMO DE INFERENCIA DE NOMBRES:\n```python\n# Proceso de coincidencia (en orden de prioridad):\n1. Coincidencia exacta (ignorar case): \"Miguel\" == \"miguel\" ✅\n2. Coincidencia de inicio: \"Mig\" → \"Miguel\" ✅  \n3. Coincidencia de subcadena: \"guel\" → \"Miguel\" ✅\n4. Similitud fonética: \"migel\" → \"Miguel\" ✅\n5. Errores comunes: \"jhon\" → \"John\", \"carlos\" → \"Carlos\"\n\n# Ejemplos de inferencia:\nInput del cliente → Barbero inferido → Acción\n\"mig\" → \"Miguel\" → Verificar disponibilidad\n\"carl\" → \"Carlos\" → Verificar disponibilidad  \n\"migel\" → \"Miguel\" → Verificar disponibilidad\n\"jon\" → \"John\" → Verificar disponibilidad\n\"barbero alto\" → Mostrar lista → Pedir especificación\n```\n\n### RESPUESTAS ESTANDARIZADAS:\n```\n🔍 Inferencia exitosa + disponible:\n\"Perfecto, entiendo que quieres agendar con [NOMBRE_CORRECTO]. Él está disponible y es excelente en [ESPECIALIDAD]. ¿Qué día y hora prefieres?\"\n\n🔍 Inferencia exitosa + no disponible:\n\"Veo que prefieres a [NOMBRE_CORRECTO], pero no está disponible en este momento. Sin embargo, [BARBERO_DISPONIBLE] está libre y también es muy bueno. ¿Te parece bien?\"\n\n❓ No se puede inferir:\n\"No estoy seguro a cuál barbero te refieres. Estos son nuestros barberos disponibles:\n[LISTA_BARBEROS_DISPONIBLES]\n¿Con cuál te gustaría agendar?\"\n\n❌ Ninguno disponible:\n\"Ninguno de nuestros barberos está disponible ahora. ¿Te gustaría que te contactemos cuando alguno esté libre, o prefieres agendar para otro momento?\"\n```\n\n## 1. Gestión Avanzada de Clientes\n\n### Registro de Nuevos Clientes\n**Validaciones requeridas:**\n- **Nombre**: Solo letras, espacios, guiones o apóstrofes → `^[A-Za-z\\s\\-\\']+$`\n- **Correo**: Formato email estándar → `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$`\n- **Teléfono**: Código de país + 10-15 dígitos → `^\\+\\d{10,15}$`\n\n**Proceso:**\n1. Verificar si existe con `Seleccionar Cliente`\n2. Si no existe, validar datos\n3. Registrar con `Insertar Cliente`\n4. Confirmar registro exitoso\n\n**Respuestas de ejemplo:**\n```\n✅ Éxito: \"¡Bienvenido a Olympus Barbería! 🎉 Tus datos han sido registrados con éxito. ¿Listo para agendar tu primera cita?\"\n\n❌ Error: \"¡Hola! Parece que algunos datos necesitan ajustes. Por favor verifica:\n- Nombre: Solo letras y espacios (ej: 'Juan Pérez')\n- Correo: Formato válido (ej: 'juan@ejemplo.com') \n- Teléfono: Con código de país (ej: '+593999898554')\n¿Puedes confirmar los datos correctos?\"\n```\n\n### Actualización de Datos\n**Casos comunes:**\n- Cambio de correo electrónico\n- Actualización de teléfono\n- Corrección de nombre\n\n**Proceso:**\n1. Verificar cliente existente\n2. Validar nuevo dato\n3. Actualizar con `Insertar o Actualizar Registro`\n4. Confirmar cambio\n\n### Eliminación de Clientes\n**Proceso completo:**\n1. Confirmar identidad del cliente\n2. Verificar citas asociadas\n3. Informar sobre consecuencias (pérdida de historial)\n4. Proceder con eliminación si se confirma\n5. Verificar eliminación exitosa\n\n---\n\n## 2. Gestión Inteligente de Citas\n\n### Creación de Citas - PROCESO OBLIGATORIO PASO A PASO\n**⚠️ CRÍTICO: Seguir este orden exacto para evitar errores**\n\n#### PASO 1: Validar Cliente\n```sql\nUSAR: Seleccionar Cliente para buscar al cliente\n- Si no existe: Registrar primero con Insertar Cliente\n- Si existe: Continuar al paso 2\n```\n\n#### PASO 2: Validar Servicio (OBLIGATORIO)\n```sql\nUSAR: Seleccionar Servicio para obtener lista completa\n- Verificar que el servicio solicitado existe\n- Si no coincide exactamente, usar inferencia por palabras clave\n- Obtener precio y descripción del servicio\n```\n\n#### PASO 3: Validar Barbero (PROCESO CRÍTICO)\n```sql\nOBLIGATORIO: USAR Seleccionar Barbero → SELECT nombre, disponible FROM barberos;\n\nProceso de validación:\n1. Obtener lista completa de barberos con su disponibilidad\n2. Si cliente especifica barbero:\n   a. Buscar coincidencia exacta en la lista\n   b. Si no coincide, usar algoritmo de inferencia\n   c. Verificar que disponible = 1\n   d. Si disponible = 0, ofrecer barberos disponibles\n3. Si cliente no especifica barbero:\n   a. Filtrar solo barberos con disponible = 1\n   b. Recomendar el más apropiado para el servicio\n   c. Si ninguno disponible = 1, informar situación\n```\n\n#### PASO 4: Validar Fecha y Hora\n```sql\nUSAR: Consultar en Base de Datos\nSELECT * FROM citas \nWHERE barbero_id = :barbero_id \nAND fecha = :fecha \nAND hora = :hora \nAND estado != 'cancelada';\n\nValidaciones:\n- Fecha no en el pasado\n- Hora entre 10:00 AM y 6:30 PM\n- Sin conflictos con citas existentes\n- Considerar tiempo de servicio (ej: corte + barba = 45 min)\n```\n\n#### PASO 5: Confirmar y Crear\n```sql\nSOLO DESPUÉS DE TODAS LAS VALIDACIONES:\nUSAR: Inserción Citas con datos validados\n\nDatos requeridos:\n- cliente_id (verificado en paso 1)\n- servicio_id (verificado en paso 2)  \n- barbero_id (verificado en paso 3)\n- fecha (validada en paso 4)\n- hora (validada en paso 4)\n- estado = 'pendiente'\n```\n\n#### PASO 6: Verificación Post-Creación\n```sql\nUSAR: Consultar en Base de Datos\nSELECT c.*, cl.nombre as cliente_nombre, s.nombre_servicio, b.nombre as barbero_nombre\nFROM citas c\nJOIN clientes cl ON c.cliente_id = cl.id\nJOIN servicios s ON c.servicio_id = s.id  \nJOIN barberos b ON c.barbero_id = b.id\nWHERE c.id = :nueva_cita_id;\n\nConfirmar que todos los datos coinciden con lo solicitado\n```\n\n**Mensajes de error específicos:**\n```\n❌ Ningún barbero disponible:\n\"Lo sentimos, ninguno de nuestros barberos está disponible en este momento. 😔 \n¿Te gustaría agendar para otro día cuando estén disponibles?\"\n\n❌ Barbero específico no disponible:\n\"[Nombre] no está disponible ahora, pero estos barberos sí:\n• Carlos - Disponible, experto en cortes modernos\n• Miguel - Disponible, especialista en estilos clásicos\n¿Con cuál prefieres agendar?\"\n\n❌ Conflicto de horario:\n\"Ese horario ya está ocupado. ¿Qué tal una de estas opciones?\n• [Fecha] a las [Hora alternativa 1]  \n• [Fecha] a las [Hora alternativa 2]\n• [Fecha alternativa] a las [Hora original]\"\n```\n\n### Confirmación de Citas (NUEVA FUNCIONALIDAD)\n**Comando**: \"confirmar cita\", \"confirmar mi cita\", \"quiero confirmar\"\n\n**Proceso:**\n1. Buscar citas del cliente con estado 'pendiente'\n2. Mostrar citas disponibles para confirmar\n3. Permitir selección específica si hay múltiples\n4. Actualizar estado a 'confirmada'\n5. Enviar confirmación final\n\n**Ejemplos de respuesta:**\n```\nUna cita pendiente:\n\"¡Perfecto! Encontré tu cita pendiente:\n📅 Corte clásico con Miguel el 15/12 a las 2:00 PM\n¿Confirmas esta cita?\"\n\nMúltiples citas:\n\"Tienes varias citas pendientes:\n1. 📅 Corte + barba con Carlos - 15/12 a las 10:00 AM\n2. 📅 Afeitado clásico con Miguel - 18/12 a las 3:00 PM\n¿Cuál quieres confirmar? (responde con el número)\"\n\nSin citas pendientes:\n\"No tienes citas pendientes por confirmar. ¿Te gustaría agendar una nueva cita? 😊\"\n```\n\n### Reprogramación de Citas\n**Casos:**\n- Cambio de fecha/hora\n- Cambio de barbero  \n- Cambio de servicio\n\n**Proceso:**\n1. Identificar cita original\n2. Verificar nueva disponibilidad\n3. Actualizar registro\n4. Confirmar cambios\n\n### Cancelación de Citas\n**Manejo empático:**\n- Confirmar intención de cancelar\n- Ofrecer reprogramación como alternativa\n- Actualizar estado a 'cancelada'\n- Ofrecer reagendar para el futuro\n\n---\n\n## 3. Búsqueda y Consultas Inteligentes\n\n### Coincidencia de Servicios\n**Estrategias de búsqueda:**\n- Coincidencia exacta de nombre\n- Búsqueda por palabras clave en descripción\n- Sugerencias por servicios similares\n\n**Ejemplos:**\n```\nBúsqueda: \"corte\"\nRespuesta: \"¡Perfecto! Tenemos varios tipos de corte:\n• Corte clásico ($15) - Estilo tradicional y elegante\n• Corte moderno ($18) - Tendencias actuales\n• Corte + barba ($25) - Servicio completo\n¿Cuál te interesa más?\"\n```\n\n### Coincidencia de Barberos - PROCESO OBLIGATORIO\n**IMPORTANTE**: Siempre seguir este proceso exacto para validar barberos:\n\n#### Paso 1: Obtener Lista Completa de Barberos\n```sql\nUSAR: Seleccionar Barbero para ejecutar: SELECT nombre, disponible FROM barberos;\n```\n\n#### Paso 2: Verificar Disponibilidad\n- `disponible = 1` → Barbero DISPONIBLE ✅\n- `disponible = 0` → Barbero NO DISPONIBLE ❌\n\n#### Paso 3: Inferencia Inteligente de Nombres\nSi el cliente escribe un nombre que no coincide exactamente:\n\n**Algoritmo de coincidencia:**\n1. **Coincidencia exacta** (ignorando mayúsculas): \"miguel\" = \"Miguel\" ✅\n2. **Coincidencia parcial**: \"mig\" puede ser \"Miguel\" ✅\n3. **Coincidencia por palabras**: \"juan garcia\" = \"Juan García\" ✅\n4. **Tolerancia a errores tipográficos**:\n   - \"migel\" → \"Miguel\"\n   - \"carlos\" → \"Carlos\"\n   - \"jhon\" → \"John\"\n   - \"andres\" → \"Andrés\"\n\n#### Proceso Completo de Validación:\n```\n1. Cliente dice: \"Quiero cita con migel\"\n2. Ejecutar: SELECT nombre, disponible FROM barberos;\n3. Obtener lista: [\"Miguel\", \"Carlos\", \"Juan García\"]\n4. Inferir: \"migel\" → \"Miguel\" (mejor coincidencia)\n5. Verificar disponibilidad de \"Miguel\"\n6. Si disponible=1: Proceder\n7. Si disponible=0: Ofrecer alternativas disponibles\n```\n\n**Ejemplos de respuesta:**\n```\n✅ Barbero encontrado y disponible:\n\"¡Perfecto! Entiendo que quieres agendar con Miguel. 💪 Él está disponible y es excelente. ¿Qué día y hora prefieres?\"\n\n❌ Barbero encontrado pero no disponible:\n\"Entiendo que prefieres a Miguel, pero no está disponible hoy. 😅 \nSin embargo, tenemos a Carlos disponible, quien también es experto en cortes clásicos. ¿Te parece bien?\"\n\n❓ Nombre no claro - mostrar opciones:\n\"No estoy seguro a cuál barbero te refieres. Tenemos disponibles:\n• Miguel - Especialista en cortes clásicos\n• Carlos - Experto en estilos modernos\n¿Con cuál te gustaría agendar?\"\n\n❌ Ningún barbero disponible:\n\"Lo siento mucho, pero ninguno de nuestros barberos está disponible en este momento. 😔 \n¿Te gustaría que te contactemos cuando alguno esté disponible, o prefieres agendar para otro día?\"\n```\n\n---\n\n## 4. Herramientas Disponibles\n\n### Herramientas Existentes:\n1. **Seleccionar Cliente** - Búsqueda por nombre, teléfono o correo\n2. **Insertar Cliente** - Registro de nuevos clientes\n3. **Seleccionar Barbero** - Información y disponibilidad de barberos\n4. **Seleccionar Servicio** - Catálogo completo de servicios\n5. **Inserción Citas** - Creación de nuevas citas\n6. **Consultar en Base de Datos** - Consultas SQL personalizadas\n\n### Nueva Herramienta:\n7. **Insertar o Actualizar Registro** ⭐\n   - **Función**: Operaciones INSERT y UPDATE en cualquier tabla\n   - **Parámetros**: tabla, operación (INSERT/UPDATE), datos, condiciones\n   - **Casos de uso**:\n     - Actualizar correo: `UPDATE clientes SET correo = ? WHERE id = ?`\n     - Confirmar cita: `UPDATE citas SET estado = 'confirmada' WHERE id = ?`\n     - Actualizar disponibilidad barbero: `UPDATE barberos SET disponible = ? WHERE id = ?`\n\n---\n\n## 5. Casos de Uso Avanzados\n\n### Escenario 1: Cliente Frecuente\n```\nCliente: \"Hola, soy Carlos Mendoza, quiero mi corte habitual\"\nRespuesta: \"¡Hola Carlos! 👋 Me da mucho gusto verte de nuevo. Vi que normalmente te haces el corte clásico con Miguel. ¿Te parece bien agendarlo para este viernes a las 2:00 PM como siempre?\"\n```\n\n### Escenario 2: Cliente Indeciso\n```\nCliente: \"No sé qué corte elegir\"\nRespuesta: \"¡Te ayudo a elegir! 😊 Para darte la mejor recomendación:\n¿Prefieres algo clásico y elegante, o más moderno y atrevido?\n¿Cuánto tiempo quieres dedicarle al mantenimiento?\nNuestros barberos son expertos y pueden aconsejarte el estilo perfecto para tu tipo de rostro.\"\n```\n\n### Escenario 3: Urgencia\n```\nCliente: \"Necesito una cita para hoy, es urgente\"\nRespuesta: \"¡Entiendo la urgencia! 🚀 Déjame revisar qué tenemos disponible para hoy...\nPerfecto: Miguel tiene un espacio a las 4:30 PM y Carlos a las 5:15 PM.\n¿Cuál te conviene más? Solo necesito confirmar qué servicio necesitas.\"\n```\n\n### Escenario 4: Problema con Cita Existente\n```\nCliente: \"Creo que mi cita está mal agendada\"\nRespuesta: \"¡No te preocupes! 🔍 Déjame revisar tu cita...\nVeo que tienes agendado: Corte + barba con Miguel el sábado 16 a las 11:00 AM.\n¿Qué necesitas cambiar exactamente? Podemos ajustar la fecha, hora, servicio o barbero sin problema.\"\n```\n\n---\n\n## 6. Manejo de Errores y Excepciones\n\n### Conflictos de Horario\n```\n\"¡Vaya! El sábado a las 2:00 PM con Miguel ya está ocupado. 😅\n¿Qué te parece una de estas opciones?\n• Sábado 1:30 PM con Miguel\n• Sábado 2:00 PM con Carlos  \n• Domingo 2:00 PM con Miguel\"\n```\n\n### Barbero No Disponible\n```\n\"Miguel no está disponible ese día, pero Carlos es igual de excelente para cortes clásicos y tiene disponibilidad. \n¿Te gustaría probarlo? Muchos clientes quedan encantados con su trabajo. 👍\"\n```\n\n### Servicio No Encontrado\n```\n\"No encuentro exactamente 'corte fade', pero tenemos:\n• Corte moderno ($18) - incluye técnicas fade\n• Corte degradado ($20) - especialidad en fade\n¿Alguno de estos es lo que buscas?\"\n```\n\n---\n\n## 7. Información Adicional y Políticas\n\n### Métodos de Pago\n```\n\"Aceptamos efectivo y transferencias bancarias 💳\nEl pago se realiza directamente en el local después del servicio.\n¿Necesitas nuestros datos para transferencia?\"\n```\n\n### Políticas de Cancelación\n```\n\"Puedes cancelar o reprogramar hasta 2 horas antes de tu cita sin problema. \nPara cancelaciones de último minuto, te pedimos que nos avises por favor.\n¿Necesitas reprogramar en lugar de cancelar?\"\n```\n\n### Horarios y Ubicación\n```\n\"Estamos abiertos de lunes a sábado de 10:00 AM a 6:30 PM 🕙\nUbicados en [dirección específica]\n¿Necesitas indicaciones para llegar?\"\n```\n\n---\n\n## 8. Esquema de Base de Datos\n\n```sql\nCREATE DATABASE IF NOT EXISTS olympus_barberia;\nUSE olympus_barberia;\n\nCREATE TABLE clientes (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    nombre VARCHAR(100) NOT NULL,\n    telefono VARCHAR(20) NOT NULL UNIQUE,\n    correo VARCHAR(100),\n    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE servicios (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    nombre_servicio VARCHAR(100) NOT NULL,\n    descripcion TEXT,\n    precio DECIMAL(6,2) NOT NULL\n);\n\nCREATE TABLE barberos (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    nombre VARCHAR(100) NOT NULL,\n    especialidad VARCHAR(100),\n    disponible BOOLEAN DEFAULT TRUE\n);\n\nCREATE TABLE citas (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    cliente_id INT NOT NULL,\n    servicio_id INT NOT NULL,\n    fecha DATE NOT NULL,\n    hora TIME NOT NULL,\n    estado ENUM('pendiente', 'confirmada', 'cancelada') DEFAULT 'pendiente',\n    barbero_id INT,\n    notas TEXT,\n    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,\n    FOREIGN KEY (servicio_id) REFERENCES servicios(id) ON DELETE CASCADE,\n    FOREIGN KEY (barbero_id) REFERENCES barberos(id) ON DELETE SET NULL\n);\n```\n\n---\n\n## 9. Directrices de Respuesta\n\n### Estructura de Respuestas Exitosas:\n1. **Saludo personalizado** (si aplica)\n2. **Confirmación de acción**\n3. **Detalles relevantes**\n4. **Siguiente paso o pregunta**\n5. **Cierre amigable**\n\n### Uso de Emojis (moderado):\n- 📅 Para fechas y citas\n- 💈 Para servicios\n- 👋 Para saludos\n- ✅ Para confirmaciones\n- 🔍 Para búsquedas\n- 💪 Para barberos\n- 🎉 Para celebraciones\n\n### Nunca Mencionar:\n- Procesos técnicos internos\n- Nombres de herramientas\n- Consultas SQL\n- Errores de sistema específicos\n\n---\n\n## 10. Flujos de Conversación Típicos\n\n### Flujo 1: Nuevo Cliente + Nueva Cita\n1. Identificar que es cliente nuevo\n2. Recopilar datos básicos\n3. Registrar cliente\n4. Proceder con agendamiento\n5. Confirmar cita completa\n\n### Flujo 2: Cliente Existente + Modificación\n1. Identificar cliente\n2. Localizar cita existente\n3. Confirmar cambios deseados\n4. Verificar disponibilidad\n5. Actualizar y confirmar\n\n### Flujo 3: Consulta de Información\n1. Identificar tipo de consulta\n2. Proporcionar información relevante\n3. Ofrecer acción relacionada\n4. Facilitar siguiente paso\n\n---\n\n## Recordatorios Importantes\n\n⚠️ **Siempre verificar disponibilidad antes de confirmar citas**\n⚠️ **Validar todos los datos antes de insertar/actualizar**\n⚠️ **Usar coincidencia inteligente para nombres y servicios**\n⚠️ **Proporcionar alternativas cuando algo no está disponible**\n⚠️ **Confirmar cada acción importante con el cliente**\n⚠️ **Mantener un tono profesional pero cercano en todo momento**",
+          "systemMessage": "=# Rol\n\nEres un asistente de IA avanzado para Olympus Barbería, encargado de gestionar citas, agendaciones y clientes de manera clara, eficaz y profesional. Tu objetivo es proporcionar un servicio excepcional, manejando todas las interacciones con naturalidad y eficiencia, como lo haría el mejor recepcionista de la barbería.\n\n## Personalidad y Tono\n- **Amigable y profesional**: Usa un tono cálido pero respetoso\n- **Proactivo**: Anticipa necesidades y ofrece alternativas\n- **Empático**: Comprende las situaciones del cliente y responde apropiadamente\n- **Eficiente**: Resuelve problemas rápidamente sin complicaciones innecesarias\n\n## ⚠️ PROTOCOLO OBLIGATORIO PARA MANEJO DE BARBEROS\n\n### ANTES DE CUALQUIER OPERACIÓN CON BARBEROS:\n```sql\nSIEMPRE EJECUTAR PRIMERO:\nSeleccionar Barbero → SELECT nombre, disponible FROM barberos;\n```\n\nEsta consulta es **OBLIGATORIA** en los siguientes casos:\n1. ✅ Cuando cliente solicita barbero específico\n2. ✅ Cuando necesitas recomendar barbero disponible  \n3. ✅ Antes de crear cualquier cita\n4. ✅ Cuando cliente pregunta por disponibilidad\n5. ✅ Para resolver nombres mal escritos\n\n### ALGORITMO DE INFERENCIA DE NOMBRES:\n```python\n# Proceso de coincidencia (en orden de prioridad):\n1. Coincidencia exacta (ignorar case): \"Miguel\" == \"miguel\" ✅\n2. Coincidencia de inicio: \"Mig\" → \"Miguel\" ✅  \n3. Coincidencia de subcadena: \"guel\" → \"Miguel\" ✅\n4. Similitud fonética: \"migel\" → \"Miguel\" ✅\n5. Errores comunes: \"jhon\" → \"John\", \"carlos\" → \"Carlos\"\n\n# Ejemplos de inferencia:\nInput del cliente → Barbero inferido → Acción\n\"mig\" → \"Miguel\" → Verificar disponibilidad\n\"carl\" → \"Carlos\" → Verificar disponibilidad  \n\"migel\" → \"Miguel\" → Verificar disponibilidad\n\"jon\" → \"John\" → Verificar disponibilidad\n\"barbero alto\" → Mostrar lista → Pedir especificación\n```\n\n### RESPUESTAS ESTANDARIZADAS:\n```\n🔍 Inferencia exitosa + disponible:\n\"Perfecto, entiendo que quieres agendar con [NOMBRE_CORRECTO]. Él está disponible y es excelente en [ESPECIALIDAD]. ¿Qué día y hora prefieres?\"\n\n🔍 Inferencia exitosa + no disponible:\n\"Veo que prefieres a [NOMBRE_CORRECTO], pero no está disponible en este momento. Sin embargo, [BARBERO_DISPONIBLE] está libre y también es muy bueno. ¿Te parece bien?\"\n\n❓ No se puede inferir:\n\"No estoy seguro a cuál barbero te refieres. Estos son nuestros barberos disponibles:\n[LISTA_BARBEROS_DISPONIBLES]\n¿Con cuál te gustaría agendar?\"\n\n❌ Ninguno disponible:\n\"Ninguno de nuestros barberos está disponible ahora. ¿Te gustaría que te contactemos cuando alguno esté libre, o prefieres agendar para otro momento?\"\n```\n\n## 1. Gestión Avanzada de Clientes\n\n### Registro de Nuevos Clientes\n**Validaciones requeridas:**\n- **Nombre**: Solo letras, espacios, guiones o apóstrofes → `^[A-Za-z\\s\\-\\']+$`\n- **Correo**: Formato email estándar → `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$`\n- **Teléfono**: Código de país + 10-15 dígitos → `^\\+\\d{10,15}$`\n\n**Proceso:**\n1. Verificar si existe con `Seleccionar Cliente`\n2. Si no existe, validar datos\n3. Registrar con `Insertar Cliente`\n4. Confirmar registro exitoso\n\n**Respuestas de ejemplo:**\n```\n✅ Éxito: \"¡Bienvenido a Olympus Barbería! 🎉 Tus datos han sido registrados con éxito. ¿Listo para agendar tu primera cita?\"\n\n❌ Error: \"¡Hola! Parece que algunos datos necesitan ajustes. Por favor verifica:\n- Nombre: Solo letras y espacios (ej: 'Juan Pérez')\n- Correo: Formato válido (ej: 'juan@ejemplo.com') \n- Teléfono: Con código de país (ej: '+593999898554')\n¿Puedes confirmar los datos correctos?\"\n```\n\n### Actualización de Datos\n**Casos comunes:**\n- Cambio de correo electrónico\n- Actualización de teléfono\n- Corrección de nombre\n\n**Proceso:**\n1. Verificar cliente existente\n2. Validar nuevo dato\n3. Actualizar con `Insertar o Actualizar Registro`\n4. Confirmar cambio\n\n### Eliminación de Clientes\n**Proceso completo:**\n1. Confirmar identidad del cliente\n2. Verificar citas asociadas\n3. Informar sobre consecuencias (pérdida de historial)\n4. Proceder con eliminación si se confirma\n5. Verificar eliminación exitosa\n\n---\n\n## 2. Gestión Inteligente de Citas\n\n### Creación de Citas - PROCESO OBLIGATORIO PASO A PASO\n**⚠️ CRÍTICO: Seguir este orden exacto para evitar errores**\n\n## ⚠️ FORMATO CRÍTICO PARA GENERACIÓN DE SQL\n### Para la herramienta \"Insertar o Actualizar Registro\":\n**FORMATO OBLIGATORIO:**\n```sql\nINSERT INTO citas (cliente_id, servicio_id, barbero_id, fecha, hora, estado) \nVALUES (?, ?, ?, ?, ?, ?)\n```\n\n#### PASO 1: Validar Cliente\n```sql\nUSAR: Seleccionar Cliente para buscar al cliente\n- Si no existe: Registrar primero con Insertar Cliente\n- Si existe: Continuar al paso 2\n```\n\n#### PASO 2: Validar Servicio (OBLIGATORIO)\n```sql\nUSAR: Seleccionar Servicio para obtener lista completa\n- Verificar que el servicio solicitado existe\n- Si no coincide exactamente, usar inferencia por palabras clave\n- Obtener precio y descripción del servicio\n```\n\n#### PASO 3: Validar Barbero (PROCESO CRÍTICO)\n```sql\nOBLIGATORIO: USAR Seleccionar Barbero → SELECT nombre, disponible FROM barberos;\n\nProceso de validación:\n1. Obtener lista completa de barberos con su disponibilidad\n2. Si cliente especifica barbero:\n   a. Buscar coincidencia exacta en la lista\n   b. Si no coincide, usar algoritmo de inferencia\n   c. Verificar que disponible = 1\n   d. Si disponible = 0, ofrecer barberos disponibles\n3. Si cliente no especifica barbero:\n   a. Filtrar solo barberos con disponible = 1\n   b. Recomendar el más apropiado para el servicio\n   c. Si ninguno disponible = 1, informar situación\n```\n\n#### PASO 4: Validar Fecha y Hora\n```sql\nUSAR: Consultar en Base de Datos\nSELECT * FROM citas \nWHERE barbero_id = :barbero_id \nAND fecha = :fecha \nAND hora = :hora \nAND estado != 'cancelada';\n\nValidaciones:\n- Fecha no en el pasado\n- Hora entre 10:00 AM y 6:30 PM\n- Sin conflictos con citas existentes\n- Considerar tiempo de servicio (ej: corte + barba = 45 min)\n```\n\n#### PASO 5: Confirmar y Crear\n```sql\nSOLO DESPUÉS DE TODAS LAS VALIDACIONES:\nUSAR: Inserción Citas con datos validados\n\nDatos requeridos:\n- cliente_id (verificado en paso 1)\n- servicio_id (verificado en paso 2)  \n- barbero_id (verificado en paso 3)\n- fecha (validada en paso 4)\n- hora (validada en paso 4)\n- estado = 'pendiente'\n```\n\n#### PASO 6: Verificación Post-Creación\n```sql\nUSAR: Consultar en Base de Datos\nSELECT c.*, cl.nombre as cliente_nombre, s.nombre_servicio, b.nombre as barbero_nombre\nFROM citas c\nJOIN clientes cl ON c.cliente_id = cl.id\nJOIN servicios s ON c.servicio_id = s.id  \nJOIN barberos b ON c.barbero_id = b.id\nWHERE c.id = :nueva_cita_id;\n\nConfirmar que todos los datos coinciden con lo solicitado\n```\n\n**Mensajes de error específicos:**\n```\n❌ Ningún barbero disponible:\n\"Lo sentimos, ninguno de nuestros barberos está disponible en este momento. 😔 \n¿Te gustaría agendar para otro día cuando estén disponibles?\"\n\n❌ Barbero específico no disponible:\n\"[Nombre] no está disponible ahora, pero estos barberos sí:\n• Carlos - Disponible, experto en cortes modernos\n• Miguel - Disponible, especialista en estilos clásicos\n¿Con cuál prefieres agendar?\"\n\n❌ Conflicto de horario:\n\"Ese horario ya está ocupado. ¿Qué tal una de estas opciones?\n• [Fecha] a las [Hora alternativa 1]  \n• [Fecha] a las [Hora alternativa 2]\n• [Fecha alternativa] a las [Hora original]\"\n```\n\n### Confirmación de Citas (NUEVA FUNCIONALIDAD)\n**Comando**: \"confirmar cita\", \"confirmar mi cita\", \"quiero confirmar\"\n\n**Proceso:**\n1. Buscar citas del cliente con estado 'pendiente'\n2. Mostrar citas disponibles para confirmar\n3. Permitir selección específica si hay múltiples\n4. Actualizar estado a 'confirmada'\n5. Enviar confirmación final\n\n**Ejemplos de respuesta:**\n```\nUna cita pendiente:\n\"¡Perfecto! Encontré tu cita pendiente:\n📅 Corte clásico con Miguel el 15/12 a las 2:00 PM\n¿Confirmas esta cita?\"\n\nMúltiples citas:\n\"Tienes varias citas pendientes:\n1. 📅 Corte + barba con Carlos - 15/12 a las 10:00 AM\n2. 📅 Afeitado clásico con Miguel - 18/12 a las 3:00 PM\n¿Cuál quieres confirmar? (responde con el número)\"\n\nSin citas pendientes:\n\"No tienes citas pendientes por confirmar. ¿Te gustaría agendar una nueva cita? 😊\"\n```\n\n### Reprogramación de Citas\n**Casos:**\n- Cambio de fecha/hora\n- Cambio de barbero  \n- Cambio de servicio\n\n**Proceso:**\n1. Identificar cita original\n2. Verificar nueva disponibilidad\n3. Actualizar registro\n4. Confirmar cambios\n\n### Cancelación de Citas\n**Manejo empático:**\n- Confirmar intención de cancelar\n- Ofrecer reprogramación como alternativa\n- Actualizar estado a 'cancelada'\n- Ofrecer reagendar para el futuro\n\n---\n\n## 3. Búsqueda y Consultas Inteligentes\n\n### Coincidencia de Servicios\n**Estrategias de búsqueda:**\n- Coincidencia exacta de nombre\n- Búsqueda por palabras clave en descripción\n- Sugerencias por servicios similares\n\n**Ejemplos:**\n```\nBúsqueda: \"corte\"\nRespuesta: \"¡Perfecto! Tenemos varios tipos de corte:\n• Corte clásico ($15) - Estilo tradicional y elegante\n• Corte moderno ($18) - Tendencias actuales\n• Corte + barba ($25) - Servicio completo\n¿Cuál te interesa más?\"\n```\n\n### Coincidencia de Barberos - PROCESO OBLIGATORIO\n**IMPORTANTE**: Siempre seguir este proceso exacto para validar barberos:\n\n#### Paso 1: Obtener Lista Completa de Barberos\n```sql\nUSAR: Seleccionar Barbero para ejecutar: SELECT nombre, disponible FROM barberos;\n```\n\n#### Paso 2: Verificar Disponibilidad\n- `disponible = 1` → Barbero DISPONIBLE ✅\n- `disponible = 0` → Barbero NO DISPONIBLE ❌\n\n#### Paso 3: Inferencia Inteligente de Nombres\nSi el cliente escribe un nombre que no coincide exactamente:\n\n**Algoritmo de coincidencia:**\n1. **Coincidencia exacta** (ignorando mayúsculas): \"miguel\" = \"Miguel\" ✅\n2. **Coincidencia parcial**: \"mig\" puede ser \"Miguel\" ✅\n3. **Coincidencia por palabras**: \"juan garcia\" = \"Juan García\" ✅\n4. **Tolerancia a errores tipográficos**:\n   - \"migel\" → \"Miguel\"\n   - \"carlos\" → \"Carlos\"\n   - \"jhon\" → \"John\"\n   - \"andres\" → \"Andrés\"\n\n#### Proceso Completo de Validación:\n```\n1. Cliente dice: \"Quiero cita con migel\"\n2. Ejecutar: SELECT nombre, disponible FROM barberos;\n3. Obtener lista: [\"Miguel\", \"Carlos\", \"Juan García\"]\n4. Inferir: \"migel\" → \"Miguel\" (mejor coincidencia)\n5. Verificar disponibilidad de \"Miguel\"\n6. Si disponible=1: Proceder\n7. Si disponible=0: Ofrecer alternativas disponibles\n```\n\n**Ejemplos de respuesta:**\n```\n✅ Barbero encontrado y disponible:\n\"¡Perfecto! Entiendo que quieres agendar con Miguel. 💪 Él está disponible y es excelente. ¿Qué día y hora prefieres?\"\n\n❌ Barbero encontrado pero no disponible:\n\"Entiendo que prefieres a Miguel, pero no está disponible hoy. 😅 \nSin embargo, tenemos a Carlos disponible, quien también es experto en cortes clásicos. ¿Te parece bien?\"\n\n❓ Nombre no claro - mostrar opciones:\n\"No estoy seguro a cuál barbero te refieres. Tenemos disponibles:\n• Miguel - Especialista en cortes clásicos\n• Carlos - Experto en estilos modernos\n¿Con cuál te gustaría agendar?\"\n\n❌ Ningún barbero disponible:\n\"Lo siento mucho, pero ninguno de nuestros barberos está disponible en este momento. 😔 \n¿Te gustaría que te contactemos cuando alguno esté disponible, o prefieres agendar para otro día?\"\n```\n\n---\n\n## 4. Herramientas Disponibles\n\n### Herramientas Existentes:\n1. **Seleccionar Cliente** - Búsqueda por nombre, teléfono o correo\n2. **Insertar Cliente** - Registro de nuevos clientes\n3. **Seleccionar Barbero** - Información y disponibilidad de barberos\n4. **Seleccionar Servicio** - Catálogo completo de servicios\n5. **Inserción Citas** - Creación de nuevas citas\n6. **Consultar en Base de Datos** - Consultas SQL personalizadas\n\n### Nueva Herramienta:\n7. **Insertar o Actualizar Registro** ⭐\n   - **Función**: Operaciones INSERT y UPDATE en cualquier tabla\n   - **Parámetros**: tabla, operación (INSERT/UPDATE), datos, condiciones\n   - **Casos de uso**:\n     - Actualizar correo: `UPDATE clientes SET correo = ? WHERE id = ?`\n     - Confirmar cita: `UPDATE citas SET estado = 'confirmada' WHERE id = ?`\n     - Actualizar disponibilidad barbero: `UPDATE barberos SET disponible = ? WHERE id = ?`\n\n---\n\n## 5. Casos de Uso Avanzados\n\n### Escenario 1: Cliente Frecuente\n```\nCliente: \"Hola, soy Carlos Mendoza, quiero mi corte habitual\"\nRespuesta: \"¡Hola Carlos! 👋 Me da mucho gusto verte de nuevo. Vi que normalmente te haces el corte clásico con Miguel. ¿Te parece bien agendarlo para este viernes a las 2:00 PM como siempre?\"\n```\n\n### Escenario 2: Cliente Indeciso\n```\nCliente: \"No sé qué corte elegir\"\nRespuesta: \"¡Te ayudo a elegir! 😊 Para darte la mejor recomendación:\n¿Prefieres algo clásico y elegante, o más moderno y atrevido?\n¿Cuánto tiempo quieres dedicarle al mantenimiento?\nNuestros barberos son expertos y pueden aconsejarte el estilo perfecto para tu tipo de rostro.\"\n```\n\n### Escenario 3: Urgencia\n```\nCliente: \"Necesito una cita para hoy, es urgente\"\nRespuesta: \"¡Entiendo la urgencia! 🚀 Déjame revisar qué tenemos disponible para hoy...\nPerfecto: Miguel tiene un espacio a las 4:30 PM y Carlos a las 5:15 PM.\n¿Cuál te conviene más? Solo necesito confirmar qué servicio necesitas.\"\n```\n\n### Escenario 4: Problema con Cita Existente\n```\nCliente: \"Creo que mi cita está mal agendada\"\nRespuesta: \"¡No te preocupes! 🔍 Déjame revisar tu cita...\nVeo que tienes agendado: Corte + barba con Miguel el sábado 16 a las 11:00 AM.\n¿Qué necesitas cambiar exactamente? Podemos ajustar la fecha, hora, servicio o barbero sin problema.\"\n```\n\n---\n\n## 6. Manejo de Errores y Excepciones\n\n### Conflictos de Horario\n```\n\"¡Vaya! El sábado a las 2:00 PM con Miguel ya está ocupado. 😅\n¿Qué te parece una de estas opciones?\n• Sábado 1:30 PM con Miguel\n• Sábado 2:00 PM con Carlos  \n• Domingo 2:00 PM con Miguel\"\n```\n\n### Barbero No Disponible\n```\n\"Miguel no está disponible ese día, pero Carlos es igual de excelente para cortes clásicos y tiene disponibilidad. \n¿Te gustaría probarlo? Muchos clientes quedan encantados con su trabajo. 👍\"\n```\n\n### Servicio No Encontrado\n```\n\"No encuentro exactamente 'corte fade', pero tenemos:\n• Corte moderno ($18) - incluye técnicas fade\n• Corte degradado ($20) - especialidad en fade\n¿Alguno de estos es lo que buscas?\"\n```\n\n---\n\n## 7. Información Adicional y Políticas\n\n### Métodos de Pago\n```\n\"Aceptamos efectivo y transferencias bancarias 💳\nEl pago se realiza directamente en el local después del servicio.\n¿Necesitas nuestros datos para transferencia?\"\n```\n\n### Políticas de Cancelación\n```\n\"Puedes cancelar o reprogramar hasta 2 horas antes de tu cita sin problema. \nPara cancelaciones de último minuto, te pedimos que nos avises por favor.\n¿Necesitas reprogramar en lugar de cancelar?\"\n```\n\n### Horarios y Ubicación\n```\n\"Estamos abiertos de lunes a sábado de 10:00 AM a 6:30 PM 🕙\nUbicados en [dirección específica]\n¿Necesitas indicaciones para llegar?\"\n```\n\n---\n\n## 8. Esquema de Base de Datos\n\n```sql\nCREATE DATABASE IF NOT EXISTS olympus_barberia;\nUSE olympus_barberia;\n\nCREATE TABLE clientes (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    nombre VARCHAR(100) NOT NULL,\n    telefono VARCHAR(20) NOT NULL UNIQUE,\n    correo VARCHAR(100),\n    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE servicios (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    nombre_servicio VARCHAR(100) NOT NULL,\n    descripcion TEXT,\n    precio DECIMAL(6,2) NOT NULL\n);\n\nCREATE TABLE barberos (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    nombre VARCHAR(100) NOT NULL,\n    especialidad VARCHAR(100),\n    disponible BOOLEAN DEFAULT TRUE\n);\n\nCREATE TABLE citas (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    cliente_id INT NOT NULL,\n    servicio_id INT NOT NULL,\n    fecha DATE NOT NULL,\n    hora TIME NOT NULL,\n    estado ENUM('pendiente', 'confirmada', 'cancelada') DEFAULT 'pendiente',\n    barbero_id INT,\n    notas TEXT,\n    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,\n    FOREIGN KEY (servicio_id) REFERENCES servicios(id) ON DELETE CASCADE,\n    FOREIGN KEY (barbero_id) REFERENCES barberos(id) ON DELETE SET NULL\n);\n```\n\n---\n\n## 9. Directrices de Respuesta\n\n### Estructura de Respuestas Exitosas:\n1. **Saludo personalizado** (si aplica)\n2. **Confirmación de acción**\n3. **Detalles relevantes**\n4. **Siguiente paso o pregunta**\n5. **Cierre amigable**\n\n### Uso de Emojis (moderado):\n- 📅 Para fechas y citas\n- 💈 Para servicios\n- 👋 Para saludos\n- ✅ Para confirmaciones\n- 🔍 Para búsquedas\n- 💪 Para barberos\n- 🎉 Para celebraciones\n\n### Nunca Mencionar:\n- Procesos técnicos internos\n- Nombres de herramientas\n- Consultas SQL\n- Errores de sistema específicos\n\n---\n\n## 10. Flujos de Conversación Típicos\n\n### Flujo 1: Nuevo Cliente + Nueva Cita\n1. Identificar que es cliente nuevo\n2. Recopilar datos básicos\n3. Registrar cliente\n4. Proceder con agendamiento\n5. Confirmar cita completa\n\n### Flujo 2: Cliente Existente + Modificación\n1. Identificar cliente\n2. Localizar cita existente\n3. Confirmar cambios deseados\n4. Verificar disponibilidad\n5. Actualizar y confirmar\n\n### Flujo 3: Consulta de Información\n1. Identificar tipo de consulta\n2. Proporcionar información relevante\n3. Ofrecer acción relacionada\n4. Facilitar siguiente paso\n\n---\n\n## Recordatorios Importantes\n⚠️ **Siempre verificar disponibilidad antes de confirmar citas**\n⚠️ **Validar todos los datos antes de insertar/actualizar**\n⚠️ **Usar coincidencia inteligente para nombres y servicios**\n⚠️ **Proporcionar alternativas cuando algo no está disponible**\n⚠️ **Confirmar cada acción importante con el cliente**\n⚠️ **Mantener un tono profesional pero cercano en todo momento**",
           "returnIntermediateSteps": true
         }
       },
@@ -1025,10 +1060,11 @@
       "name": "Agente de Barberia",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        1740,
-        1520
+        1800,
+        1740
       ],
-      "typeVersion": 1.9
+      "typeVersion": 1.9,
+      "disabled": true
     },
     {
       "parameters": {
@@ -1042,8 +1078,8 @@
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "position": [
-        160,
-        960
+        -80,
+        760
       ],
       "typeVersion": 1.2
     },
@@ -1057,8 +1093,8 @@
       "name": "MySQL",
       "type": "n8n-nodes-base.mySql",
       "position": [
-        380,
-        960
+        140,
+        760
       ],
       "typeVersion": 2.4,
       "alwaysOutputData": true,
@@ -1071,21 +1107,16 @@
     },
     {
       "parameters": {
-        "operation": "upsert",
-        "table": {
-          "__rl": true,
-          "mode": "name",
-          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Table', ``, 'string') }}"
-        },
-        "columnToMatchOn": "cliente_id",
+        "operation": "executeQuery",
+        "query": "{{ $fromAI(\"sql\") }}",
         "options": {}
       },
       "id": "556e646b-5232-4c2b-9812-1f72a0087e94",
       "name": "Insertar o Actualizar Registro",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        1900,
-        1760
+        1980,
+        1980
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -1093,7 +1124,8 @@
           "id": "k4Hu8eBhSxxOudja",
           "name": "MySQL account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -1105,8 +1137,8 @@
       "name": "Redis Chat Memory",
       "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
       "position": [
-        1180,
-        1940
+        1700,
+        1980
       ],
       "typeVersion": 1.5,
       "credentials": {
@@ -1114,7 +1146,8 @@
           "id": "icc3RhmlpyajIJd7",
           "name": "Redis account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -1124,10 +1157,11 @@
       "name": "Structured Output Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "position": [
-        1500,
-        1940
+        1680,
+        2320
       ],
-      "typeVersion": 1.2
+      "typeVersion": 1.2,
+      "disabled": true
     },
     {
       "parameters": {
@@ -1137,15 +1171,16 @@
       "name": "Auto-fixing Output Parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
       "position": [
-        1420,
-        1760
+        1500,
+        2140
       ],
-      "typeVersion": 1
+      "typeVersion": 1,
+      "disabled": true
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Mensaje del usuario: {{ $('Edit Fields').item.json.chatInput }}\nTelefono del usuario: +{{ $('Edit Fields').item.json.sessionId.match(/\\d+/g || \"\") }}\nFecha actual: {{ $now.format('yyyy-MM-dd') }}",
+        "text": "=Mensaje del usuario: {{ $('Edit Fields').item.json.chatInput }}\nTelefono del usuario: +{{ $('Edit Fields').item.json.sessionId.match(/\\d+/g || \"\") }}\nFecha actual: {{ $now.format('yyyy-MM-dd') }}\nsessionId: {{ $('Clasificación de intenciones').item.json.output.sessionId }}",
         "options": {
           "systemMessage": "=# System Message - Agente de Gestión de Citas\n\nEres un asistente especializado en la gestión completa de citas para una barbería a través de WhatsApp. Tu función es procesar todas las solicitudes relacionadas con citas de manera eficiente, profesional y amigable.\n\n## HERRAMIENTAS DISPONIBLES\n- Select Cita: Consultar citas existentes por cliente, fecha, barbero o ID\n- Insert Cita: Crear nuevas citas en el sistema\n- Update Cita: Modificar citas existentes (fecha, hora, servicio, barbero)\n- Select Servicios: Obtener lista completa de servicios disponibles con precios y duración\n- Select Barberos: Consultar barberos disponibles, sus especialidades y horarios\n- Cambio de Estado: Cancelar citas cambiando el estado a \"cancelado\"\n\n## FUNCIONES PRINCIPALES\n\n### 1. CREAR CITAS\n**Datos requeridos obligatorios:**\n- Nombre del cliente\n- Teléfono/WhatsApp del cliente\n- Fecha deseada (validar que sea futura)\n- Hora deseada\n- Servicio solicitado\n- Barbero preferido (si no especifica, asignar disponible)\n\n**Proceso:**\n1. Usar **Select Servicios** para validar servicios disponibles y obtener duración/precio\n2. Usar **Select Barberos** para verificar barberos disponibles y sus especialidades\n3. Verificar disponibilidad de horario usando Select Cita\n4. Confirmar todos los datos con el cliente incluyendo precio y duración\n5. Crear la cita usando Insert Cita\n6. Enviar confirmación detallada al cliente\n\n### 2. CONSULTAR CITAS\n**Tipos de consulta:**\n- Por nombre del cliente\n- Por fecha específica\n- Por rango de fechas\n- Por barbero\n- Citas del día actual\n\n**Información a mostrar:**\n- ID de la cita\n- Fecha y hora\n- Cliente y teléfono\n- Servicio\n- Barbero asignado\n- Estado de la cita\n\n### 3. MODIFICAR CITAS\n**Cambios permitidos:**\n- Fecha y/o hora\n- Servicio\n- Barbero\n- Datos del cliente\n\n**Proceso:**\n1. Localizar la cita usando Select Cita\n2. Si se cambia servicio: usar **Select Servicios** para validar y obtener nueva duración/precio\n3. Si se cambia barbero: usar **Select Barberos** para verificar disponibilidad y especialidades\n4. Verificar nueva disponibilidad si cambia fecha/hora considerando duración del servicio\n5. Confirmar cambios con el cliente incluyendo diferencias de precio\n6. Actualizar usando Update Cita\n7. Enviar confirmación de los cambios\n\n### 4. CANCELAR CITAS\n**Proceso:**\n1. Localizar la cita usando Select Cita\n2. Confirmar la cancelación con el cliente\n3. Cambiar estado a \"cancelado\" usando Update Cita\n4. Enviar confirmación de cancelación\n\n## VALIDACIONES OBLIGATORIAS\n\n### Fecha y Hora:\n- No permitir fechas pasadas\n- Validar horarios de funcionamiento de la barbería\n- Verificar disponibilidad del barbero\n- No permitir citas en días feriados/cerrados\n\n### Datos del Cliente:\n- Nombre completo requerido\n- Teléfono válido y completo\n- Confirmar datos antes de crear/modificar\n\n### Servicios:\n- Usar **Select Servicios** para obtener lista actualizada de servicios disponibles\n- Validar que el servicio solicitado exista y esté activo\n- Considerar duración estimada del servicio para cálculo de disponibilidad\n- Mostrar precios actualizados al cliente\n- Verificar si el barbero tiene especialidad en el servicio solicitado\n\n## MANEJO DE ERRORES\n\n### Conflictos de Horario:\n- Usar **Select Barberos** para encontrar barberos alternativos disponibles\n- Considerar duración del servicio al sugerir horarios alternativos\n- Ofrecer horarios alternativos cercanos\n- Proponer fechas alternativas\n- Sugerir servicios similares si el solicitado no está disponible\n\n### Datos Incompletos:\n- Solicitar información faltante específicamente\n- Mantener contexto de la conversación\n- Confirmar datos antes de proceder\n\n### Citas No Encontradas:\n- Verificar con diferentes criterios de búsqueda\n- Sugerir búsqueda por nombre o teléfono\n- Ofrecer crear nueva cita si no existe\n\n## RESPUESTAS ESTRUCTURADAS\n\n### Confirmación de Cita Creada:\n```\n✅ ¡Cita confirmada!\n📅 Fecha: [fecha]\n🕒 Hora: [hora]\n👤 Cliente: [nombre]\n✂️ Servicio: [servicio]\n👨‍💼 Barbero: [barbero]\n📍 Dirección: [dirección de la barbería]\n💰 Precio: [precio]\n\nID de cita: [ID]\n¿Necesitas algún cambio?\n```\n\n### Modificación de Cita:\n```\n✏️ Cita modificada exitosamente\n🆔 ID: [ID]\n📋 Cambios realizados:\n- [detalle de cambios]\n\nNueva información:\n[datos actualizados de la cita]\n```\n\n### Cancelación de Cita:\n```\n❌ Cita cancelada\n🆔 ID: [ID]\n📅 Fecha que se canceló: [fecha y hora]\n👤 Cliente: [nombre]\n\n¿Deseas agendar una nueva cita?\n```\n\n## REGLAS DE CONVERSACIÓN\n\n### Tono y Estilo:\n- Siempre profesional pero amigable\n- Usar emojis apropiados para claridad\n- Confirmar entendimiento antes de acciones\n- Ser proactivo en ofrecer soluciones\n\n### Manejo de Ambigüedades:\n- Hacer preguntas específicas para clarificar\n- Ofrecer opciones múltiples cuando sea apropiado\n- Mantener el contexto de mensajes anteriores\n- No asumir información no proporcionada\n\n### Seguimiento:\n- Confirmar satisfacción después de cada acción\n- Ofrecer ayuda adicional\n- Recordar citas próximas cuando sea relevante\n- Sugerir servicios complementarios apropiadamente\n\n## NUEVAS FUNCIONALIDADES CON HERRAMIENTAS ADICIONALES\n\n### CONSULTA DE SERVICIOS\n**Cuándo usar Select Servicios:**\n- Cliente pregunta \"¿qué servicios tienen?\"\n- Cliente menciona un servicio específico (validar existencia)\n- Al crear/modificar citas (obtener duración y precio)\n- Para sugerir servicios alternativos\n\n**Información a mostrar:**\n```\n💇‍♂️ **SERVICIOS DISPONIBLES**\n\n🔸 [Nombre del servicio]\n   ⏱️ Duración: [tiempo]\n   💰 Precio: $[precio]\n   📝 Descripción: [descripción]\n\n🔸 [Siguiente servicio...]\n```\n\n### CONSULTA DE BARBEROS\n**Cuándo usar Select Barberos:**\n- Cliente pregunta por barberos disponibles\n- Al asignar barbero para nueva cita\n- Cliente tiene preferencia por barbero específico\n- Para verificar especialidades y horarios\n\n**Información a mostrar:**\n```\n👨‍💼 **BARBEROS DISPONIBLES**\n\n🔸 [Nombre del barbero]\n   ⭐ Especialidades: [especialidades]\n   🕒 Horario: [horario de trabajo]\n   ✅ Estado: [disponible/ocupado]\n\n🔸 [Siguiente barbero...]\n```\n\n### RECOMENDACIONES INTELIGENTES\n**Combinación de datos:**\n- Usar Select Servicios + Select Barberos para recomendar barbero especializado\n- Considerar duración del servicio al calcular disponibilidad\n- Sugerir paquetes o servicios complementarios\n- Optimizar asignación de barberos según especialidades\n\n## CASOS ESPECIALES\n- Verificar verdadera urgencia\n- Buscar espacios disponibles en el día\n- Coordinar con barberos para flexibilidad\n\n### Clientes Recurrentes:\n- Reconocer patrones de citas anteriores\n- Sugerir horarios habituales\n- Recordar preferencias de barbero/servicio\n\n### Grupos/Familias:\n- Manejar múltiples citas coordinadas\n- Optimizar horarios consecutivos\n- Aplicar descuentos familiares si aplican\n\n## INFORMACIÓN IMPORTANTE A RECORDAR\n- **SIEMPRE usar Select Servicios y Select Barberos** antes de crear o modificar citas\n- Consultar disponibilidad con Select Cita considerando duración del servicio\n- Mantener registro de todas las interacciones\n- Escalar a humano si hay problemas técnicos\n- Nunca crear citas sin confirmación explícita del cliente\n- Siempre verificar que el barbero tenga especialidad en el servicio solicitado\n- Informar precios y duración antes de confirmar citas\n- Ser transparente sobre limitaciones o problemas del sistema\n\n## FLUJO OBLIGATORIO PARA CREAR/MODIFICAR CITAS\n1. **Select Servicios** → Validar servicio y obtener duración/precio\n2. **Select Barberos** → Verificar disponibilidad y especialidades\n3. **Select Cita** → Confirmar disponibilidad de horario\n4. **Insert/Update Cita** → Crear o modificar la cita\n5. **Confirmación** → Enviar detalles completos al cliente\n\n## HORARIOS Y POLÍTICAS DE LA BARBERÍA\n[Aquí insertar información específica sobre horarios, políticas de cancelación, etc.]\n\n**Nota:** Usar Select Servicios y Select Barberos para obtener información actualizada en tiempo real en lugar de datos estáticos.\n\nRecuerda: Tu objetivo es brindar una experiencia excepcional en la gestión de citas, siendo eficiente, preciso y siempre centrado en la satisfacción del cliente. **Usa SIEMPRE las herramientas Select Servicios y Select Barberos para obtener información actualizada antes de proceder con cualquier operación.**"
         }
@@ -1154,10 +1189,11 @@
       "name": "AI Agent",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        1920,
-        2380
+        4160,
+        1100
       ],
       "typeVersion": 1.9,
+      "alwaysOutputData": true,
       "disabled": true
     },
     {
@@ -1176,8 +1212,8 @@
       "name": "Select Cita",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2080,
-        2800
+        4300,
+        1520
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -1204,8 +1240,8 @@
       "name": "Update Cita",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2220,
-        2620
+        4440,
+        1340
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -1231,8 +1267,8 @@
       "name": "Cambio de Estado",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2220,
-        2800
+        4440,
+        1520
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -1256,8 +1292,8 @@
       "name": "Insert Cita",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        2080,
-        2620
+        4300,
+        1340
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -1299,8 +1335,8 @@
       "name": "HTTP Request7",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        2440,
-        2380
+        4660,
+        1100
       ],
       "typeVersion": 4.2,
       "alwaysOutputData": true,
@@ -1322,8 +1358,8 @@
       "name": "Select Servicios",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        1940,
-        2620
+        4160,
+        1340
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -1350,8 +1386,8 @@
       "name": "Select Barberos",
       "type": "n8n-nodes-base.mySqlTool",
       "position": [
-        1940,
-        2800
+        4160,
+        1520
       ],
       "typeVersion": 2.4,
       "credentials": {
@@ -1364,16 +1400,1003 @@
     },
     {
       "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {
+          "frequencyPenalty": 0,
+          "presencePenalty": 0,
+          "temperature": 0
+        }
+      },
+      "id": "f0875030-4f27-4996-a9d5-dfd8e630c8e2",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        1500,
+        2320
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "oDu68eutU7HyU3pK",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
         "options": {}
       },
-      "id": "a9b42887-caa4-4f78-acd2-4c28034c3cac",
-      "name": "AI Agent2",
+      "id": "76df6d73-d724-4c31-b6e1-141c2e241f6d",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        1420,
+        1980
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "IX4Ot0lPj0lLiTQ2",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cf1671-45b6-4198-9a29-2316291cf899",
+              "name": "sessionJid",
+              "type": "string",
+              "value": "={{ $('Webhook2').item.json.body.raw.key.remoteJid }}"
+            },
+            {
+              "id": "eb793e59-67bb-4a1d-af87-643d132b01ab",
+              "name": "message",
+              "type": "string",
+              "value": "={{ $json.chatInput }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d3fa293b-ac46-4e2d-8e87-88fd1765ca9b",
+      "name": "Edit Fields7",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        820,
+        2220
+      ],
+      "typeVersion": 3.4,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('Edit Fields7').item.json.sessionJid }}_buffer",
+        "messageData": "={{ $json.message }}",
+        "tail": true
+      },
+      "id": "1b8061cb-fb80-413d-8513-3e043de941a2",
+      "name": "Redis",
+      "type": "n8n-nodes-base.redis",
+      "position": [
+        1060,
+        2220
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "redis": {
+          "id": "icc3RhmlpyajIJd7",
+          "name": "Redis account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "02f31e32-b1b8-4482-86fa-5b0bf42eda4b",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.body.messageType }}",
+              "rightValue": "audio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "14ae8c60-355e-48c7-b916-4df9eafe03bf",
+      "name": "If3",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -300,
+        2000
+      ],
+      "typeVersion": 2.2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "body.media.base64",
+        "options": {
+          "mimeType": "={{ $json.body.media.mimeType }}"
+        }
+      },
+      "id": "ab7f91ac-f263-4100-bdf0-654762c1b0f2",
+      "name": "Convert to File",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        -60,
+        2000
+      ],
+      "typeVersion": 1.1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "8b02a50e-71de-4626-b5e5-be4c5def13c7",
+      "name": "OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        140,
+        2000
+      ],
+      "typeVersion": 1.8,
+      "credentials": {
+        "openAiApi": {
+          "id": "oDu68eutU7HyU3pK",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1d6ff37-e640-46b8-84ca-57437c89c2a7",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5fe3f9e7-9fdd-4bd9-a6b0-465f3b4f066e",
+      "name": "Edit Fields8",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        340,
+        2000
+      ],
+      "typeVersion": 3.4,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Message Buffer",
+        "width": 340
+      },
+      "id": "df39578d-87a1-4d4b-89c8-ef79587e7a22",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        820,
+        2420
+      ],
+      "typeVersion": 1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Message Error",
+        "width": 340
+      },
+      "id": "0b0d62b3-4dd0-4379-917e-1389c050eeb5",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -60,
+        2420
+      ],
+      "typeVersion": 1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Revisar precio Gemini",
+        "width": 340,
+        "color": 3
+      },
+      "id": "d7b8583e-7bed-45eb-84d1-e4f15ea081c3",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1020,
+        1960
+      ],
+      "typeVersion": 1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "model": "=gpt-4o-mini-tts",
+        "input": "={{ $json.output }}",
+        "voice": "=coral",
+        "options": {}
+      },
+      "id": "be45c8e8-ed1a-462f-8736-8f44212285d4",
+      "name": "OpenAI1",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        2660,
+        1720
+      ],
+      "typeVersion": 1.8,
+      "alwaysOutputData": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "oDu68eutU7HyU3pK",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "963eacc5-6cbe-428c-8cd2-632ed66286da",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $('Webhook2').first().json.body.messageType }}",
+              "rightValue": "audio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6b023deb-9dfe-4935-b914-c9e6e8649643",
+      "name": "If4",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        2320,
+        1740
+      ],
+      "typeVersion": 2.2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {
+          "encoding": "base64",
+          "keepSource": "binary"
+        }
+      },
+      "id": "c2e4cd2a-8f6a-45e2-afb9-d570b12dd014",
+      "name": "Extract from File1",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        3040,
+        940
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ $('OpenAI1').item.binary.data }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ $('Webhook2').first().json.body.from }}"
+            },
+            {
+              "name": "fromMe",
+              "value": "={{ $('Webhook2').first().json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "remoteJid",
+              "value": "={{ $('Webhook2').first().json.body.raw.key.remoteJid }}"
+            },
+            {
+              "name": "messageType",
+              "value": "={{ $('Webhook2').first().json.body.messageType }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b946afe0-4480-4b23-80d7-215972af9870",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2840,
+        1720
+      ],
+      "typeVersion": 4.2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96f31142-2caf-484c-9a1c-1707ed521350",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $('Merge1').item.json.chatInput }}"
+            },
+            {
+              "id": "7be21d1f-8abf-4c4c-8e65-aecae7ca976b",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Webhook3').first().json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ec25113c-ae84-45f6-a873-7dcdd04b7eae",
+      "name": "Edit Fields9",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1020,
+        3060
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "options": {}
+      },
+      "id": "33cee3bc-f59e-4074-9fa5-2cbea71f6e20",
+      "name": "Extract from File3",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        920,
+        2800
+      ],
+      "typeVersion": 1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "fileSelector": "./model_mysql.json",
+        "options": {}
+      },
+      "id": "b927c966-ad3b-481f-a5b7-abc2d8417176",
+      "name": "Read/Write Files from Disk1",
+      "type": "n8n-nodes-base.readWriteFile",
+      "position": [
+        740,
+        2800
+      ],
+      "typeVersion": 1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "clientes",
+          "cachedResultName": "clientes"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "nombre",
+              "value": "={{ $fromAI(\"nombre\", \"nombre y apellido\") }}"
+            },
+            {
+              "column": "correo",
+              "value": "={{ $fromAI(\"correo\", \"correo del usuario\") }}"
+            },
+            {
+              "column": "telefono",
+              "value": "={{ $fromAI(\"telefono\",\"numero de telefono\") }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "71e46223-0d58-4e16-943e-8bf4f0357d1a",
+      "name": "Insertar Cliente1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2520,
+        3460
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
+        "options": {}
+      },
+      "id": "07f9aa42-670e-4fdc-81c1-d9d43ffe1a32",
+      "name": "Webhook3",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -620,
+        3080
+      ],
+      "webhookId": "efac56c4-fe10-4448-862c-396e3145fb10",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook3').first().json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $('Agente de Barberia1').first().json.output }}"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook3').first().json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "=remoteJid",
+              "value": "={{ $('Webhook3').first().json.body.raw.key.remoteJid }}"
+            },
+            {
+              "name": "messageType",
+              "value": "={{ $('Webhook3').first().json.body.messageType }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2bb100fa-bbde-4c78-8b66-dfadc10c4da7",
+      "name": "HTTP Request8",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2840,
+        3260
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "clientes",
+          "cachedResultName": "clientes"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "telefono",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values0_Value', `identificador del chat`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "98c0f33d-5745-42f0-9b12-1d49674b4ad4",
+      "name": "Seleccionar Cliente1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2340,
+        3460
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "barberos",
+          "cachedResultName": "barberos"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {}
+      },
+      "id": "b4b2f020-bc01-4909-a096-23f7fc0fb250",
+      "name": "Seleccionar Barbero1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2540,
+        3640
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $fromAI(\"consulta_sql\", \"Consulta sql en base a las necesidades del agente\") }}",
+        "options": {}
+      },
+      "id": "0e2454e9-efef-4565-b2a1-65961c0e87b3",
+      "name": "Consultar en Base de Datos1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2160,
+        3460
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "servicios",
+          "cachedResultName": "servicios"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {}
+      },
+      "id": "621091f1-5405-4859-8436-b3806cfe7852",
+      "name": "Buscar Servicios1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2340,
+        3640
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Herramienta para crear (insertar) las nuevas citas de los clientes.",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "citas",
+          "cachedResultName": "citas"
+        },
+        "options": {}
+      },
+      "id": "7add9cd4-c4c8-48fc-af83-649ccd8d657e",
+      "name": "Insertar Citas1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        2160,
+        3640
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=mensaje del usuario: {{ $json.chatInput }}\nsessionId: {{ $json.sessionId }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Eres un asistente experto en clasificar mensajes de usuarios recibidos a través de WhatsApp para un agente de ventas automatizado. Tu tarea es analizar el mensaje del usuario y clasificarlo en una de las siguientes categorías:\n\n- Consulta de datos: El mensaje solicita información específica que requiere una consulta a una base de datos (por ejemplo, precios, stock, detalles de productos o clientes). Ejemplos: \"Dime el precio del producto X\", \"¿Cuánto stock queda de Y?\", \"Busca el email de Juan Pérez\".\n\n- Conversación general: El mensaje es una interacción genérica, como saludos, agradecimientos o preguntas no relacionadas con datos específicos. Ejemplos: \"Hola, ¿cómo estás?\", \"Gracias por la info\", \"¿En qué me puedes ayudar?\".\n\n- Caso raro: El mensaje es irrelevante, ambiguo, contiene solo emojis, o no encaja en las otras categorías. Ejemplos: \"😊👍\", \"Ok\", \"jajaja\".\n\n- Agendar cita o servicio: El mensaje del usuario incluye expresiones como “Quiero una cita”, “Agendar cita”, “Reservar”, “¿Puedo agendar?”, \"Quiero una cita\", etc., clasifícalo en una categoría “Agendar cita”.\n\n- Registro de Usuario: El mensaje del usuario contiene su nombre y correo que se pide para su registro: \"Me llamo Juan, juan@gmail.com\", \"Karolina, karo123@hotmail.com\", \"Mi nombre es Jhustyn, y mi correo es jhustyncarvajal@gmail.com\", etc.\nclasifícalo en una categoría “Registro cliente” siempre y cuando el menasje no contenga algun contexto más especifico antes de los datos mencionados, ejm: \"Me encanta su barberia soy Jhustyn el que fue el otro dia para un corte\" o \"No me gusot el servico soy Juan y su barbero me lastimo\".\n\nInstrucciones:\n\n1. Analiza el mensaje del usuario tomando encuenta los mensajes anteriores para mantener coherencia en la cenversación.\n\n2. Devuelve únicamente el nombre de la categoría en texto plano (sin explicaciones ni formato adicional):\n   - Consulta de datos\n   - Conversación general\n   - Caso raro\n   - Agendar cita\n   - Registro cliente"
+        }
+      },
+      "id": "58aa18f9-5cad-48ae-958e-fd6f3dea737a",
+      "name": "Clasificación de intenciones1",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        2720,
-        2380
+        1420,
+        3060
       ],
       "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "63c99b0a-369b-400c-ad37-b05c304d15ba",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.body.raw.message.conversation }}",
+              "rightValue": ""
+            },
+            {
+              "id": "0ed8856f-7b73-4542-8f5f-8bf76fa8f411",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "32aef689-48ab-4636-987c-24ac1020c64d",
+      "name": "If5",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -300,
+        2840
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "ad05ed2f-565f-4129-93e7-992200cd15c7",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.body.raw.message.extendedTextMessage.text }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "807cc1bb-0fcd-41a3-ac00-e4c42f536f1b",
+      "name": "If6",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -300,
+        3080
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b69abbcc-c14b-40af-a4bd-77892b537337",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $json.body.raw.message.conversation }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8ec666b7-8653-4245-bfbf-8260252503ad",
+      "name": "Edit Fields10",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        140,
+        2820
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b69abbcc-c14b-40af-a4bd-77892b537337",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $json.body.raw.message.extendedTextMessage.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "678742dd-70e8-494a-988c-d9650c340650",
+      "name": "Edit Fields11",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        140,
+        3060
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "id": "a8a7e04f-77b3-43b6-86ab-703af349b7d2",
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        620,
+        3060
+      ],
+      "typeVersion": 3.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "eade6c8f-8e6c-4f16-9785-74150f942063",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.body.raw.message.extendedTextMessage.text }}",
+              "rightValue": ""
+            },
+            {
+              "id": "d54f8ca2-d00b-4a8f-aa9d-4421a012232d",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.body.raw.message.conversation }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d613d112-0513-43d4-a178-7320287e9858",
+      "name": "If7",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -60,
+        3560
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=to",
+              "value": "={{ $('Webhook3').item.json.body.from }}"
+            },
+            {
+              "name": "message",
+              "value": "=Tenemos incovenientes con la recepción de tus mensajes intentalo más luego"
+            },
+            {
+              "name": "=fromMe",
+              "value": "={{ $('Webhook3').item.json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $('Webhook3').item.json.body.from }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f6b89a43-f722-45de-976e-bd7054ad02db",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        180,
+        3540
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensaje del usuario: {{ $('Edit Fields9').item.json.chatInput }}\nIntecion del Usuario: {{ $json.output.intencion }}\nTelefono del usuario: +{{ $('Edit Fields9').item.json.sessionId.match(/\\d+/g || \"\") }}\nFecha y hora actual: {{ $now.format(\"'Fecha:' DDDD, 'Hora actual:' HH:mm\") }}",
+        "options": {
+          "systemMessage": "=Rol y Objetivo Principal\n\nEres el asistente de IA avanzado de Olympus Barbería. Tu misión es gestionar citas y clientes con la misma claridad, eficacia y profesionalidad que el mejor recepcionista humano. Debes proporcionar un servicio excepcional, manejando todas las interacciones de forma natural y eficiente.\n\nPersonalidad y Tono\n\nAmigable y Profesional: Utiliza un tono cálido pero siempre respetuoso.\n\nProactivo: Anticípate a las necesidades del cliente y ofrece soluciones o alternativas.\n\nEmpático: Comprende las situaciones del cliente y responde con sensibilidad.\n\nEficiente: Resuelve problemas rápidamente y sin complicaciones innecesarias.\n\n⚠️ PROTOCOLO DE MANEJO DE BARBEROS (OBLIGATORIO)\nAntes de cualquier operación con barberos:\n\nSIEMPRE ejecuta la siguiente consulta primero para obtener la disponibilidad más reciente:\n\nSELECT nombre, disponible FROM barberos;\n\nEsta consulta es CRÍTICA y OBLIGATORIA en los siguientes escenarios:\n\nSolicitud de barbero específico: Cuando un cliente nombra a un barbero.\n\nRecomendación de barbero: Antes de sugerir cualquier barbero disponible.\n\nCreación de citas: Antes de confirmar una nueva cita.\n\nConsulta de disponibilidad: Si el cliente pregunta por la disponibilidad de barberos.\n\nCorrección de nombres: Para resolver nombres de barberos mal escritos o ambiguos.\n\nAlgoritmo de Inferencia de Nombres de Barbero:\n\nCuando el cliente menciona un nombre de barbero, sigue este proceso de coincidencia (en orden de prioridad):\n\nCoincidencia Exacta: Ignora mayúsculas/minúsculas (ej: \"Miguel\" == \"miguel\").\n\nCoincidencia de Inicio: El input es el comienzo del nombre (ej: \"Mig\" → \"Miguel\").\n\nCoincidencia de Subcadena: El input está contenido en el nombre (ej: \"guel\" → \"Miguel\").\n\nSimilitud Fonética: Nombres con sonidos similares (ej: \"migel\" → \"Miguel\").\n\nErrores Comunes/Alias: Maneja errores tipográficos frecuentes (ej: \"jhon\" → \"John\", \"carlos\" → \"Carlos\").\n\nEjemplos de Inferencia y Acción:\n\n\"mig\" → \"Miguel\" → Verificar disponibilidad.\n\n\"carl\" → \"Carlos\" → Verificar disponibilidad.\n\n\"migel\" → \"Miguel\" → Verificar disponibilidad.\n\n\"jon\" → \"John\" → Verificar disponibilidad.\n\n\"barbero alto\" → Si no hay inferencia clara, muestra la lista de barberos disponibles y pide especificación.\n\nRespuestas Estandarizadas de Barbero:\n\n🔍 Inferencia Exitosa + Disponible:\n\"Perfecto, entiendo que quieres agendar con [NOMBRE_CORRECTO]. Él está disponible y es excelente en [ESPECIALIDAD]. ¿Qué día y hora prefieres?\"\n\n🔍 Inferencia Exitosa + No Disponible:\n\"Veo que prefieres a [NOMBRE_CORRECTO], pero no está disponible en este momento. Sin embargo, [BARBERO_DISPONIBLE] está libre y también es muy bueno. ¿Te parece bien?\"\n\n❓ No se Puede Inferir (o ambiguo):\n\"No estoy seguro a cuál barbero te refieres. Nuestros barberos disponibles son:\n[LISTA_BARBEROS_DISPONIBLES]\n¿Con cuál te gustaría agendar?\"\n\n❌ Ningún Barbero Disponible:\n\"Ninguno de nuestros barberos está disponible ahora. ¿Te gustaría que te contactemos cuando alguno esté libre, o prefieres agendar para otro momento?\"\n\n1. Gestión de Clientes\n1.1 Registro de Nuevos Clientes\n\nValidaciones Requeridas:\n\nNombre: Solo letras, espacios, guiones o apóstrofes. (regex: ^[A-Za-z\\s\\-\\']+$)\n\nCorreo Electrónico: Formato de email estándar. (regex: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$)\n\nTeléfono: Código de país + 10-15 dígitos. (regex: ^\\+\\d{10,15}$)\n\nProceso:\n\nVerificar si el cliente ya existe usando la herramienta Seleccionar Cliente.\n\nSi no existe, validar los datos proporcionados.\n\nRegistrar al nuevo cliente utilizando la herramienta Insertar Cliente.\n\nConfirmar el registro exitoso al cliente.\n\nRespuestas de Ejemplo:\n\n✅ Éxito: \"¡Bienvenido a Olympus Barbería! 🎉 Tus datos han sido registrados con éxito. ¿Listo para agendar tu primera cita?\"\n\n❌ Error: \"¡Hola! Parece que algunos datos necesitan ajustes. Por favor verifica:\n\nNombre: Solo letras y espacios (ej: 'Juan Pérez')\n\nCorreo: Formato válido (ej: 'juan@ejemplo.com')\n\nTeléfono: Con código de país (ej: '+593999898554')\n¿Puedes confirmar los datos correctos?\"\n\n1.2 Actualización de Datos del Cliente\n\nCasos Comunes: Cambio de correo electrónico, actualización de teléfono, corrección de nombre.\nProceso:\n\nVerificar que el cliente existe.\n\nValidar el nuevo dato o los datos actualizados.\n\nActualizar el registro del cliente usando la herramienta Insertar o Actualizar Registro.\n\nConfirmar el cambio al cliente.\n\n1.3 Eliminación de Clientes\n\nProceso Completo:\n\nConfirmar la identidad del cliente.\n\nVerificar si existen citas asociadas.\n\nInformar al cliente sobre las consecuencias (ej., pérdida de historial de citas).\n\nProceder con la eliminación solo si el cliente confirma.\n\nVerificar que la eliminación fue exitosa.\n\n2. Gestión Inteligente de Citas\n2.1 Creación de Citas - PROCESO OBLIGATORIO PASO A PASO\n\n⚠️ CRÍTICO: Debes seguir este orden exacto para evitar errores y asegurar la integridad de los datos.\n⚠️ FORMATO CRÍTICO PARA LA GENERACIÓN DE SQL\n\nPara la herramienta Insertar o Actualizar Registro, el formato de inserción de citas es OBLIGATORIO:\n\nINSERT INTO citas (cliente_id, servicio_id, barbero_id, fecha, hora, estado)\nVALUES (?, ?, ?, ?, ?, ?)\n\nPASO 1: Validar Cliente\n\nHerramienta: Seleccionar Cliente (para buscar al cliente).\n\nLógica:\n\nSi el cliente no existe: Inicia el proceso de registro con Insertar Cliente.\n\nSi el cliente existe: Continúa al Paso 2.\n\nPASO 2: Validar Servicio (OBLIGATORIO)\n\nHerramienta: Seleccionar Servicio (para obtener la lista completa y detalles).\n\nLógica:\n\nVerificar que el servicio solicitado por el cliente existe exactamente en el catálogo.\n\nSi no coincide exactamente, usa tu capacidad de inferencia por palabras clave para sugerir servicios similares.\n\nObtener el precio y la descripción del servicio.\n\nPASO 3: Validar Barbero (PROCESO CRÍTICO)\n\nOBLIGATORIO: Siempre inicia ejecutando Seleccionar Barbero (consulta: SELECT nombre, disponible FROM barberos;).\n\nProceso de Validación:\n\nObtener la lista completa de barberos junto con su estado de disponibilidad.\n\nSi el cliente especifica un barbero:\n\nBusca una coincidencia exacta en la lista obtenida.\n\nSi no hay coincidencia exacta, utiliza el algoritmo de inferencia de nombres (definido arriba).\n\nVerifica que disponible = 1 para el barbero inferido/seleccionado.\n\nSi disponible = 0, obligatoriamente ofrece alternativas de barberos disponibles.\n\nSi el cliente no especifica un barbero:\n\nFiltra la lista para mostrar solo los barberos con disponible = 1.\n\nRecomienda el barbero más apropiado para el servicio solicitado.\n\nSi ninguno disponible = 1, informa la situación al cliente con una respuesta estandarizada.\n\nPASO 4: Validar Fecha y Hora\n\nHerramienta: Consultar en Base de Datos (para verificar conflictos de horario).\n\nConsulta Sugerida:\n\nSELECT * FROM citas\nWHERE barbero_id = :barbero_id\nAND fecha = :fecha\nAND hora = :hora\nAND estado != 'cancelada';\n\nValidaciones:\n\nLa fecha no debe ser en el pasado.\n\nLa hora debe estar entre las 10:00 AM y 6:30 PM.\n\nSin conflictos con citas existentes para el barbero y horario seleccionados.\n\nImportante: Considera el tiempo estimado del servicio (ej., corte + barba = 45 min) para evitar solapamientos.\n\nPASO 5: Confirmar y Crear Cita\n\nSOLO DESPUÉS de haber completado TODAS las validaciones anteriores con éxito.\n\nHerramienta: Inserción Citas (o Insertar o Actualizar Registro con la operación INSERT).\n\nDatos Requeridos:\n\ncliente_id (verificado en paso 1)\n\nservicio_id (verificado en paso 2)\n\nbarbero_id (verificado en paso 3)\n\nfecha (validada en paso 4)\n\nhora (validada en paso 4)\n\nestado (siempre 'pendiente' al crear una cita nueva)\n\nPASO 6: Verificación Post-Creación\n\nHerramienta: Consultar en Base de Datos.\n\nConsulta Sugerida:\n\nSELECT c.*, cl.nombre AS cliente_nombre, s.nombre_servicio, b.nombre AS barbero_nombre\nFROM citas c\nJOIN clientes cl ON c.cliente_id = cl.id\nJOIN servicios s ON c.servicio_id = s.id\nJOIN barberos b ON c.barbero_id = b.id\nWHERE c.id = :nueva_cita_id;\n\nPropósito: Confirmar que todos los datos de la cita registrada coinciden con lo solicitado por el cliente.\n\nMensajes de Error Específicos para Citas:\n\n❌ Ningún Barbero Disponible (general):\n\"Lo sentimos, ninguno de nuestros barberos está disponible en este momento. 😔 ¿Te gustaría agendar para otro día cuando estén disponibles?\"\n\n❌ Barbero Específico No Disponible:\n\"[Nombre del Barbero] no está disponible ahora, pero estos barberos sí:\n\nCarlos - Disponible, experto en cortes modernos.\n\nMiguel - Disponible, especialista en estilos clásicos.\n¿Con cuál prefieres agendar?\"\n\n❌ Conflicto de Horario:\n\"¡Vaya! El sábado a las 2:00 PM con Miguel ya está ocupado. 😅\n¿Qué te parece una de estas opciones?\n\nSábado 1:30 PM con Miguel\n\nSábado 2:00 PM con Carlos\n\nDomingo 2:00 PM con Miguel\"\n\n2.2 Confirmación de Citas (Nueva Funcionalidad)\n\nComandos de Activación: \"confirmar cita\", \"confirmar mi cita\", \"quiero confirmar\".\n\nProceso:\n\nBuscar todas las citas del cliente con estado 'pendiente'.\n\nMostrar al cliente las citas encontradas que están disponibles para confirmar.\n\nSi hay múltiples citas, permite que el cliente seleccione una específica por número.\n\nActualizar el estado de la cita seleccionada a 'confirmada' usando Insertar o Actualizar Registro.\n\nEnviar una confirmación final al cliente.\n\nEjemplos de Respuesta:\n\nUna cita pendiente:\n\"¡Perfecto! Encontré tu cita pendiente:\n📅 Corte clásico con Miguel el 15/12 a las 2:00 PM\n¿Confirmas esta cita?\"\n\nMúltiples citas pendientes:\n\"Tienes varias citas pendientes:\n\n📅 Corte + barba con Carlos - 15/12 a las 10:00 AM\n\n📅 Afeitado clásico con Miguel - 18/12 a las 3:00 PM\n¿Cuál quieres confirmar? (responde con el número)\"\n\nSin citas pendientes:\n\"No tienes citas pendientes por confirmar. ¿Te gustaría agendar una nueva cita? 😊\"\n\n2.3 Reprogramación de Citas\n\nCasos: Cambio de fecha/hora, cambio de barbero, cambio de servicio.\n\nProceso:\n\nIdentificar la cita original que el cliente desea reprogramar.\n\nVerificar la nueva disponibilidad (fecha, hora, barbero) siguiendo las validaciones del Paso 3 y 4 de la creación de citas.\n\nActualizar el registro de la cita usando Insertar o Actualizar Registro.\n\nConfirmar los cambios al cliente.\n\n2.4 Cancelación de Citas\n\nManejo Empático:\n\nConfirmar claramente la intención del cliente de cancelar.\n\nSiempre ofrece la opción de reprogramar como alternativa.\n\nActualizar el estado de la cita a 'cancelada' utilizando Insertar o Actualizar Registro.\n\nOfrecer la opción de reagendar en el futuro.\n\n3. Búsqueda y Consultas Inteligentes\n3.1 Coincidencia de Servicios\n\nEstrategias de Búsqueda:\n\nCoincidencia exacta del nombre del servicio.\n\nBúsqueda por palabras clave dentro de la descripción del servicio.\n\nSugerencias de servicios similares si no hay una coincidencia directa.\n\nEjemplo de Respuesta:\n\nBúsqueda: \"corte\"\n\nRespuesta: \"¡Perfecto! Tenemos varios tipos de corte:\n\nCorte clásico ($15) - Estilo tradicional y elegante.\n\nCorte moderno ($18) - Tendencias actuales.\n\nCorte + barba ($25) - Servicio completo.\n¿Cuál te interesa más?\"\n\n3.2 Coincidencia de Barberos - PROCESO OBLIGATORIO\n\nIMPORTANTE: Siempre sigue este proceso exacto para validar e inferir barberos:\nPaso 1: Obtener Lista Completa de Barberos\n\nHerramienta: Seleccionar Barbero (ejecutar: SELECT nombre, disponible FROM barberos;).\n\nPaso 2: Verificar Disponibilidad\n\ndisponible = 1 → Barbero DISPONIBLE ✅\n\ndisponible = 0 → Barbero NO DISPONIBLE ❌\n\nPaso 3: Inferencia Inteligente de Nombres\n\nSi el cliente proporciona un nombre que no coincide exactamente con la base de datos, aplica el Algoritmo de Inferencia de Nombres de Barbero (definido al inicio del prompt).\nProceso Completo de Validación (Resumen):\n\nEl cliente dice: \"Quiero cita con migel.\"\n\nEjecutas: SELECT nombre, disponible FROM barberos;\n\nObtienes la lista: [\"Miguel\", \"Carlos\", \"Juan García\"].\n\nInferir: \"migel\" → \"Miguel\" (por mejor coincidencia).\n\nVerificar la disponibilidad de \"Miguel\".\n\nSi disponible=1: Proceder con el agendamiento.\n\nSi disponible=0: Ofrecer alternativas de barberos disponibles.\n\nEjemplos de Respuesta:\n\n✅ Barbero Encontrado y Disponible:\n\"¡Perfecto! Entiendo que quieres agendar con Miguel. 💪 Él está disponible y es excelente. ¿Qué día y hora prefieres?\"\n\n❌ Barbero Encontrado pero No Disponible:\n\"Entiendo que prefieres a Miguel, pero no está disponible hoy. 😅 Sin embargo, tenemos a Carlos disponible, quien también es experto en cortes clásicos. ¿Te parece bien?\"\n\n❓ Nombre No Claro - Mostrar Opciones:\n\"No estoy seguro a cuál barbero te refieres. Tenemos disponibles a:\n\nMiguel - Especialista en cortes clásicos.\n\nCarlos - Experto en estilos modernos.\n¿Con cuál te gustaría agendar?\"\n\n❌ Ningún Barbero Disponible:\n\"Lo siento mucho, pero ninguno de nuestros barberos está disponible en este momento. 😔 ¿Te gustaría que te contactemos cuando alguno esté disponible, o prefieres agendar para otro día?\"\n\n4. Herramientas Disponibles\nHerramientas Existentes:\n\nSeleccionar Cliente: Búsqueda de clientes por nombre, teléfono o correo.\n\nInsertar Cliente: Registro de nuevos clientes.\n\nSeleccionar Barbero: Obtiene información y disponibilidad de barberos.\n\nSeleccionar Servicio: Proporciona el catálogo completo de servicios.\n\nInserción Citas: Crea nuevas citas. (Se sugiere usar Insertar o Actualizar Registro para esta función si es posible, ver abajo).\n\nConsultar en Base de Datos: Permite ejecutar consultas SQL personalizadas.\n\nNueva Herramienta Clave:\n\nInsertar o Actualizar Registro ⭐\n\nFunción: Realiza operaciones INSERT y UPDATE en cualquier tabla de la base de datos.\n\nParámetros: tabla, operación (INSERT/UPDATE), datos (dict/json), condiciones (dict/json, para UPDATE).\n\nCasos de Uso Ejemplares:\n\nActualizar correo: UPDATE clientes SET correo = ? WHERE id = ?\n\nConfirmar cita: UPDATE citas SET estado = 'confirmada' WHERE id = ?\n\nActualizar disponibilidad de barbero: UPDATE barberos SET disponible = ? WHERE id = ?\n\n5. Casos de Uso Avanzados (Ejemplos de Interacción)\n\nEscenario 1: Cliente Frecuente\n\nCliente: \"Hola, soy Carlos Mendoza, quiero mi corte habitual.\"\n\nRespuesta: \"¡Hola Carlos! 👋 Me da mucho gusto verte de nuevo. Vi que normalmente te haces el corte clásico con Miguel. ¿Te parece bien agendarlo para este viernes a las 2:00 PM como siempre?\"\n\nEscenario 2: Cliente Indeciso\n\nCliente: \"No sé qué corte elegir.\"\n\nRespuesta: \"¡Te ayudo a elegir! 😊 Para darte la mejor recomendación:\n\n¿Prefieres algo clásico y elegante, o más moderno y atrevido?\n\n¿Cuánto tiempo quieres dedicarle al mantenimiento?\nNuestros barberos son expertos y pueden aconsejarte el estilo perfecto para tu tipo de rostro.\"\n\nEscenario 3: Urgencia\n\nCliente: \"Necesito una cita para hoy, es urgente.\"\n\nRespuesta: \"¡Entiendo la urgencia! 🚀 Déjame revisar qué tenemos disponible para hoy...\nPerfecto: Miguel tiene un espacio a las 4:30 PM y Carlos a las 5:15 PM.\n¿Cuál te conviene más? Solo necesito confirmar qué servicio necesitas.\"\n\nEscenario 4: Problema con Cita Existente\n\nCliente: \"Creo que mi cita está mal agendada.\"\n\nRespuesta: \"¡No te preocupes! 🔍 Déjame revisar tu cita...\nVeo que tienes agendado: Corte + barba con Miguel el sábado 16 a las 11:00 AM.\n¿Qué necesitas cambiar exactamente? Podemos ajustar la fecha, hora, servicio o barbero sin problema.\"\n\n6. Manejo de Errores y Excepciones (Respuestas Modelo)\n\nConflictos de Horario\n\n\"¡Vaya! El sábado a las 2:00 PM con Miguel ya está ocupado. 😅\n¿Qué te parece una de estas opciones?\n\nSábado 1:30 PM con Miguel\n\nSábado 2:00 PM con Carlos\n\nDomingo 2:00 PM con Miguel\"\n\nBarbero No Disponible (alternativa)\n\n\"Miguel no está disponible ese día, pero Carlos es igual de excelente para cortes clásicos y tiene disponibilidad.\n¿Te gustaría probarlo? Muchos clientes quedan encantados con su trabajo. 👍\"\nServicio No Encontrado (sugerencias)\n\n\"No encuentro exactamente 'corte fade', pero tenemos:\n\nCorte moderno ($18) - incluye técnicas fade.\n\nCorte degradado ($20) - especialidad en fade.\n¿Alguno de estos es lo que buscas?\"\n\n7. Información Adicional y Políticas de la Barbería\n\nMétodos de Pago\n\n\"Aceptamos efectivo y transferencias bancarias 💳.\nEl pago se realiza directamente en el local después del servicio.\n¿Necesitas nuestros datos para transferencia?\"\nPolíticas de Cancelación\n\n\"Puedes cancelar o reprogramar hasta 2 horas antes de tu cita sin problema.\nPara cancelaciones de último minuto, te pedimos que nos avises por favor.\n¿Necesitas reprogramar en lugar de cancelar?\"\nHorarios y Ubicación\n\n\"Estamos abiertos de lunes a sábado de 10:00 AM a 6:30 PM 🕙.\nNos ubicamos en [dirección específica de Olympus Barbería]\n¿Necesitas indicaciones para llegar?\"\n\n8. Esquema de Base de Datos\n\nCREATE DATABASE IF NOT EXISTS olympus_barberia;\nUSE olympus_barberia;\n\nCREATE TABLE clientes (\nid INT AUTO_INCREMENT PRIMARY KEY,\nnombre VARCHAR(100) NOT NULL,\ntelefono VARCHAR(20) NOT NULL UNIQUE,\ncorreo VARCHAR(100),\nfecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE servicios (\nid INT AUTO_INCREMENT PRIMARY KEY,\nnombre_servicio VARCHAR(100) NOT NULL,\ndescripcion TEXT,\nprecio DECIMAL(6,2) NOT NULL\n);\n\nCREATE TABLE barberos (\nid INT AUTO_INCREMENT PRIMARY KEY,\nnombre VARCHAR(100) NOT NULL,\nespecialidad VARCHAR(100),\ndisponible BOOLEAN DEFAULT TRUE\n);\n\nCREATE TABLE citas (\nid INT AUTO_INCREMENT PRIMARY KEY,\ncliente_id INT NOT NULL,\nservicio_id INT NOT NULL,\nfecha DATE NOT NULL,\nhora TIME NOT NULL,\nestado ENUM('pendiente', 'confirmada', 'cancelada') DEFAULT 'pendiente',\nbarbero_id INT,\nnotas TEXT,\nfecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\nFOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,\nFOREIGN KEY (servicio_id) REFERENCES servicios(id) ON DELETE CASCADE,\nFOREIGN KEY (barbero_id) REFERENCES barberos(id) ON DELETE SET NULL\n);\n\n9. Directrices de Respuesta\nEstructura de Respuestas Exitosas:\n\nSaludo personalizado (si aplica).\n\nConfirmación de la acción realizada.\n\nDetalles relevantes de la acción (ej., fecha, hora, barbero).\n\nSiguiente paso o pregunta para continuar la interacción. Importante: Esta pregunta debe ser una solicitud de información del usuario para continuar el flujo, NO una promesa de respuesta futura por parte del agente sin nueva entrada.\n\nCierre amigable.\n\nUso de Emojis (Moderado):\n\n📅 Para fechas y citas.\n\n💈 Para servicios.\n\n👋 Para saludos.\n\n✅ Para confirmaciones exitosas.\n\n🔍 Para búsquedas o revisiones.\n\n💪 Para resaltar barberos o fortaleza.\n\n🎉 Para celebraciones o bienvenida.\n\n🚀 Para urgencias o rapidez.\n\n👍 Para aprobación o sugerencia.\n\nReglas de Comunicación Esenciales:\n\nNUNCA menciones procesos técnicos internos (ej., \"ejecutando SQL\", \"consultando la base de datos\").\n\nNUNCA nombres las herramientas internas (ej., \"usando Insertar Cliente\"). Simplemente describe la acción que estás realizando (ej., \"Hemos registrado tus datos\").\n\nNUNCA muestres directamente las consultas SQL al cliente.\n\nNUNCA expongas errores de sistema específicos o mensajes de error de la base de datos. Tradúcelos a un lenguaje amigable para el usuario.\n\nCRÍTICO: CADA RESPUESTA DEBE SER UNA COMUNICACIÓN FINAL Y AUTO-CONTENIDA PARA ESE TURNO. Esto significa que NUNCA debes enviar mensajes que impliquen una acción pendiente o una confirmación futura por parte del agente sin una nueva interacción explícita del usuario. Evita frases como:\n\n\"Déjame revisar la disponibilidad de ese día.\"\n\n\"Te confirmo si hay disponibilidad.\"\n\n\"Revisaré y te avisaré.\"\n\n\"Espera un momento mientras verifico.\"\n\nCualquier frase que sugiera que el agente enviará otro mensaje automáticamente.\nSiempre proporciona la información o las opciones completas en el mismo turno de respuesta.\n\n10. Flujos de Conversación Típicos\nFlujo 1: Nuevo Cliente + Nueva Cita\n\nIdentificar que es un cliente nuevo.\n\nRecopilar los datos básicos requeridos.\n\nRegistrar al cliente.\n\nProceder con el proceso de agendamiento de cita.\n\nConfirmar la cita completa al cliente.\n\nFlujo 2: Cliente Existente + Modificación de Cita\n\nIdentificar al cliente.\n\nLocalizar la cita existente que el cliente desea modificar.\n\nConfirmar los cambios deseados.\n\nVerificar la disponibilidad para los cambios.\n\nActualizar la cita y confirmar los cambios al cliente.\n\nFlujo 3: Consulta de Información\n\nIdentificar el tipo de consulta del cliente (ej., precios, disponibilidad, ubicación).\n\nProporcionar la información relevante de manera clara y concisa.\n\nOfrecer una acción relacionada (ej., \"¿Te gustaría agendar una cita ahora?\").\n\nFacilitar el siguiente paso en la conversación.\n\n11. Mensaje de Bienvenida y Menú Inicial\n\nAl iniciar la conversación, presenta el siguiente mensaje y menú:\n\n\"¡Hola! Bienvenido a Olympus Barbería. 👋\nSoy tu asistente virtual y estoy aquí para ayudarte.\n¿Qué deseas hacer hoy? Elige una opción:\n\n1.Reservar una cita 📅\n2.Ver servicios y precios 💈\n3.Consultar ubicación y horarios 🗺️\n4.Ver promociones 🎉\n\nLógica de Interacción con el Menú:\n\nSi el usuario selecciona una opción numérica (ej., \"1\", \"opción 2\"), procede directamente con el flujo correspondiente a esa opción.\n\nSi el usuario escribe una frase que coincide claramente con una de las opciones (ej., \"quiero reservar\", \"ver precios\", \"dónde están ubicados\"), interpreta la intención y procede con el flujo adecuado.\n\nSi la entrada del usuario es ambigua o no se relaciona directamente con el menú, utiliza tu capacidad de comprensión del lenguaje natural para determinar la mejor acción o solicitar una clarificación.\n\nRecordatorios Importantes para tu Operación Diaria:\n\n⚠️ Siempre verificar la disponibilidad (de barberos y horarios) antes de confirmar cualquier cita.\n\n⚠️ Validar todos los datos proporcionados por el cliente antes de cualquier operación de inserción o actualización.\n\n⚠️ Usar la coincidencia inteligente para nombres de barberos y servicios para mejorar la experiencia del usuario.\n\n⚠️ Proporcionar alternativas claras y útiles cuando algo no está disponible o no es posible.\n\n⚠️ Confirmar cada acción importante con el cliente para asegurar la claridad y evitar malentendidos.\n\n⚠️ Mantener un tono profesional pero cercano en todo momento, reflejando la calidez de Olympus Barbería.\n\n⚠️ CRÍTICO: Cada respuesta debe ser una comunicación final y auto-contenida para ese turno. NUNCA envíes un mensaje que sugiera que el agente realizará una acción o una \"confirmación\" posterior sin una nueva entrada del usuario.",
+          "returnIntermediateSteps": true
+        }
+      },
+      "id": "b8283846-a292-40a7-987e-e5eac1109abb",
+      "name": "Agente de Barberia1",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1800,
+        3060
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $fromAI(\"sql\") }}",
+        "options": {}
+      },
+      "id": "78f3dd44-59a3-4ca3-8f37-86ac28d64da0",
+      "name": "Insertar o Actualizar Registro1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        1980,
+        3460
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Edit Fields9').item.json.sessionId }}",
+        "contextWindowLength": 10
+      },
+      "id": "f9b9de17-dfef-4199-ab58-95875f50f43a",
+      "name": "Redis Chat Memory1",
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "position": [
+        1680,
+        3260
+      ],
+      "typeVersion": 1.5,
+      "credentials": {
+        "redis": {
+          "id": "icc3RhmlpyajIJd7",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"intencion\": \"Conversación general\",\n\t\"sessionId\": \"593999898554@s.whatsapp.net\"\n}"
+      },
+      "id": "a2ffe4e5-8436-4708-8ea3-391b192f9927",
+      "name": "Structured Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        1660,
+        3640
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "1ec44b48-c8f2-4140-841f-395b0b46f90f",
+      "name": "Auto-fixing Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "position": [
+        1480,
+        3460
+      ],
+      "typeVersion": 1
     },
     {
       "parameters": {
@@ -1382,14 +2405,18 @@
           "mode": "list",
           "value": "gpt-4o-mini"
         },
-        "options": {}
+        "options": {
+          "frequencyPenalty": 0,
+          "presencePenalty": 0,
+          "temperature": 0
+        }
       },
-      "id": "f0875030-4f27-4996-a9d5-dfd8e630c8e2",
-      "name": "OpenAI Chat Model",
+      "id": "1267c4e2-6920-45d5-9d72-e35aae8e5d8d",
+      "name": "OpenAI Chat Model1",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "position": [
-        2740,
-        2580
+        1480,
+        3640
       ],
       "typeVersion": 1.2,
       "credentials": {
@@ -1401,19 +2428,313 @@
     },
     {
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
-        "options": {
-          "temperature": 0,
-          "topK": 0,
-          "topP": 0
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cf1671-45b6-4198-9a29-2316291cf899",
+              "name": "sessionJid",
+              "type": "string",
+              "value": "={{ $('Webhook3').item.json.body.raw.key.remoteJid }}"
+            },
+            {
+              "id": "eb793e59-67bb-4a1d-af87-643d132b01ab",
+              "name": "message",
+              "type": "string",
+              "value": "={{ $json.chatInput }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "81992d6d-1ed7-4e4e-9d31-261e04e28753",
+      "name": "Edit Fields12",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        820,
+        3540
+      ],
+      "typeVersion": 3.4,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('Edit Fields12').item.json.sessionJid }}_buffer",
+        "messageData": "={{ $json.message }}",
+        "tail": true
+      },
+      "id": "a94bd7c5-b664-4a0c-8126-995266bc155e",
+      "name": "Redis1",
+      "type": "n8n-nodes-base.redis",
+      "position": [
+        1060,
+        3540
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "redis": {
+          "id": "icc3RhmlpyajIJd7",
+          "name": "Redis account"
         }
       },
-      "id": "e8822d54-4b2d-4345-a31c-51cd51aa07c5",
-      "name": "Google Gemini Chat Model",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "02f31e32-b1b8-4482-86fa-5b0bf42eda4b",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.body.messageType }}",
+              "rightValue": "audio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ad0e8ea3-c47b-463a-94f7-bdfa375c3aaf",
+      "name": "If8",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -300,
+        3320
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "body.media.base64",
+        "options": {
+          "mimeType": "={{ $json.body.media.mimeType }}"
+        }
+      },
+      "id": "afe38e22-7a4f-4c55-a920-7f1e2c7592d9",
+      "name": "Convert to File2",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        -60,
+        3320
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "b7ccedde-210e-47db-9b5b-35eb2b6047b0",
+      "name": "OpenAI2",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        140,
+        3320
+      ],
+      "typeVersion": 1.8,
+      "credentials": {
+        "openAiApi": {
+          "id": "oDu68eutU7HyU3pK",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1d6ff37-e640-46b8-84ca-57437c89c2a7",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3ee6bf77-2676-4090-b3df-8c8f0efb46f2",
+      "name": "Edit Fields13",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        340,
+        3320
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "## Message Buffer",
+        "width": 340
+      },
+      "id": "a8078218-c3dc-4bf2-8c25-409af9dae196",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        820,
+        3740
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Message Error",
+        "width": 340
+      },
+      "id": "f7f633e0-7d9d-4851-b26e-d6a2ef8da566",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -60,
+        3740
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Revisar precio Gemini",
+        "width": 340,
+        "color": 3
+      },
+      "id": "afeba4df-ff85-4626-ba05-7ad5e5d90a20",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1060,
+        3240
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "model": "=gpt-4o-mini-tts",
+        "input": "={{ $json.output }}",
+        "voice": "=coral",
+        "options": {}
+      },
+      "id": "2c49c9a4-c8ae-4a5a-b28e-59ef43228411",
+      "name": "OpenAI3",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        2620,
+        3040
+      ],
+      "typeVersion": 1.8,
+      "alwaysOutputData": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "oDu68eutU7HyU3pK",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "963eacc5-6cbe-428c-8cd2-632ed66286da",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $('Webhook3').first().json.body.messageType }}",
+              "rightValue": "audio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ef05222e-35c8-4812-81ba-433570048d01",
+      "name": "If9",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        2320,
+        3060
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/send-message",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ $('OpenAI3').item.binary.data }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ $('Webhook3').first().json.body.from }}"
+            },
+            {
+              "name": "fromMe",
+              "value": "={{ $('Webhook3').first().json.body.raw.key.fromMe }}"
+            },
+            {
+              "name": "remoteJid",
+              "value": "={{ $('Webhook3').first().json.body.raw.key.remoteJid }}"
+            },
+            {
+              "name": "messageType",
+              "value": "={{ $('Webhook3').first().json.body.messageType }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5fd77a74-781e-4d5b-97dd-59e17282d457",
+      "name": "HTTP Request3",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2840,
+        3040
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "id": "9bf98ef9-f477-41ca-a1af-c05af88733f8",
+      "name": "Google Gemini Chat Model1",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "position": [
-        1000,
-        1940
+        1860,
+        3260
       ],
       "typeVersion": 1,
       "credentials": {
@@ -1422,56 +2743,172 @@
           "name": "Google Gemini(PaLM) Api account 2"
         }
       }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "id": "144098f4-1297-4177-8a0d-ff95ea4e61b6",
+      "name": "Google Gemini Chat Model2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        1460,
+        3260
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "IX4Ot0lPj0lLiTQ2",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        1980,
+        3640
+      ],
+      "id": "de81dd80-9f5b-4c3d-a462-ddb452002d3d",
+      "name": "Gmail",
+      "webhookId": "225f3a95-50a9-4313-99e5-7ab285264c96",
+      "disabled": true
     }
   ],
   "pinData": {
-    "Switch": [
-      {
-        "json": {}
-      }
-    ],
     "Webhook2": [
       {
         "json": {
-          "headers": {
-            "accept": "application/json, text/plain, */*",
-            "content-type": "application/json",
-            "user-agent": "axios/1.9.0",
-            "content-length": "611",
-            "accept-encoding": "gzip, compress, deflate, br",
-            "host": "localhost:5678",
-            "connection": "keep-alive"
-          },
-          "params": {},
-          "query": {},
           "body": {
-            "from": "593999898554@s.whatsapp.net",
-            "id": "E8CAFD656FE5D0888E600815A2C475C9",
-            "timestamp": 1748398483,
-            "body": "Hola",
+            "id": "6ADB10949C59053A7B942D53E8512215",
             "raw": {
               "key": {
-                "remoteJid": "593999898554@s.whatsapp.net",
+                "id": "6ADB10949C59053A7B942D53E8512215",
                 "fromMe": false,
-                "id": "E8CAFD656FE5D0888E600815A2C475C9"
+                "remoteJid": "593999898554@s.whatsapp.net"
               },
-              "messageTimestamp": 1748398483,
-              "pushName": "Jhustyn C.",
-              "broadcast": false,
               "message": {
-                "conversation": "Hola",
+                "audioMessage": {
+                  "ptt": true,
+                  "url": "https://mmg.whatsapp.net/v/t62.7117-24/23917182_1046658420903498_5150518655468557853_n.enc?ccb=11-4&oh=01_Q5Aa1gGohaqm_K2cDzW7y8Lvwbn__oVbcaJyfF_iIZ6SRU5irA&oe=686465EA&_nc_sid=5e03e0&mms3=true",
+                  "seconds": 2,
+                  "mediaKey": "GZ/Yh1rCRBqsoGuJjg0pCK46ptZxT8+3lHg/plEH0T4=",
+                  "mimetype": "audio/ogg; codecs=opus",
+                  "waveform": "AAAAAAAAAAADGRgMAAA4TkxITlFRTkVITEk+PD0+Pjw5NzktLSAFLzc4Oz0yIhw1MzY6OTQuLjU1HhMYKCcUAA==",
+                  "directPath": "/v/t62.7117-24/23917182_1046658420903498_5150518655468557853_n.enc?ccb=11-4&oh=01_Q5Aa1gGohaqm_K2cDzW7y8Lvwbn__oVbcaJyfF_iIZ6SRU5irA&oe=686465EA&_nc_sid=5e03e0",
+                  "fileLength": "5563",
+                  "fileSha256": "XkDL3r3Z2HzTrpVjG37WWBjf877HrBQz6sf0D07JZCc=",
+                  "fileEncSha256": "koKIV0SKBa9TIttUG+6zUIq+R6MHkI72nL0VPYkDEe4=",
+                  "mediaKeyTimestamp": "1748823786"
+                },
                 "messageContextInfo": {
+                  "messageSecret": "eSh9YSE0gIeYTyrZ2iIQ+r3xTccM+2MvHS5M2T+pUeA=",
                   "deviceListMetadata": {
                     "senderKeyHash": "Y24qxTiYpV3l8w==",
                     "senderTimestamp": "1748120420",
                     "recipientKeyHash": "czvV1ELTrgOx1A==",
                     "recipientTimestamp": "1748217616"
                   },
-                  "deviceListMetadataVersion": 2,
-                  "messageSecret": "2qNlymmx7d6vXH1nDa1dfgXwd4/SipLWH0GwHHVZqLU="
+                  "deviceListMetadataVersion": 2
                 }
-              }
-            }
+              },
+              "pushName": "Jhustyn C.",
+              "broadcast": false,
+              "messageTimestamp": 1748823787
+            },
+            "body": null,
+            "from": "593999898554@s.whatsapp.net",
+            "media": {
+              "size": 5563,
+              "base64": "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",
+              "mimeType": "audio/ogg; codecs=opus",
+              "fileExtension": "ogg"
+            },
+            "timestamp": 1748823787,
+            "messageType": "audio"
+          },
+          "query": {},
+          "params": {},
+          "headers": {
+            "host": "localhost:5678",
+            "accept": "application/json, text/plain, */*",
+            "connection": "keep-alive",
+            "user-agent": "axios/1.9.0",
+            "content-type": "application/json",
+            "content-length": "8910",
+            "accept-encoding": "gzip, compress, deflate, br"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook3": [
+      {
+        "json": {
+          "body": {
+            "id": "6ADB10949C59053A7B942D53E8512215",
+            "raw": {
+              "key": {
+                "id": "6ADB10949C59053A7B942D53E8512215",
+                "fromMe": false,
+                "remoteJid": "593999898554@s.whatsapp.net"
+              },
+              "message": {
+                "audioMessage": {
+                  "ptt": true,
+                  "url": "https://mmg.whatsapp.net/v/t62.7117-24/23917182_1046658420903498_5150518655468557853_n.enc?ccb=11-4&oh=01_Q5Aa1gGohaqm_K2cDzW7y8Lvwbn__oVbcaJyfF_iIZ6SRU5irA&oe=686465EA&_nc_sid=5e03e0&mms3=true",
+                  "seconds": 2,
+                  "mediaKey": "GZ/Yh1rCRBqsoGuJjg0pCK46ptZxT8+3lHg/plEH0T4=",
+                  "mimetype": "audio/ogg; codecs=opus",
+                  "waveform": "AAAAAAAAAAADGRgMAAA4TkxITlFRTkVITEk+PD0+Pjw5NzktLSAFLzc4Oz0yIhw1MzY6OTQuLjU1HhMYKCcUAA==",
+                  "directPath": "/v/t62.7117-24/23917182_1046658420903498_5150518655468557853_n.enc?ccb=11-4&oh=01_Q5Aa1gGohaqm_K2cDzW7y8Lvwbn__oVbcaJyfF_iIZ6SRU5irA&oe=686465EA&_nc_sid=5e03e0",
+                  "fileLength": "5563",
+                  "fileSha256": "XkDL3r3Z2HzTrpVjG37WWBjf877HrBQz6sf0D07JZCc=",
+                  "fileEncSha256": "koKIV0SKBa9TIttUG+6zUIq+R6MHkI72nL0VPYkDEe4=",
+                  "mediaKeyTimestamp": "1748823786"
+                },
+                "messageContextInfo": {
+                  "messageSecret": "eSh9YSE0gIeYTyrZ2iIQ+r3xTccM+2MvHS5M2T+pUeA=",
+                  "deviceListMetadata": {
+                    "senderKeyHash": "Y24qxTiYpV3l8w==",
+                    "senderTimestamp": "1748120420",
+                    "recipientKeyHash": "czvV1ELTrgOx1A==",
+                    "recipientTimestamp": "1748217616"
+                  },
+                  "deviceListMetadataVersion": 2
+                }
+              },
+              "pushName": "Jhustyn C.",
+              "broadcast": false,
+              "messageTimestamp": 1748823787
+            },
+            "body": null,
+            "from": "593999898554@s.whatsapp.net",
+            "media": {
+              "size": 5563,
+              "base64": "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",
+              "mimeType": "audio/ogg; codecs=opus",
+              "fileExtension": "ogg"
+            },
+            "timestamp": 1748823787,
+            "messageType": "audio"
+          },
+          "query": {},
+          "params": {},
+          "headers": {
+            "host": "localhost:5678",
+            "accept": "application/json, text/plain, */*",
+            "connection": "keep-alive",
+            "user-agent": "axios/1.9.0",
+            "content-type": "application/json",
+            "content-length": "8910",
+            "accept-encoding": "gzip, compress, deflate, br"
           },
           "webhookUrl": "http://localhost:5678/webhook/efac56c4-fe10-4448-862c-396e3145fb10/webhook/whatsapp",
           "executionMode": "production"
@@ -1489,13 +2926,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "If2",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "If1": {
@@ -1507,13 +2938,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "If2",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "If2": {
@@ -1521,6 +2946,97 @@
         [
           {
             "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "OpenAI1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If7": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If8": {
+      "main": [
+        [
+          {
+            "node": "Convert to File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If9": {
+      "main": [
+        [
+          {
+            "node": "OpenAI3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request8",
             "type": "main",
             "index": 0
           }
@@ -1549,6 +3065,28 @@
         ]
       ]
     },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Switch": {
       "main": [
         [],
@@ -1557,6 +3095,39 @@
         [
           {
             "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
             "type": "main",
             "index": 0
           }
@@ -1595,6 +3166,32 @@
           },
           {
             "node": "If1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook3": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If8",
             "type": "main",
             "index": 0
           }
@@ -1727,11 +3324,115 @@
         ]
       ]
     },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Edit Fields9": {
+      "main": [
+        [
+          {
+            "node": "Clasificación de intenciones1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields10": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields11": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields12": {
+      "main": [
+        [
+          {
+            "node": "Redis1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields13": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        []
+      ]
+    },
     "Insertar Citas": {
       "ai_tool": [
         [
           {
             "node": "Agente de Barberia",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insertar Citas1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente de Barberia1",
             "type": "ai_tool",
             "index": 0
           }
@@ -1794,6 +3495,17 @@
         ]
       ]
     },
+    "Convert to File2": {
+      "main": [
+        [
+          {
+            "node": "OpenAI2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Describe Tables2": {
       "main": [
         [
@@ -1838,6 +3550,17 @@
         ]
       ]
     },
+    "Buscar Servicios1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente de Barberia1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Extract from File": {
       "main": [
         [
@@ -1849,11 +3572,22 @@
         ]
       ]
     },
+    "Insertar Cliente1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente de Barberia1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "OpenAI Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent2",
+            "node": "Auto-fixing Output Parser",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -1880,11 +3614,16 @@
       "main": [
         [
           {
-            "node": "HTTP Request6",
+            "node": "If4",
             "type": "main",
             "index": 0
           }
         ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        []
       ]
     },
     "Extract from File2": {
@@ -1892,6 +3631,49 @@
         [
           {
             "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File3": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agente de Barberia1",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Clasificación de intenciones1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente de Barberia1": {
+      "main": [
+        [
+          {
+            "node": "If9",
             "type": "main",
             "index": 0
           }
@@ -1920,6 +3702,28 @@
         ]
       ]
     },
+    "Seleccionar Barbero1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente de Barberia1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seleccionar Cliente1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente de Barberia1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
@@ -1930,11 +3734,6 @@
           },
           {
             "node": "Agente de Barberia",
-            "type": "ai_languageModel",
-            "index": 0
-          },
-          {
-            "node": "Auto-fixing Output Parser",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -1963,6 +3762,50 @@
         ]
       ]
     },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente de Barberia1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Clasificación de intenciones1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Clasificación de intenciones1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Consultar en Base de Datos": {
       "ai_tool": [
         [
@@ -1979,6 +3822,28 @@
         [
           {
             "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar en Base de Datos1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente de Barberia1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File3",
             "type": "main",
             "index": 0
           }
@@ -2007,11 +3872,33 @@
         ]
       ]
     },
+    "Clasificación de intenciones1": {
+      "main": [
+        [
+          {
+            "node": "Agente de Barberia1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Insertar o Actualizar Registro": {
       "ai_tool": [
         [
           {
             "node": "Agente de Barberia",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insertar o Actualizar Registro1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente de Barberia1",
             "type": "ai_tool",
             "index": 0
           }
@@ -2028,13 +3915,24 @@
           }
         ]
       ]
+    },
+    "Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente de Barberia1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "c263b5c7-f4f9-486b-9001-b6d7f716e295",
+  "versionId": "7b6412cf-ab8f-4b51-8827-1918e6d9a0b4",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "79c01d1a105320c6c3f2fe02ffea042ae762f8a4f408f11e58e3c7cbdb887d09"
