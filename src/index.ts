@@ -296,6 +296,7 @@ async function start() {
             if (mediaData) {
               payload.media = mediaData;
             }
+
           } else if (m.message.videoMessage) {
             payload.messageType = "video";
             const mediaData = await downloadMedia(m, "video");
@@ -314,16 +315,20 @@ async function start() {
           await sleep(1000);
           await sock.readMessages([m.key]);
           await sleep(1000);
-
+          
           //* Send to n8n webhook
           await axios.post(webHookUrl, payload, {
             headers: { "Content-Type": "application/json" },
             timeout: 30000, //? Increased timeout for media uploads
           });
           console.log(`Mensaje ${payload.messageType} reenviado a n8n`);
-
+          
           //* Set typing indicator
-          await sock.sendPresenceUpdate("composing", m.key.remoteJid!);
+          if (m.message.conversation || m.message.extendedTextMessage?.text ) {
+            await sock.sendPresenceUpdate("composing", m.key.remoteJid!);
+          } else if (m.message.audioMessage) {
+            await sock.sendPresenceUpdate("recording", m.key.remoteJid!);
+          } 
         }
       } catch (err) {
         console.error("Error procesando mensaje:", (err as Error).message);
@@ -534,6 +539,7 @@ app.post("/send-message", async (req: Request, res: Response): Promise<void> => 
 
   //? To change the readding animation state
   await sock.sendPresenceUpdate("paused", remoteJid!);
+  await sock.sendPresenceUpdate("available", remoteJid!);
 
   console.log("FROM ME:", req.body);
   // if (!fromMe) return;
