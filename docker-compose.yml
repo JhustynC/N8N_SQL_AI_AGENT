@@ -67,16 +67,16 @@ services:
       - n8n_data:/home/node/.n8n
     depends_on:
       - mysql
-      # - ollama
       - redis
+      # - ollama
     networks:
       - n8n-network
   
 volumes:
   mysql_data:
   n8n_data:
-  # ollama_data:
   redis_data:
+  # ollama_data:
 
 networks:
   n8n-network:

@@ -1,0 +1,381 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "clientes",
+          "cachedResultName": "clientes"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "nombre",
+              "value": "={{ $fromAI(\"nombre\", \"nombre y apellido\") }}"
+            },
+            {
+              "column": "correo",
+              "value": "={{ $fromAI(\"correo\", \"correo del usuario\") }}"
+            },
+            {
+              "column": "telefono",
+              "value": "={{ $fromAI(\"telefono\",\"numero de telefono\") }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "39c9df52-8313-48cb-8416-198b0a72b4a5",
+      "name": "Insertar Cliente1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        1020,
+        100
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "clientes",
+          "cachedResultName": "clientes"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "telefono",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('values0_Value', `identificador del chat`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "78539d06-7e2d-43d6-ad4a-27ac2ca39936",
+      "name": "Seleccionar Cliente1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        840,
+        100
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "barberos",
+          "cachedResultName": "barberos"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {}
+      },
+      "id": "6e2e1aba-ec33-4491-8878-78375e5a283f",
+      "name": "Seleccionar Barbero1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        1040,
+        280
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $fromAI(\"consulta_sql\", \"Consulta sql en base a las necesidades del agente\") }}",
+        "options": {}
+      },
+      "id": "35209c58-e854-4b83-af58-df2c7361fd61",
+      "name": "Consultar en Base de Datos1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        660,
+        100
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "servicios",
+          "cachedResultName": "servicios"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {}
+      },
+      "id": "ae8b21f8-1c01-42f4-bedb-56370ec6c7dd",
+      "name": "Buscar Servicios1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        840,
+        280
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Herramienta para crear (insertar) las nuevas citas de los clientes.",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "citas",
+          "cachedResultName": "citas"
+        },
+        "options": {}
+      },
+      "id": "d20ee381-15b3-4da0-82a3-a40e2e7b7e09",
+      "name": "Insertar Citas1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        660,
+        280
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $fromAI(\"sql\") }}",
+        "options": {}
+      },
+      "id": "4c707a91-375e-4d93-9d96-de23fd6309a7",
+      "name": "Insertar o Actualizar Registro1",
+      "type": "n8n-nodes-base.mySqlTool",
+      "position": [
+        480,
+        100
+      ],
+      "typeVersion": 2.4,
+      "credentials": {
+        "mySql": {
+          "id": "k4Hu8eBhSxxOudja",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "24cbfba8-b320-400f-a764-cd9089dc3199",
+      "name": "Gmail",
+      "type": "n8n-nodes-base.gmailTool",
+      "position": [
+        480,
+        280
+      ],
+      "webhookId": "225f3a95-50a9-4313-99e5-7ab285264c96",
+      "typeVersion": 2.1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=#Rol\n\nEres un agente de IA avanzado especializado en realizar consultas a una base de datos, tu objetivo es realizar correctamente la operación que se te solicita entregando la información de la consulta de manera estructurada y legible\n\n# Pasos\nRecibirás consultas que tienes que realizar a la base de datos mediante las herramientas que tienes dsiponibles\n\nAntes de realizar la consulta tienes que revizar que este correctamente hecha y en caso de no estarlo tu te encargaras de corregirla, Basate en este esquema de base de datos.\n\n# Esquema de Base de Datos:\n\nCREATE DATABASE IF NOT EXISTS olympus_barberia;\nUSE olympus_barberia;\n\nCREATE TABLE clientes (\nid INT AUTO_INCREMENT PRIMARY KEY,\nnombre VARCHAR(100) NOT NULL,\ntelefono VARCHAR(20) NOT NULL UNIQUE,\ncorreo VARCHAR(100),\nfecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE servicios (\nid INT AUTO_INCREMENT PRIMARY KEY,\nnombre_servicio VARCHAR(100) NOT NULL,\ndescripcion TEXT,\nprecio DECIMAL(6,2) NOT NULL\n);\n\nCREATE TABLE barberos (\nid INT AUTO_INCREMENT PRIMARY KEY,\nnombre VARCHAR(100) NOT NULL,\nespecialidad VARCHAR(100),\ndisponible BOOLEAN DEFAULT TRUE\n);\n\nCREATE TABLE citas (\nid INT AUTO_INCREMENT PRIMARY KEY,\ncliente_id INT NOT NULL,\nservicio_id INT NOT NULL,\nfecha DATE NOT NULL,\nhora TIME NOT NULL,\nestado ENUM('pendiente', 'confirmada', 'cancelada') DEFAULT 'pendiente',\nbarbero_id INT,\nnotas TEXT,\nfecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\nFOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,\nFOREIGN KEY (servicio_id) REFERENCES servicios(id) ON DELETE CASCADE,\nFOREIGN KEY (barbero_id) REFERENCES barberos(id) ON DELETE SET NULL\n);\n\nReponderas solo con la información solicitada, nada de información redundante\n\n\n"
+        }
+      },
+      "id": "ad01aaf0-6083-4c43-a843-1329b2ba89cc",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -100,
+        -40
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-001",
+        "options": {}
+      },
+      "id": "b43dff77-caca-49c1-a432-12a60b2fa619",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -100,
+        200
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "IX4Ot0lPj0lLiTQ2",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "f3485d5c-5bb0-43d4-8104-6ec121c579ff",
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -320,
+        -40
+      ],
+      "typeVersion": 1.1
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Insertar Citas1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Servicios1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insertar Cliente1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seleccionar Barbero1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seleccionar Cliente1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar en Base de Datos1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insertar o Actualizar Registro1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "626f6050-7a0b-4c06-b74f-6b604a110abb",
+  "meta": {
+    "instanceId": "79c01d1a105320c6c3f2fe02ffea042ae762f8a4f408f11e58e3c7cbdb887d09"
+  },
+  "id": "v5shuzosFWXQrgQF",
+  "tags": []
+}

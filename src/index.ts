@@ -271,8 +271,14 @@ async function start() {
       // if (!m.message || !m.key.fromMe) return; // Ignorar mensajes propios
       if (!m.message) return;
 
-      await sock.sendPresenceUpdate("paused", m.key.remoteJid!);
-      await sock.sendPresenceUpdate("available", m.key.remoteJid!!);
+      //* Set typing indicator
+      if (m.message.conversation || m.message.extendedTextMessage?.text) {
+        // await sock.sendPresenceUpdate("composing", m.key.remoteJid!);
+        await sock.sendPresenceUpdate("paused", m.key.remoteJid!);
+      } else if (m.message.audioMessage) {
+        // await sock.sendPresenceUpdate("recording", m.key.remoteJid!);
+        await sock.sendPresenceUpdate("available", m.key.remoteJid!);
+      }
 
       // Preparar el payload base
       const payload: any = {
@@ -299,7 +305,6 @@ async function start() {
             if (mediaData) {
               payload.media = mediaData;
             }
-
           } else if (m.message.videoMessage) {
             payload.messageType = "video";
             const mediaData = await downloadMedia(m, "video");
@@ -318,20 +323,20 @@ async function start() {
           await sleep(1000);
           await sock.readMessages([m.key]);
           await sleep(1000);
-          
+
           //* Send to n8n webhook
           await axios.post(webHookUrl, payload, {
             headers: { "Content-Type": "application/json" },
             timeout: 30000, //? Increased timeout for media uploads
           });
           console.log(`Mensaje ${payload.messageType} reenviado a n8n`);
-          
+
           //* Set typing indicator
-          if (m.message.conversation || m.message.extendedTextMessage?.text ) {
+          if (m.message.conversation || m.message.extendedTextMessage?.text) {
             await sock.sendPresenceUpdate("composing", m.key.remoteJid!);
           } else if (m.message.audioMessage) {
             await sock.sendPresenceUpdate("recording", m.key.remoteJid!);
-          } 
+          }
         }
       } catch (err) {
         console.error("Error procesando mensaje:", (err as Error).message);
